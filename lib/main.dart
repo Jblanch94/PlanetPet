@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'models/animal_data.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: animalList[3].name),
     );
   }
 }
