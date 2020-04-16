@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>157550543750-b8m779htus22o9njcp58nbn65t62k25o.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.157550543750-b8m779htus22o9njcp58nbn65t62k25o</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>157550543750-rldgoacehglri9rnil520rdekiued6r5.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDVtaIvPSAahufXMH4P6LXTTeeezXawUUE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>157550543750</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.planetPet</string>
+	<key>PROJECT_ID</key>
+	<string>planet-pet-3275b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>planet-pet-3275b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:157550543750:ios:1f32bee6a5c173462fa207</string>
+	<key>DATABASE_URL</key>
+	<string>https://planet-pet-3275b.firebaseio.com</string>
+</dict>
+</plist>
