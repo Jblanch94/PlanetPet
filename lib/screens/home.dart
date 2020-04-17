@@ -19,12 +19,12 @@ class _HomeState extends State<Home> {
 
   void signIn() async {
     await _googleSignIn.signIn();
-    
   }
 
   @override
   void initState() {
     super.initState();
+    _googleSignIn.signOut();
     _googleSignIn.onCurrentUserChanged.listen((account) {
       handleSignIn(account);
     }, onError: (err) {
