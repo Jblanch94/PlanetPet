@@ -1,6 +1,7 @@
 class Animal {
   String name;
   DateTime dateOfBirth = DateTime.parse('2010-01-01');
+  DateTime creationDate = DateTime.now();
   String animalType;
   String breed;
   String sex;
