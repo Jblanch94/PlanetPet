@@ -1,5 +1,6 @@
 class Animal {
   String name;
+  DateTime creationDate = DateTime.now();
   String animalType;
   String breed;
   String sex;
