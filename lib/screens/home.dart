@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:planet_pet/widgets/bottom_tab_bar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -69,6 +70,10 @@ class _HomeState extends State<Home> {
     
   }
 
+   BottomTabBar authScreen() {
+    return BottomTabBar();
+  }
+
   Container notAuthScreen() {
     return Container(
       width: double.infinity,
@@ -96,16 +101,9 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+
+   
   }
 
-  Widget authScreen() {
-    return Scaffold(
-          body: RaisedButton(
-        onPressed: () => _googleSignIn.signOut(),
-        child: Text(
-          'Sign Out'
-        ),
-      ),
-    );
-  }
+  
 }
