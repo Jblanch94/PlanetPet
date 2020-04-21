@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "157550543750",
+    "firebase_url": "https://planet-pet-3275b.firebaseio.com",
+    "project_id": "planet-pet-3275b",
+    "storage_bucket": "planet-pet-3275b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157550543750:android:36dae545d8d383e72fa207",
+        "android_client_info": {
+          "package_name": "edu.oregonstate.planet_pet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157550543750-rldgoacehglri9rnil520rdekiued6r5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.oregonstate.planet_pet",
+            "certificate_hash": "562a3e78f53b695460f1ce7d1d4fa48dc96937f7"
+          }
+        },
+        {
+          "client_id": "157550543750-5u3ofmn61pkto2bgie1eq3f87rrnioqu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRl326qKMxzsy6vUQKUqiT6NOZvTOPPHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "157550543750-5u3ofmn61pkto2bgie1eq3f87rrnioqu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "157550543750-b8m779htus22o9njcp58nbn65t62k25o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.planetPet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
