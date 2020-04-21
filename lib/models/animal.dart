@@ -54,6 +54,7 @@ class Animal {
       int ageInYears = currentYear - dobYear;
       int ageInMonths = currentMonth > dobMonth ? currentMonth - dobMonth : 12 + currentMonth - dobMonth;
       if (currentMonth < dobMonth) { ageInYears--; }
+      if (currentDay > dobDay) { ageInMonths--; }
 
       if (ageInYears != 0) {
         ageString = ageInYears > 1 ? ageInYears.toString() + " Years " : ageInYears.toString() + " Year ";
