@@ -38,7 +38,7 @@ class Animal {
 
     // if the animal is less than 5 months old report the age in Weeks
     } else if (age.inDays < 150) {
-      int ageInWeeks = (age.inDays / 7).round();
+      int ageInWeeks = (age.inDays / 7).floor();
       ageString = ageInWeeks > 1 ? ageInWeeks.toString() + " Weeks" : ageInWeeks.toString() + " Week";
 
     // if the animal is older than 5 months report the age in Years & Months
@@ -54,7 +54,7 @@ class Animal {
       int ageInYears = currentYear - dobYear;
       int ageInMonths = currentMonth > dobMonth ? currentMonth - dobMonth : 12 + currentMonth - dobMonth;
       if (currentMonth < dobMonth) { ageInYears--; }
-      if (currentDay > dobDay) { ageInMonths--; }
+      if (currentDay < dobDay) { ageInMonths--; }
 
       if (ageInYears != 0) {
         ageString = ageInYears > 1 ? ageInYears.toString() + " Years " : ageInYears.toString() + " Year ";
