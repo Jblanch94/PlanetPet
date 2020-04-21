@@ -23,17 +23,10 @@ class Animal {
   var matchedUsers = new List();
 
   Animal({this.name = 'Fido', this.animalType = 'Dog', this.breed = 'Golden Retriever',
-<<<<<<< HEAD
-          this.sex = 'Male', this.imageURL = 'NULL', this.adoptionStatus = 'Available',
-          this.shelterName = 'Hope Animal Shelter', this.latitude = 100.0, this.longitude = 100.0,
-          this.goodAnimals = true, this.goodChildren = true, this.leashNeeded = true, this.status = 'Waiting for adoption...',
-          this.description = 'A gentle dog in search of a kind home...'});
-=======
           this.sex = 'Male', this.dateOfBirth = '2001-01-01', this.imageURL = 'NULL',
           this.adoptionStatus = 'Available', this.shelterName = 'Hope Animal Shelter',
           this.latitude = 100.0, this.longitude = 100.0, this.goodAnimals = true,
           this.goodChildren = true, this.leashNeeded = true});
->>>>>>> 7d26ef5dd2355720554aa64ff4d7ecc59563127e
 
   DateTime get dobToDate => DateTime.parse(dateOfBirth);
 
