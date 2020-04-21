@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:planet_pet/widgets/bottom_tab_bar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,10 +14,13 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      //ternary that displays screens if user is authenticated or not
       body: _isAuth ? authScreen() : notAuthScreen(),
     );
   }
 
+  //sign user in
   void signIn() async {
     await _googleSignIn.signIn();
   }
@@ -24,7 +28,9 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _googleSignIn.signOut();
+     //_googleSignIn.signOut();
+
+    //listen for a change in user account
     _googleSignIn.onCurrentUserChanged.listen((account) {
       handleSignIn(account);
     }, onError: (err) {
@@ -33,12 +39,14 @@ class _HomeState extends State<Home> {
     signInOnStart();
   }
 
+  //function that sets the state of authentication and updates the current users's account information
   void handleSignIn(GoogleSignInAccount account) {
     if (account != null) {
       setState(() {
         _isAuth = true;
         currentUser = account;
       });
+      createUser();
     } else {
       setState(() {
         _isAuth = false;
@@ -46,6 +54,7 @@ class _HomeState extends State<Home> {
     }
   }
 
+  //signs in user on start of application
   void signInOnStart() async {
     try {
       final GoogleSignInAccount _authOnStart =
@@ -55,6 +64,14 @@ class _HomeState extends State<Home> {
     } catch (err) {
       print('$err');
     }
+  }
+
+  void createUser() {
+    
+  }
+
+   BottomTabBar authScreen() {
+    return BottomTabBar();
   }
 
   Container notAuthScreen() {
@@ -84,9 +101,9 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+
+   
   }
 
-  Widget authScreen() {
-    return Text('Authenticated');
-  }
+  
 }
