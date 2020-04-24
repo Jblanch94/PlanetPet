@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:planet_pet/screens/add_pet.dart';
-import 'package:planet_pet/screens/view_matches.dart';
+import 'package:planet_pet/screens/admin_grid.dart';
 import 'package:planet_pet/screens/posts.dart';
 import 'package:planet_pet/screens/favorite_animals.dart';
 import 'package:planet_pet/screens/preferences.dart';
@@ -34,7 +34,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
             Preferences(),
             FavoriteAnimals(),
             PetForm(),
-            ViewMatches()
+            AdminGrid()
           ],
         ),
       ),

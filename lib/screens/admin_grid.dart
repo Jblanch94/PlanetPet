@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ViewMatches extends StatelessWidget {
+class AdminGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text('View Matches');
+    return Text('Admin Grid');
   }
 }
