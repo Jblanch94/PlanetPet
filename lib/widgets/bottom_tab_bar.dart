@@ -21,17 +21,17 @@ class _BottomTabBarState extends State<BottomTabBar> {
           labelColor: Colors.blue,
           unselectedLabelColor: Colors.grey,
           tabs: <Widget>[
+            Icon(Icons.home),
             Icon(Icons.settings_applications),
-            Icon(Icons.local_post_office),
             Icon(Icons.favorite),
-            Icon(Icons.create),
+            Icon(Icons.camera_alt),
             Icon(Icons.whatshot)
           ],
         ),
         body: TabBarView(
           children: <Widget>[
-            Preferences(),
             Posts(),
+            Preferences(),
             FavoriteAnimals(),
             PetForm(),
             ViewMatches()
