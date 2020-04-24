@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "157550543750-6tqamceg00usupjftaqg3s3tqhuhtkqu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.oregonstate.planet_pet",
+            "certificate_hash": "cd8c59baa04c467f549a013ab151042dfbf404de"
+          }
+        },
+        {
           "client_id": "157550543750-rldgoacehglri9rnil520rdekiued6r5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
