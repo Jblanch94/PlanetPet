@@ -30,7 +30,7 @@ class App extends StatelessWidget {
     // throw StateError('Generic Test Error');
 
     return MaterialApp(
-      home: PetForm(),
+      home: Home(),
     );
   }
 }

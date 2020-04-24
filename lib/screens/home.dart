@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:planet_pet/models/user.dart';
 import 'package:planet_pet/widgets/bottom_tab_bar.dart';
+import 'package:planet_pet/screens/create_account_details.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,10 +14,12 @@ class _HomeState extends State<Home> {
   bool _isAuth = false;
   GoogleSignInAccount currentUser;
   GoogleSignIn _googleSignIn = GoogleSignIn();
+  final CollectionReference usersRef = Firestore.instance.collection('users');
+  User user;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       //ternary that displays screens if user is authenticated or not
       body: _isAuth ? authScreen() : notAuthScreen(),
     );
@@ -28,7 +33,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-     //_googleSignIn.signOut();
+    //_googleSignIn.signOut();
 
     //listen for a change in user account
     _googleSignIn.onCurrentUserChanged.listen((account) {
@@ -66,11 +71,27 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void createUser() {
-    
+  void createUser() async {
+    DocumentSnapshot doc = await usersRef.document(currentUser.id).get();
+
+    //check if document exists by using the user id as the document id
+    //if user does not exist then navigate to create account page
+    if (!doc.exists) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => CreateAccountDetails(),
+        ),
+      );
+    }
+
+    //otherwise proceed as normal and save details of user
+    // we might need to pass down user detail to other pages
+    setState(() {
+      user = User.fromDocument(doc);
+    });
   }
 
-   BottomTabBar authScreen() {
+  BottomTabBar authScreen() {
     return BottomTabBar();
   }
 
@@ -101,9 +122,5 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-
-   
   }
-
-  
 }
