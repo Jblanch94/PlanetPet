@@ -76,6 +76,7 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 12),
                       child: TextFormField(
+                        autovalidate: true,
                         validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Please provide your address';
@@ -103,7 +104,11 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                       margin: EdgeInsets.only(left: 12, right: 12),
                       child: TextFormField(
                         onSaved: (value) {
-                          user.streetAddress2 = value;
+                          if (value.trim().isEmpty) {
+                            user.streetAddress2 = '';
+                          } else {
+                            user.streetAddress2 = value;
+                          }
                         },
                         decoration: InputDecoration(
                           labelText: 'Street Address 2/Apartment',

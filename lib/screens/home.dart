@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    //_googleSignIn.signOut();
+    _googleSignIn.signOut();
 
     //listen for a change in user account
     _googleSignIn.onCurrentUserChanged.listen((account) {
@@ -82,8 +82,21 @@ class _HomeState extends State<Home> {
           builder: (context) => CreateAccountDetails(),
         ),
       );
-      print(newUser);
       //send to firebase with new user
+      usersRef.document(currentUser.id).setData({
+        'username': currentUser.displayName,
+        'userId': currentUser.id,
+        'email': currentUser.email,
+        'isAdmin': false,
+        'phoneNumber': newUser.phoneNumber,
+        'latitude': newUser.latitude,
+        'longitude': newUser.longitude,
+        'streetAddress1': newUser.streetAddress1,
+        'streetAddress2': newUser.streetAddress2,
+        'city': newUser.city,
+        'state': '',
+        'zipcode': newUser.zipcode
+      });
       
     }
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
   String username;
+  String userId;
   String email;
   bool isAdmin;
   String phoneNumber;
@@ -18,6 +19,7 @@ class User {
 
   User(
       {this.username,
+      this.userId,
       this.email,
       this.isAdmin,
       this.phoneNumber,
@@ -32,6 +34,7 @@ class User {
   factory User.fromDocument(DocumentSnapshot record) {
     return User(
         username: record['username'],
+        userId: record['userId'],
         email: record['email'],
         isAdmin: record['isAdmin'],
         phoneNumber: record['phoneNumber'],
