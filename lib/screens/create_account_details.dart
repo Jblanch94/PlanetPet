@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:planet_pet/models/user.dart';
+import 'dart:async';
 
 class CreateAccountDetails extends StatefulWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final String currentUserName;
+
+  CreateAccountDetails({Key key, this.currentUserName}) : super(key: key);
   @override
   _CreateAccountDetailsState createState() => _CreateAccountDetailsState();
 }
 
 //TODO: ADD DROPDOWNBUTTON FOR STATES
+//TODO: REFACTOR
 class _CreateAccountDetailsState extends State<CreateAccountDetails> {
   User user = User();
   LocationData locationData;
 
+  //get user location
   void getUserLocation() async {
     final location = Location();
     LocationData data = await location.getLocation();
@@ -30,6 +37,7 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: widget._scaffoldKey,
       appBar: AppBar(
         title: Text('Account Details'),
       ),
@@ -190,7 +198,16 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                           widget._formKey.currentState.save();
                           user.latitude = locationData.latitude;
                           user.longitude = locationData.longitude;
-                          Navigator.of(context).pop(user);
+                          widget._scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text('Welcome ${widget.currentUserName}!'),
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+                          Timer(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(user);
+                          });
+                          
                         }
                       },
                     ),

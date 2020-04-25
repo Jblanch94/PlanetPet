@@ -52,6 +52,7 @@ class _HomeState extends State<Home> {
         currentUser = account;
       });
       createUser();
+      print(user);
     } else {
       setState(() {
         _isAuth = false;
@@ -79,7 +80,7 @@ class _HomeState extends State<Home> {
     if (!doc.exists) {
       final User newUser = await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => CreateAccountDetails(),
+          builder: (context) => CreateAccountDetails(currentUserName: currentUser.displayName),
         ),
       );
       //send to firebase with new user
@@ -95,9 +96,10 @@ class _HomeState extends State<Home> {
         'streetAddress2': newUser.streetAddress2,
         'city': newUser.city,
         'state': '',
-        'zipcode': newUser.zipcode
+        'zipcode': newUser.zipcode,
+        'favorites': null,
+        'Adopted Pets': null
       });
-      
     }
 
     //otherwise proceed as normal and save details of user
