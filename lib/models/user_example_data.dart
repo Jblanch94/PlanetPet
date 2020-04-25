@@ -7,7 +7,7 @@ User user1 = User(
     phoneNumber: '(123)456-7890',
     latitude: 12.8769,
     longitude: -87.6544,
-    streetAddress: '123 Main Street',
+    streetAddress1: '123 Main Street',
     city: 'New York City',
     state: 'New York',
     zipcode: '06789');
@@ -19,7 +19,7 @@ User user1 = User(
     phoneNumber: '(123)456-7890',
     latitude: 67.89754,
     longitude: 15.9087,
-    streetAddress: '1 West Town Street',
+    streetAddress1: '1 West Town Street',
     city: 'Philadelphia',
     state: 'Pennsylvania',
     zipcode: '06567');
@@ -31,7 +31,7 @@ User user1 = User(
     phoneNumber: '(123)456-7890',
     latitude: 87.9012,
     longitude: -87.6876,
-    streetAddress: '1 Broad Street',
+    streetAddress1: '1 Broad Street',
     city: 'Las Vegas',
     state: 'Nevada',
     zipcode: '01567');

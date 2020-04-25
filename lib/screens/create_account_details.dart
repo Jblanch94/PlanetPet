@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:planet_pet/models/user.dart';
 
 class CreateAccountDetails extends StatefulWidget {
@@ -7,10 +8,25 @@ class CreateAccountDetails extends StatefulWidget {
   _CreateAccountDetailsState createState() => _CreateAccountDetailsState();
 }
 
-//TODO: ADD VALIDATION AND ONCHANGED FUNCTIONALITY
 //TODO: ADD DROPDOWNBUTTON FOR STATES
 class _CreateAccountDetailsState extends State<CreateAccountDetails> {
   User user = User();
+  LocationData locationData;
+
+  void getUserLocation() async {
+    final location = Location();
+    LocationData data = await location.getLocation();
+    setState(() {
+      locationData = data;
+    });
+  }
+
+  @override
+  void initState() {
+    getUserLocation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +43,7 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                 key: widget._formKey,
                 child: Column(
                   children: <Widget>[
+                    //field for phone number
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 12),
                       child: TextFormField(
@@ -36,6 +53,9 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                             return 'Invalid phone Number';
                           }
                           return null;
+                        },
+                        onSaved: (value) {
+                          user.phoneNumber = value;
                         },
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
@@ -50,10 +70,21 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 16),
+
+                      //field for first street address
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 12),
                       child: TextFormField(
+                        validator: (value) {
+                          if (value.trim().isEmpty) {
+                            return 'Please provide your address';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          user.streetAddress1 = value;
+                        },
                         decoration: InputDecoration(
                           labelText: 'Street Address 1',
                           hintText: 'Street Address 1',
@@ -66,9 +97,14 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     Padding(
                       padding: EdgeInsets.only(top: 16),
                     ),
+
+                    //field for optional apartment number/second address
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 12),
                       child: TextFormField(
+                        onSaved: (value) {
+                          user.streetAddress2 = value;
+                        },
                         decoration: InputDecoration(
                           labelText: 'Street Address 2/Apartment',
                           hintText: 'Street Address 2/Apartment',
@@ -81,9 +117,20 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     Padding(
                       padding: EdgeInsets.only(top: 16),
                     ),
+
+                    //field for city
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 200),
                       child: TextFormField(
+                        validator: (value) {
+                          if (value.trim().length < 3) {
+                            return 'Please enter a valid city';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          user.city = value;
+                        },
                         decoration: InputDecoration(
                           labelText: 'City',
                           hintText: 'Enter your city...',
@@ -96,9 +143,20 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     Padding(
                       padding: EdgeInsets.only(top: 16),
                     ),
+
+                    //field for zipcode
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 150),
                       child: TextFormField(
+                        validator: (value) {
+                          if (value.trim().length < 5) {
+                            return 'Please enter a valid zip code';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          user.zipcode = value;
+                        },
                         decoration: InputDecoration(
                           labelText: 'Zipcode',
                           hintText: 'Enter your zipcode...',
@@ -122,7 +180,14 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                           fontSize: 22,
                         ),
                       ),
-                      onPressed: () => print('submitted'),
+                      onPressed: () {
+                        if (widget._formKey.currentState.validate()) {
+                          widget._formKey.currentState.save();
+                          user.latitude = locationData.latitude;
+                          user.longitude = locationData.longitude;
+                          Navigator.of(context).pop(user);
+                        }
+                      },
                     ),
                   ],
                 ),

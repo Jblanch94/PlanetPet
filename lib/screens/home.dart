@@ -77,11 +77,14 @@ class _HomeState extends State<Home> {
     //check if document exists by using the user id as the document id
     //if user does not exist then navigate to create account page
     if (!doc.exists) {
-      Navigator.of(context).push(
+      final User newUser = await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => CreateAccountDetails(),
         ),
       );
+      print(newUser);
+      //send to firebase with new user
+      
     }
 
     //otherwise proceed as normal and save details of user

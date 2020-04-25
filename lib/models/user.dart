@@ -7,7 +7,8 @@ class User {
   String phoneNumber;
   double latitude;
   double longitude;
-  String streetAddress;
+  String streetAddress1;
+  String streetAddress2;
   String city;
   String state;
   String zipcode;
@@ -22,7 +23,8 @@ class User {
       this.phoneNumber,
       this.latitude,
       this.longitude,
-      this.streetAddress,
+      this.streetAddress1,
+      this.streetAddress2,
       this.city,
       this.state,
       this.zipcode});
@@ -35,7 +37,8 @@ class User {
         phoneNumber: record['phoneNumber'],
         latitude: record['latitude'],
         longitude: record['longitude'],
-        streetAddress: record['streetAddress'],
+        streetAddress1: record['streetAddress1'],
+        streetAddress2: record['streetAddress2'],
         city: record['city'],
         state: record['state'],
         zipcode: record['zipcode']);
