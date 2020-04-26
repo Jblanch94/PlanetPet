@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    //_googleSignIn.signOut();
+    _googleSignIn.signOut();
 
     //listen for a change in user account
     _googleSignIn.onCurrentUserChanged.listen((account) {
@@ -52,6 +52,7 @@ class _HomeState extends State<Home> {
         currentUser = account;
       });
       createUser();
+      print(user);
     } else {
       setState(() {
         _isAuth = false;
@@ -77,11 +78,28 @@ class _HomeState extends State<Home> {
     //check if document exists by using the user id as the document id
     //if user does not exist then navigate to create account page
     if (!doc.exists) {
-      Navigator.of(context).push(
+      final User newUser = await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => CreateAccountDetails(),
+          builder: (context) => CreateAccountDetails(currentUserName: currentUser.displayName),
         ),
       );
+      //send to firebase with new user
+      usersRef.document(currentUser.id).setData({
+        'username': currentUser.displayName,
+        'userId': currentUser.id,
+        'email': currentUser.email,
+        'isAdmin': false,
+        'phoneNumber': newUser.phoneNumber,
+        'latitude': newUser.latitude,
+        'longitude': newUser.longitude,
+        'streetAddress1': newUser.streetAddress1,
+        'streetAddress2': newUser.streetAddress2,
+        'city': newUser.city,
+        'state': '',
+        'zipcode': newUser.zipcode,
+        'favorites': null,
+        'Adopted Pets': null
+      });
     }
 
     //otherwise proceed as normal and save details of user
