@@ -46,6 +46,7 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
       key: widget._scaffoldKey,
       appBar: AppBar(
         title: Text('Account Details'),
+        leading: Text(''),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

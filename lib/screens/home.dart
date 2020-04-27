@@ -28,6 +28,12 @@ class _HomeState extends State<Home> {
   //sign user in
   void signIn() async {
     await _googleSignIn.signIn();
+    _googleSignIn.onCurrentUserChanged.listen((account) {
+      handleSignIn(account);
+    }, onError: (err) {
+      print('$err');
+    });
+    signInOnStart();
   }
 
   @override
@@ -80,9 +86,16 @@ class _HomeState extends State<Home> {
     if (!doc.exists) {
       final User newUser = await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => CreateAccountDetails(currentUserName: currentUser.displayName),
+          builder: (context) =>
+              CreateAccountDetails(currentUserName: currentUser.displayName),
         ),
       );
+
+      if(newUser == null) {
+        setState(() {
+          _isAuth = false;
+        });
+      }
       //send to firebase with new user
       usersRef.document(currentUser.id).setData({
         'username': currentUser.displayName,
@@ -100,13 +113,14 @@ class _HomeState extends State<Home> {
         'favorites': null,
         'Adopted Pets': null
       });
+
+      //otherwise proceed as normal and save details of user
+      // we might need to pass down user detail to other pages
+      setState(() {
+        user = User.fromDocument(doc);
+      });
     }
 
-    //otherwise proceed as normal and save details of user
-    // we might need to pass down user detail to other pages
-    setState(() {
-      user = User.fromDocument(doc);
-    });
   }
 
   BottomTabBar authScreen() {
