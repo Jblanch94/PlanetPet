@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:planet_pet/models/user.dart';
 import 'dart:async';
+import 'package:planet_pet/constants.dart';
+import 'package:planet_pet/widgets/account_text_field.dart';
+import 'package:planet_pet/utils/create_account_validation.dart';
 
 class CreateAccountDetails extends StatefulWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -16,16 +19,20 @@ class CreateAccountDetails extends StatefulWidget {
 //TODO: ADD DROPDOWNBUTTON FOR STATES
 //TODO: REFACTOR
 class _CreateAccountDetailsState extends State<CreateAccountDetails> {
-  User user = User();
+  AccountFormValidation accountForm = AccountFormValidation();
   LocationData locationData;
 
   //get user location
   void getUserLocation() async {
-    final location = Location();
-    LocationData data = await location.getLocation();
-    setState(() {
-      locationData = data;
-    });
+    try {
+      final location = Location();
+      LocationData data = await location.getLocation();
+      setState(() {
+        locationData = data;
+      });
+    } catch (err) {
+      print('${err.message}');
+    }
   }
 
   @override
@@ -54,26 +61,11 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     //field for phone number
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 12),
-                      child: TextFormField(
-                        autovalidate: true,
-                        validator: (value) {
-                          if (value.trim().length != 10) {
-                            return 'Invalid phone Number';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          user.phoneNumber = value;
-                        },
+                      child: AccountTextField(
+                        fieldDecorator: kPhoneFormField,
                         keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          labelText: 'Phone Number',
-                          hintText: 'Enter your phone number...',
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
+                        save: accountForm.phoneSave,
+                        validate: accountForm.phoneValidate,
                       ),
                     ),
                     Padding(
@@ -83,24 +75,10 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 12),
-                      child: TextFormField(
-                        autovalidate: true,
-                        validator: (value) {
-                          if (value.trim().isEmpty) {
-                            return 'Please provide your address';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          user.streetAddress1 = value;
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Street Address 1',
-                          hintText: 'Street Address 1',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
+                      child: AccountTextField(
+                        fieldDecorator: kStreetAddressField1,
+                        save: accountForm.streetAddress1Save,
+                        validate: accountForm.streetAddress1Validate,
                       ),
                     ),
                     Padding(
@@ -110,21 +88,9 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     //field for optional apartment number/second address
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 12),
-                      child: TextFormField(
-                        onSaved: (value) {
-                          if (value.trim().isEmpty) {
-                            user.streetAddress2 = '';
-                          } else {
-                            user.streetAddress2 = value;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Street Address 2/Apartment',
-                          hintText: 'Street Address 2/Apartment',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
+                      child: AccountTextField(
+                        fieldDecorator: kStreetAddressField2,
+                        save: accountForm.streetAddress2Save,
                       ),
                     ),
                     Padding(
@@ -134,23 +100,10 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     //field for city
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 200),
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value.trim().length < 3) {
-                            return 'Please enter a valid city';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          user.city = value;
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'City',
-                          hintText: 'Enter your city...',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
+                      child: AccountTextField(
+                        fieldDecorator: kCityField,
+                        validate: accountForm.cityValidate,
+                        save: accountForm.citySave,
                       ),
                     ),
                     Padding(
@@ -160,23 +113,11 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     //field for zipcode
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 150),
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value.trim().length < 5) {
-                            return 'Please enter a valid zip code';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          user.zipcode = value;
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Zipcode',
-                          hintText: 'Enter your zipcode...',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
+                      child: AccountTextField(
+                        fieldDecorator: kZipcodeField,
+                        save: accountForm.zipcodeSave,
+                        validate: accountForm.zipcodeValidate,
+                        keyboardType: TextInputType.number,
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(top: 16)),
@@ -196,18 +137,18 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                       onPressed: () {
                         if (widget._formKey.currentState.validate()) {
                           widget._formKey.currentState.save();
-                          user.latitude = locationData.latitude;
-                          user.longitude = locationData.longitude;
+                          accountForm.user.latitude = locationData.latitude;
+                          accountForm.user.longitude = locationData.longitude;
                           widget._scaffoldKey.currentState.showSnackBar(
                             SnackBar(
-                              content: Text('Welcome ${widget.currentUserName}!'),
+                              content:
+                                  Text('Welcome ${widget.currentUserName}!'),
                               duration: Duration(seconds: 3),
                             ),
                           );
                           Timer(Duration(seconds: 3), () {
-                            Navigator.of(context).pop(user);
+                            Navigator.of(context).pop(accountForm.user);
                           });
-                          
                         }
                       },
                     ),
