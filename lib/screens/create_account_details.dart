@@ -16,11 +16,10 @@ class CreateAccountDetails extends StatefulWidget {
   _CreateAccountDetailsState createState() => _CreateAccountDetailsState();
 }
 
-//TODO: ADD DROPDOWNBUTTON FOR STATES
-//TODO: REFACTOR
 class _CreateAccountDetailsState extends State<CreateAccountDetails> {
   AccountFormValidation accountForm = AccountFormValidation();
   LocationData locationData;
+  String _selectedState;
 
   //get user location
   void getUserLocation() async {
@@ -48,10 +47,10 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
       appBar: AppBar(
         title: Text('Account Details'),
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 32)),
               Form(
@@ -106,6 +105,52 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                         save: accountForm.citySave,
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                    ),
+
+                    //dropdown button for state selection
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        height: 80,
+                        width: 180,
+                        margin: EdgeInsets.only(left: 12),
+                        child: DropdownButtonFormField(
+                            isDense: true,
+                            hint: Text('Select a state'),
+                            decoration: InputDecoration(
+                              hintText: 'Select a state',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            ),
+                            value: _selectedState,
+                            items: accountForm.states
+                                .map(
+                                  (state) => DropdownMenuItem(
+                                    child: Text(state),
+                                    value: state,
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedState = value;
+                              });
+                            },
+                            onSaved: (value) {
+                              accountForm.user.state = value;
+                            },
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Please select a state';
+                              }
+                              return null;
+                            }),
+                      ),
+                    ),
+
                     Padding(
                       padding: EdgeInsets.only(top: 16),
                     ),

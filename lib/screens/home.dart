@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
         'streetAddress1': newUser.streetAddress1,
         'streetAddress2': newUser.streetAddress2,
         'city': newUser.city,
-        'state': '',
+        'state': newUser.state,
         'zipcode': newUser.zipcode,
         'favorites': null,
         'Adopted Pets': null

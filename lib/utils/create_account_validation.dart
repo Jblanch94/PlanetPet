@@ -1,7 +1,6 @@
 import 'package:planet_pet/models/user.dart';
 
 class AccountFormValidation {
-
   User user = User();
   String phoneValidate(String value) {
     if (value.trim().length != 10) {
@@ -54,4 +53,58 @@ class AccountFormValidation {
   void zipcodeSave(String value) {
     user.zipcode = value;
   }
+
+  //create list of states
+  List<String> states = [
+    'AL',
+    'AK',
+    'AZ',
+    'AR',
+    'CA',
+    'CO',
+    'CT',
+    'DE',
+    'FL',
+    'GA',
+    'HI',
+    'ID',
+    'IL',
+    'IN',
+    'IA',
+    'KS',
+    'KY',
+    'LA',
+    'ME',
+    'MD',
+    'MA',
+    'MI',
+    'MN',
+    'MS',
+    'MO',
+    'MT',
+    'NE',
+    'NV',
+    'NH',
+    'NJ',
+    'NM',
+    'NY',
+    'NC',
+    'ND',
+    'OH',
+    'OK',
+    'OR',
+    'PA',
+    'RI',
+    'SC',
+    'SD',
+    'TN',
+    'TX',
+    'UT',
+    'VT',
+    'VA',
+    'WA',
+    'WV',
+    'WI',
+    'WY'
+  ];
 }
