@@ -44,12 +44,26 @@ class _PetFormState extends State<PetForm> {
     return url;
   }
 
+  DateTime selectedDate = DateTime.now();
   String _sex = "Male";
   String _animalType = "Cat";
   bool _goodAnimals = true;
   bool _goodChildren = true;
   bool _leashNeeded = false;
   String _availability = "Available";
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime selected = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000,1),
+      lastDate: DateTime.now()
+    );
+    if (selected != null && selected != selectedDate)
+      setState(() {
+        selectedDate = selected;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +111,13 @@ class _PetFormState extends State<PetForm> {
                             return null;
                           }
                         }
+                      ),
+                      SizedBox(height: 10),
+                      Text("Birthdate:"),
+                      Text("${selectedDate.toLocal()}".split(' ')[0]),
+                      RaisedButton(
+                        onPressed: () => _selectDate(context),
+                        child: Text('Select Birthdate')
                       ),
                       SizedBox(height: 10),
                       Text('Sex'),
@@ -292,6 +313,7 @@ class _PetFormState extends State<PetForm> {
                               'latitude': locationData.latitude,
                               'longitude': locationData.longitude,
                               'name': petFormFields.name,
+                              'dateOfBirth': selectedDate.toLocal(),
                               'sex': _sex,
                               'animalType': _animalType,
                               'breed': petFormFields.breed,
