@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:planet_pet/models/user.dart';
 import 'package:planet_pet/widgets/bottom_tab_bar.dart';
 import 'package:planet_pet/screens/create_account_details.dart';
+import 'package:planet_pet/widgets/not_auth_screen.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -21,19 +22,13 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       //ternary that displays screens if user is authenticated or not
-      body: _isAuth ? authScreen() : notAuthScreen(),
+      body: _isAuth ? authScreen() : NotAuthScreen(signIn: signIn),
     );
   }
 
   //sign user in
   void signIn() async {
     await _googleSignIn.signIn();
-    // _googleSignIn.onCurrentUserChanged.listen((account) {
-    //   handleSignIn(account);
-    // }, onError: (err) {
-    //   print('$err');
-    // });
-    // signInOnStart();
   }
 
   @override
@@ -94,11 +89,16 @@ class _HomeState extends State<Home> {
       print(newUser == null);
 
 
-      // if(newUser == null) {
-      //   setState(() {
-      //     _isAuth = false;
-      //   });
-     // }
+      if(newUser != null) {
+        setState(() {
+          _isAuth = true;
+        });
+     } else {
+       setState(() {
+         _isAuth = false;
+         _googleSignIn.signOut();
+       });
+     }
       //send to firebase with new user
       usersRef.document(currentUser.id).setData({
         'username': currentUser.displayName,
@@ -130,32 +130,5 @@ class _HomeState extends State<Home> {
     return BottomTabBar();
   }
 
-  Container notAuthScreen() {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Planet Pet',
-            style: TextStyle(
-              fontSize: 42,
-              fontWeight: FontWeight.w800,
-              fontFamily: 'Indie Flower',
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          Container(
-            width: 280,
-            height: 120,
-            child: GestureDetector(
-              onTap: signIn,
-              child: Image.asset('assets/images/google_signin_button.png'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  
 }
