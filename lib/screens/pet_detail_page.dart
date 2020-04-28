@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class PetDetailPage extends StatefulWidget {
@@ -12,12 +13,30 @@ class PetDetailPage extends StatefulWidget {
 
 class _PetDetailPageState extends State<PetDetailPage> {
   bool favorited = false;
+  final CollectionReference postsRef = Firestore.instance.collection('pets');
+  String docId;
 
+  /*update the user to favorite the pet 
+  will now show up in user's favorites page */
   void favoritePet() {
     setState(() {
       favorited = !favorited;
     });
   }
+
+  void getDocId() {
+    setState(() {
+      docId = postsRef.document().documentID;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDocId();
+    print(docId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,19 +115,31 @@ class _PetDetailPageState extends State<PetDetailPage> {
                   fontSize: 12,
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.only(top: 12),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   IconButton(
-                    icon:
-                        favorited ? Icon(Icons.star, color: Colors.yellow) : Icon(Icons.star_border),
+                    icon: favorited
+                        ? Icon(Icons.star, color: Colors.yellow)
+                        : Icon(Icons.star_border),
                     iconSize: 30,
                     color: Colors.yellow[700],
                     onPressed: favoritePet,
                   ),
-                  IconButton(
-                    color: Colors.lightGreen,
-                    icon: Icon(Icons.check_circle),
+                  RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
+                    ),
+                    elevation: 11,
+                    label: Text(
+                      'Adopt',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    color: Colors.green[300],
+                    icon: Icon(Icons.check_circle, color: Colors.white),
                     onPressed: () => print('Adopted'),
                   ),
                 ],
