@@ -185,16 +185,8 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                           widget._formKey.currentState.save();
                           accountForm.user.latitude = locationData.latitude;
                           accountForm.user.longitude = locationData.longitude;
-                          widget._scaffoldKey.currentState.showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text('Welcome ${widget.currentUserName}!'),
-                              duration: Duration(seconds: 3),
-                            ),
-                          );
-                          Timer(Duration(seconds: 3), () {
-                            Navigator.of(context).pop(accountForm.user);
-                          });
+                        
+                           Navigator.of(context).pop(accountForm.user);
                         }
                       },
                     ),

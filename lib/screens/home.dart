@@ -28,12 +28,12 @@ class _HomeState extends State<Home> {
   //sign user in
   void signIn() async {
     await _googleSignIn.signIn();
-    _googleSignIn.onCurrentUserChanged.listen((account) {
-      handleSignIn(account);
-    }, onError: (err) {
-      print('$err');
-    });
-    signInOnStart();
+    // _googleSignIn.onCurrentUserChanged.listen((account) {
+    //   handleSignIn(account);
+    // }, onError: (err) {
+    //   print('$err');
+    // });
+    // signInOnStart();
   }
 
   @override
@@ -91,11 +91,14 @@ class _HomeState extends State<Home> {
         ),
       );
 
-      if(newUser == null) {
-        setState(() {
-          _isAuth = false;
-        });
-      }
+      print(newUser == null);
+
+
+      // if(newUser == null) {
+      //   setState(() {
+      //     _isAuth = false;
+      //   });
+     // }
       //send to firebase with new user
       usersRef.document(currentUser.id).setData({
         'username': currentUser.displayName,
