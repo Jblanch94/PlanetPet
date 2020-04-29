@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:planet_pet/models/user.dart';
 
 class PetDetailPage extends StatefulWidget {
   final dynamic petDoc;
+  final String userId;
 
-  PetDetailPage({Key key, this.petDoc}) : super(key: key);
+  PetDetailPage({Key key, this.petDoc, this.userId}) : super(key: key);
 
   @override
   _PetDetailPageState createState() => _PetDetailPageState();
@@ -14,15 +16,14 @@ class PetDetailPage extends StatefulWidget {
 class _PetDetailPageState extends State<PetDetailPage> {
   bool favorited = false;
   final CollectionReference postsRef = Firestore.instance.collection('pets');
+  final CollectionReference usersRef = Firestore.instance.collection('users');
   String docId;
 
   /*update the user to favorite the pet 
   will now show up in user's favorites page */
-  void favoritePet() {
-    setState(() {
-      favorited = !favorited;
-    });
-  }
+ void favoritePet() {
+
+ }
 
   void getDocId() {
     setState(() {
@@ -35,6 +36,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
     super.initState();
     getDocId();
     print(docId);
+    print(widget.userId);
   }
 
   @override

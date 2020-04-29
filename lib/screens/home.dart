@@ -127,7 +127,7 @@ class _HomeState extends State<Home> {
   }
 
   BottomTabBar authScreen() {
-    return BottomTabBar();
+    return BottomTabBar(userId: currentUser.id);
   }
 
   
