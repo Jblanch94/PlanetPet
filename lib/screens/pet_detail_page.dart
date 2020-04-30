@@ -14,16 +14,32 @@ class PetDetailPage extends StatefulWidget {
 }
 
 class _PetDetailPageState extends State<PetDetailPage> {
-  bool favorited = false;
   final CollectionReference postsRef = Firestore.instance.collection('pets');
   final CollectionReference usersRef = Firestore.instance.collection('users');
   String docId;
+  bool favorited;
 
   /*update the user to favorite the pet 
   will now show up in user's favorites page */
- void favoritePet() {
-
- }
+  void favoritePet() async {
+    getFavoriteStatus();
+    setState(() {});
+    print(favorited);
+    if (favorited == false) {
+      usersRef.document(widget.userId).updateData({
+        'favorites': FieldValue.arrayUnion([docId])
+      });
+      getFavoriteStatus();
+      setState(() {});
+      print(favorited);
+    } else {
+      usersRef.document(widget.userId).updateData({
+        'favorites': FieldValue.arrayRemove([docId])
+      });
+      getFavoriteStatus();
+      setState(() {});
+    }
+  }
 
   void getDocId() {
     setState(() {
@@ -31,12 +47,31 @@ class _PetDetailPageState extends State<PetDetailPage> {
     });
   }
 
+  void getFavoriteStatus() async {
+    final favoriteList = await usersRef.document(widget.userId).get();
+    bool favorited;
+    favoriteList['favorites'].forEach((favorite) {
+      if (favorite == docId) {
+        favorited = true;
+      } else if (favorite != docId) {
+        favorited = false;
+      } else {
+        favorited = false;
+      }
+    });
+    if (favorited == null) {
+      favorited = false;
+    }
+    this.favorited = favorited;
+  }
+
   @override
   void initState() {
     super.initState();
+    getFavoriteStatus();
+    setState(() {});
     getDocId();
     print(docId);
-    print(widget.userId);
   }
 
   @override
@@ -127,6 +162,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
                     icon: favorited
                         ? Icon(Icons.star, color: Colors.yellow)
                         : Icon(Icons.star_border),
+                   
                     iconSize: 30,
                     color: Colors.yellow[700],
                     onPressed: favoritePet,
