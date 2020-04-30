@@ -5,73 +5,61 @@ import 'package:planet_pet/models/user.dart';
 
 class PetDetailPage extends StatefulWidget {
   final dynamic petDoc;
+  final dynamic docId;
   final String userId;
 
-  PetDetailPage({Key key, this.petDoc, this.userId}) : super(key: key);
+  PetDetailPage({Key key, this.petDoc, this.userId, this.docId}) : super(key: key);
 
   @override
   _PetDetailPageState createState() => _PetDetailPageState();
 }
 
 class _PetDetailPageState extends State<PetDetailPage> {
-  final CollectionReference postsRef = Firestore.instance.collection('pets');
+  final CollectionReference postsRef =  Firestore.instance.collection('pets');
   final CollectionReference usersRef = Firestore.instance.collection('users');
-  String docId;
   bool favorited;
 
   /*update the user to favorite the pet 
   will now show up in user's favorites page */
   void favoritePet() async {
     getFavoriteStatus();
-    setState(() {});
     print(favorited);
     if (favorited == false) {
-      usersRef.document(widget.userId).updateData({
-        'favorites': FieldValue.arrayUnion([docId])
+      await usersRef.document(widget.userId).updateData({
+        'favorites': FieldValue.arrayUnion([widget.docId])
       });
       getFavoriteStatus();
-      setState(() {});
-      print(favorited);
     } else {
-      usersRef.document(widget.userId).updateData({
-        'favorites': FieldValue.arrayRemove([docId])
+      await usersRef.document(widget.userId).updateData({
+        'favorites': FieldValue.arrayRemove([widget.docId])
       });
       getFavoriteStatus();
-      setState(() {});
     }
   }
 
-  void getDocId() {
-    setState(() {
-      docId = postsRef.document().documentID;
-    });
-  }
 
   void getFavoriteStatus() async {
-    final favoriteList = await usersRef.document(widget.userId).get();
-    bool favorited;
-    favoriteList['favorites'].forEach((favorite) {
-      if (favorite == docId) {
+    DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
+    final favorites = userDoc['favorites'];
+    if (favorites.contains(widget.docId)) {
+      setState(() {
         favorited = true;
-      } else if (favorite != docId) {
+      });
+    } else {
+      setState(() {
         favorited = false;
-      } else {
-        favorited = false;
-      }
-    });
-    if (favorited == null) {
-      favorited = false;
+      });
     }
-    this.favorited = favorited;
   }
 
   @override
   void initState() {
     super.initState();
+    print(widget.docId);
     getFavoriteStatus();
-    setState(() {});
-    getDocId();
-    print(docId);
+    if(favorited == null) {
+      favorited = false;
+    }
   }
 
   @override
@@ -162,7 +150,6 @@ class _PetDetailPageState extends State<PetDetailPage> {
                     icon: favorited
                         ? Icon(Icons.star, color: Colors.yellow)
                         : Icon(Icons.star_border),
-                   
                     iconSize: 30,
                     color: Colors.yellow[700],
                     onPressed: favoritePet,

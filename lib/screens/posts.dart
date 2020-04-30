@@ -11,9 +11,9 @@ class Posts extends StatelessWidget {
   Posts({this.userId});
   final CollectionReference postsRef = Firestore.instance.collection('pets');
 
-  void viewPetDetails(BuildContext context, dynamic petDoc) {
+  void viewPetDetails(BuildContext context, dynamic petDoc, dynamic docId) {
     Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => PetDetailPage(petDoc: petDoc, userId: userId)));
+        MaterialPageRoute(builder: (context) => PetDetailPage(petDoc: petDoc, userId: userId, docId: docId)));
   }
 
   @override
@@ -39,10 +39,11 @@ class Posts extends StatelessWidget {
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (_, index) {
                     var petDoc = snapshot.data.documents[index];
+                    var docId = snapshot.data.documents[index].documentID;
                     return Column(
                       children: <Widget>[
                         GestureDetector(
-                          onTap: () => viewPetDetails(context, petDoc),
+                          onTap: () => viewPetDetails(context, petDoc, docId),
                           child: CircleAvatar(
                             radius: 50,
                             backgroundImage: CachedNetworkImageProvider(
