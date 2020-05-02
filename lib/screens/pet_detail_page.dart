@@ -1,21 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:planet_pet/models/user.dart';
 
 class PetDetailPage extends StatefulWidget {
   final dynamic petDoc;
   final dynamic docId;
   final String userId;
 
-  PetDetailPage({Key key, this.petDoc, this.userId, this.docId}) : super(key: key);
+  PetDetailPage({Key key, this.petDoc, this.userId, this.docId})
+      : super(key: key);
 
   @override
   _PetDetailPageState createState() => _PetDetailPageState();
 }
 
 class _PetDetailPageState extends State<PetDetailPage> {
-  final CollectionReference postsRef =  Firestore.instance.collection('pets');
+  final CollectionReference postsRef = Firestore.instance.collection('pets');
   final CollectionReference usersRef = Firestore.instance.collection('users');
   bool favorited;
 
@@ -37,7 +37,6 @@ class _PetDetailPageState extends State<PetDetailPage> {
     }
   }
 
-
   void getFavoriteStatus() async {
     DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
     final favorites = userDoc['favorites'];
@@ -57,7 +56,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
     super.initState();
     print(widget.docId);
     getFavoriteStatus();
-    if(favorited == null) {
+    if (favorited == null) {
       favorited = false;
     }
   }
@@ -164,7 +163,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     color: Colors.green[300],
-                    icon: Icon(Icons.check_circle, color: Colors.white),
+                    icon: Icon(Icons.pets, color: Colors.white),
                     onPressed: () => print('Adopted'),
                   ),
                 ],

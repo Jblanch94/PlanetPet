@@ -13,9 +13,9 @@ class User {
   String city;
   String state;
   String zipcode;
+  List<String> favoritedAnimals;
 
   var adoptedAnimals = [];
-  var favoritedAnimals = [];
 
   User(
       {this.username,
@@ -29,7 +29,8 @@ class User {
       this.streetAddress2,
       this.city,
       this.state,
-      this.zipcode});
+      this.zipcode,
+      this.favoritedAnimals});
 
   factory User.fromDocument(DocumentSnapshot record) {
     return User(
@@ -44,6 +45,7 @@ class User {
         streetAddress2: record['streetAddress2'],
         city: record['city'],
         state: record['state'],
-        zipcode: record['zipcode']);
+        zipcode: record['zipcode'],
+        favoritedAnimals: record['favorites']);
   }
 }

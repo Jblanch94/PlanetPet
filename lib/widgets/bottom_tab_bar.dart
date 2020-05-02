@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:planet_pet/models/user.dart';
 import 'package:planet_pet/screens/add_pet.dart';
 import 'package:planet_pet/screens/admin_grid.dart';
 import 'package:planet_pet/screens/posts.dart';
@@ -7,7 +6,6 @@ import 'package:planet_pet/screens/favorite_animals.dart';
 import 'package:planet_pet/screens/preferences.dart';
 
 class BottomTabBar extends StatefulWidget {
-
   final String userId;
 
   BottomTabBar({this.userId});
@@ -37,7 +35,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
           children: <Widget>[
             Posts(userId: widget.userId),
             Preferences(),
-            FavoriteAnimals(),
+            FavoriteAnimals(userId: widget.userId),
             PetForm(),
             AdminGrid()
           ],
