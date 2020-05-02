@@ -324,6 +324,13 @@ class _PetFormState extends State<PetForm> {
                               'status': petFormFields.status,
                               'description': petFormFields.description,
                             });
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Congrats! You added ${petFormFields.name} as a pet!'),
+                              )
+                            );
+                            image = null;
+                            formKey.currentState.reset();
                             PetForm(); // Navigator.of(context).pop();
                           }
                         })
