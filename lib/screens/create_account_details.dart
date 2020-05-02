@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'dart:async';
 import 'package:planet_pet/constants.dart';
 import 'package:planet_pet/widgets/account_text_field.dart';
 import 'package:planet_pet/utils/create_account_validation.dart';

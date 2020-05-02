@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:planet_pet/screens/home.dart';
-import 'package:planet_pet/screens/add_pet.dart';
 import 'package:sentry/sentry.dart';
 
 const sentryDSN = 'https://03af678dd10041d1babef9e30701aeb3@o365156.ingest.sentry.io/5207600';
