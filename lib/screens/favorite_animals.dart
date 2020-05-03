@@ -29,9 +29,12 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
     DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
     final docs = userDoc.data['favorites'];
     userFavorites = docs;
-    setState(() {
+    if(this.mounted) {
+      setState(() {
       userFavorites = docs;
     });
+    }
+    
   }
 
   Widget buildPostPet(dynamic record, String url) {
@@ -149,7 +152,7 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
       body: StreamBuilder(
           stream: postsRef.snapshots(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             } else {
               return ListView.builder(

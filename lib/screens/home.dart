@@ -34,15 +34,17 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _googleSignIn.signOut();
 
+    _googleSignIn.signOut();
     //listen for a change in user account
     _googleSignIn.onCurrentUserChanged.listen((account) {
       handleSignIn(account);
     }, onError: (err) {
       print('$err');
     });
-    signInOnStart();
+    if (currentUser != null) {
+      signInOnStart();
+    }
   }
 
   //function that sets the state of authentication and updates the current users's account information
@@ -53,7 +55,6 @@ class _HomeState extends State<Home> {
         currentUser = account;
       });
       createUser();
-      print(user);
     } else {
       setState(() {
         _isAuth = false;
@@ -88,17 +89,16 @@ class _HomeState extends State<Home> {
 
       print(newUser == null);
 
-
-      if(newUser != null) {
+      if (newUser != null) {
         setState(() {
           _isAuth = true;
         });
-     } else {
-       setState(() {
-         _isAuth = false;
-         _googleSignIn.signOut();
-       });
-     }
+      } else {
+        setState(() {
+          _isAuth = false;
+          _googleSignIn.signOut();
+        });
+      }
       //send to firebase with new user
       usersRef.document(currentUser.id).setData({
         'username': currentUser.displayName,
@@ -116,19 +116,10 @@ class _HomeState extends State<Home> {
         'favorites': null,
         'Adopted Pets': null
       });
-
-      //otherwise proceed as normal and save details of user
-      // we might need to pass down user detail to other pages
-      setState(() {
-        user = User.fromDocument(doc);
-      });
     }
-
   }
 
   BottomTabBar authScreen() {
     return BottomTabBar(userId: currentUser.id);
   }
-
-  
 }

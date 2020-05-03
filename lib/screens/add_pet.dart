@@ -28,7 +28,10 @@ class _PetFormState extends State<PetForm> {
   void retrieveLocation() async {
     var locationService = Location();
     locationData = await locationService.getLocation();
-    setState(() {});
+    if(this.mounted) {
+      setState(() {});
+    }
+    
   }
 
   File image;
