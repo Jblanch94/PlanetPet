@@ -5,7 +5,7 @@ import 'package:sentry/sentry.dart';
 import 'app.dart' as App;
 
 
-
+const sentryDSN = 'https://03af678dd10041d1babef9e30701aeb3@o365156.ingest.sentry.io/5207600';
 final SentryClient sentry = SentryClient(dsn: sentryDSN);
 
 void main() {

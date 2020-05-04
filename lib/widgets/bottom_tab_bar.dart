@@ -34,7 +34,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
         body: TabBarView(
           children: <Widget>[
             Posts(userId: widget.userId),
-            Preferences(),
+            Preferences(userId: widget.userId),
             FavoriteAnimals(userId: widget.userId),
             PetForm(),
             AdminGrid()
