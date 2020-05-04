@@ -19,7 +19,7 @@ class Preferences extends StatefulWidget {
 }
 
 class _PreferencesState extends State<Preferences> {
-  CollectionReference usersRef = Firestore.instance.collection('users');
+  final CollectionReference usersRef = Firestore.instance.collection('users');
 
   AnimalType _animalType;
   CatBreeds _catBreeds;
@@ -417,7 +417,7 @@ class _PreferencesState extends State<Preferences> {
                 }
               ),
               Padding(padding: EdgeInsets.only(left: 18)),
-              Expanded (child: Text('Good With Humans')),
+              Expanded (child: Text('Good With Children')),
             ],
           ),
         ),
