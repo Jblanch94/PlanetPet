@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class PetDetailPage extends StatefulWidget {
   final dynamic petDoc;
@@ -96,7 +97,9 @@ class _PetDetailPageState extends State<PetDetailPage> {
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),
-              Text("Birthdate: ${widget.petDoc['dateOfBirth']}"),
+//              Text("Birthdate: ${widget.petDoc['dateOfBirth']}"),
+              Text("Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.petDoc['dateOfBirth'].toDate())}"),
+
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),
