@@ -28,7 +28,7 @@ class _PreferencesState extends State<Preferences> {
   AnimalSex _animalSex;
   bool goodHumans = true;
   bool goodAnimals = true;
-  bool needLeash = false;
+  bool needLeash = true;
   Availability _availability;
 
   void initState() {
@@ -47,7 +47,7 @@ class _PreferencesState extends State<Preferences> {
       _animalSex = AnimalSex.values[userDoc.data['prefsAnimalSex']] ?? AnimalSex.none;
       goodHumans = userDoc.data['prefsGoodHumans'] ?? true;
       goodAnimals = userDoc.data['prefsGoodAnimals'] ?? true;
-      needLeash = userDoc.data['prefsNeedLeash'] ?? false;
+      needLeash = userDoc.data['prefsNeedLeash'] ?? true;
       _availability = Availability.values[userDoc.data['prefsAvailability']] ?? Availability.none;
     });
   }
@@ -70,6 +70,8 @@ class _PreferencesState extends State<Preferences> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          resetPrefs(context),
+          Divider(height: 30),
           animalType(context),
           Divider(height: 30),
           animalBreed(context),
@@ -81,6 +83,44 @@ class _PreferencesState extends State<Preferences> {
           animalAvailability(context),
         ],
       ),
+    );
+  }
+
+  Widget resetPrefs(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _animalType = AnimalType.none;
+          _catBreeds = CatBreeds.none;
+          _dogBreeds = DogBreeds.none;
+          _otherBreeds = OtherBreeds.none;
+          _animalSex = AnimalSex.none;
+          goodHumans = true;
+          goodAnimals = true;
+          needLeash = true;
+          _availability = Availability.none;
+          usersRef.document(widget.userId).setData({
+            'prefsAnimalType': 0,
+            'prefsCatBreeds': 0,
+            'prefsDogBreeds': 0,
+            'prefsOtherBreeds': 0,
+            'prefsAnimalSex': 0,
+            'prefsGoodHumans': true,
+            'prefsGoodAnimals': true,
+            'prefsNeedLeash': true,
+            'prefsAvailability': 0,
+          }, merge: true);
+        });
+      },
+      child: Text(
+        'Reset Search Preferences',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: Colors.red,
+        )
+      )
     );
   }
 
