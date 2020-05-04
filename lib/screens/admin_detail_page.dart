@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class AdminDetailPage extends StatelessWidget {
 
@@ -22,7 +23,7 @@ class AdminDetailPage extends StatelessWidget {
             )
           ),
           Text("Name: ${document['name']}"),
-          Text("Birthdate: ${document['dateOfBirth']}"),
+          Text("Birthdate: ${DateFormat.yMMMMEEEEd().format(document['dateOfBirth'].toDate())}"),
           Text("Sex: ${document['sex']}"),
           Text("Animal type: ${document['animalType']}"),
           Text("Breed: ${document['breed']}"),
