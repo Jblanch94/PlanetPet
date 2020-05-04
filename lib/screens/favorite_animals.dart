@@ -164,6 +164,8 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
 
                     if (userFavorites.contains(recordId)) {
                       return buildPostPet(record, record['imageURL']);
+                    } else if(userFavorites.length == null) {
+                      return Text('No favorited animals.');
                     } else
                       return Container();
                   });

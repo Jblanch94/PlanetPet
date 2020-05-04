@@ -39,7 +39,13 @@ class _PetDetailPageState extends State<PetDetailPage> {
 
   void getFavoriteStatus() async {
     DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
-    final favorites = userDoc['favorites'];
+    List<dynamic> favorites = userDoc['favorites'];
+    if(favorites == null) {
+      favorites = [];
+      setState(() {
+        favorited = false;
+      });
+    }
     if (favorites.contains(widget.docId)) {
       setState(() {
         favorited = true;
