@@ -36,7 +36,14 @@ class _PostsState extends State<Posts> {
   void initState() {
     super.initState();
     initSearchPreferences();
-    setState(() {});
+    if(_animalType == null) {
+      _animalType = 'None';
+      _catBreeds = 'None';
+      _dogBreeds = 'None';
+      _otherBreeds = 'None';
+      _animalSex = 'None';
+      _availability = 'None';
+    }
   }
 
   void initSearchPreferences() async {
