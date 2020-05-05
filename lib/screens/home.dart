@@ -114,7 +114,16 @@ class _HomeState extends State<Home> {
         'state': newUser.state,
         'zipcode': newUser.zipcode,
         'favorites': null,
-        'Adopted Pets': null
+        'Adopted Pets': null,
+        'prefsAnimalType': 0,
+        'prefsCatBreeds': 0,
+        'prefsDogBreeds': 0,
+        'prefsOtherBreeds': 0,
+        'prefsAnimalSex': 0,
+        'prefsGoodHumans': null,
+        'prefsGoodAnimals': null,
+        'prefsNeedLeash': null,
+        'prefsAvailability': 0,
       });
     }
   }
