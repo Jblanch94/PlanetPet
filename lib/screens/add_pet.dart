@@ -334,7 +334,7 @@ class _PetFormState extends State<PetForm> {
                             );
                             image = null;
                             formKey.currentState.reset();
-                            PetForm(); // Navigator.of(context).pop();
+                            setState(() {});// Navigator.of(context).pop();
                           }
                         })
                     ],
