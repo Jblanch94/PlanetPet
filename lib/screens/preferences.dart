@@ -604,7 +604,7 @@ class _PreferencesState extends State<Preferences> {
         ListTile(
           title: Text('All'),
           leading: Radio(
-            value: Availability.available,
+            value: Availability.none,
             groupValue: _availability,
             onChanged: (Availability value) {
               setState(() {
@@ -625,7 +625,7 @@ class _PreferencesState extends State<Preferences> {
               setState(() {
                 _availability = value;
                 usersRef.document(widget.userId).setData({
-                  'prefsAvailability': 0,
+                  'prefsAvailability': 1,
                 }, merge: true);
               });
             },
