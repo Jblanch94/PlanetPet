@@ -55,6 +55,7 @@ class _HomeState extends State<Home> {
         currentUser = account;
       });
       createUser();
+      setState(() {});
     } else {
       setState(() {
         _isAuth = false;

@@ -130,6 +130,21 @@ class _PreferencesState extends State<Preferences> {
       children: <Widget>[
         Text('Type', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         ListTile(
+          title: Text('All'),
+          leading: Radio(
+            value: AnimalType.none,
+            groupValue: _animalType,
+            onChanged: (AnimalType value) {
+              setState(() {
+                _animalType = value;
+                usersRef.document(widget.userId).setData({
+                  'prefsAnimalType': 0,
+                }, merge: true);
+              });
+            },
+          ),
+        ),
+        ListTile(
           title: Text('Cat'),
           leading: Radio(
             value: AnimalType.cat,
@@ -203,6 +218,21 @@ class _PreferencesState extends State<Preferences> {
       children: <Widget>[
         breed(),
         ListTile(
+          title: Text('All'),
+          leading: Radio(
+            value: CatBreeds.none,
+            groupValue: _catBreeds,
+            onChanged: (CatBreeds value) {
+              setState(() {
+                _catBreeds = value;
+                usersRef.document(widget.userId).setData({
+                  'prefsCatBreeds': 0,
+                }, merge: true);
+              });
+            },
+          ),
+        ),
+        ListTile(
           title: Text('Persian'),
           leading: Radio(
             value: CatBreeds.persian,
@@ -256,6 +286,21 @@ class _PreferencesState extends State<Preferences> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         breed(),
+        ListTile(
+          title: Text('All'),
+          leading: Radio(
+            value: DogBreeds.none,
+            groupValue: _dogBreeds,
+            onChanged: (DogBreeds value) {
+              setState(() {
+                _dogBreeds = value;
+                usersRef.document(widget.userId).setData({
+                  'prefsDogBreeds': 0,
+                }, merge: true);
+              });
+            },
+          ),
+        ),
         ListTile(
           title: Text('Golden Retriever'),
           leading: Radio(
@@ -326,6 +371,21 @@ class _PreferencesState extends State<Preferences> {
       children: <Widget>[
         breed(),
         ListTile(
+          title: Text('All'),
+          leading: Radio(
+            value: OtherBreeds.none,
+            groupValue: _otherBreeds,
+            onChanged: (OtherBreeds value) {
+              setState(() {
+                _otherBreeds = value;
+                usersRef.document(widget.userId).setData({
+                  'prefsOtherBreeds': 0,
+                }, merge: true);
+              });
+            },
+          ),
+        ),
+        ListTile(
           title: Text('Bird'),
           leading: Radio(
             value: OtherBreeds.bird,
@@ -394,6 +454,21 @@ class _PreferencesState extends State<Preferences> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Sex', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        ListTile(
+          title: Text('All'),
+          leading: Radio(
+            value: AnimalSex.none,
+            groupValue: _animalSex,
+            onChanged: (AnimalSex value) {
+              setState(() {
+                _animalSex = value;
+                usersRef.document(widget.userId).setData({
+                  'prefsAnimalSex': 0,
+                }, merge: true);
+              });
+            },
+          ),
+        ),
         ListTile(
           title: Text('Male'),
           leading: Radio(
@@ -526,6 +601,21 @@ class _PreferencesState extends State<Preferences> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Availability', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        ListTile(
+          title: Text('All'),
+          leading: Radio(
+            value: Availability.available,
+            groupValue: _availability,
+            onChanged: (Availability value) {
+              setState(() {
+                _availability = value;
+                usersRef.document(widget.userId).setData({
+                  'prefsAvailability': 0,
+                }, merge: true);
+              });
+            },
+          ),
+        ),
         ListTile(
           title: Text('Available'),
           leading: Radio(

@@ -28,14 +28,15 @@ class _PostsState extends State<Posts> {
   String _dogBreeds;
   String _otherBreeds;
   String _animalSex;
-  bool goodHumans = null;
-  bool goodAnimals = null;
-  bool needLeash = null;
+  bool goodHumans = true;
+  bool goodAnimals = true;
+  bool needLeash = true;
   String _availability;
 
   void initState() {
     super.initState();
     initSearchPreferences();
+    setState(() {});
   }
 
   void initSearchPreferences() async {
@@ -47,11 +48,12 @@ class _PostsState extends State<Posts> {
       _dogBreeds = dogBreeds[userDoc.data['prefsDogBreeds']] ?? 'None';
       _otherBreeds = otherBreeds[userDoc.data['prefsOtherBreeds']] ?? 'None';
       _animalSex = animalSexes[userDoc.data['prefsAnimalSex']] ?? 'None';
-      goodHumans = userDoc.data['prefsGoodHumans'] ?? null;
-      goodAnimals = userDoc.data['prefsGoodAnimals'] ?? null;
-      needLeash = userDoc.data['prefsNeedLeash'] ?? null;
+      goodHumans = userDoc.data['prefsGoodHumans'] ?? true;
+      goodAnimals = userDoc.data['prefsGoodAnimals'] ?? true;
+      needLeash = userDoc.data['prefsNeedLeash'] ?? true;
       _availability = availability[userDoc.data['prefsAvailability']] ?? 'None';
     });
+
   }
 
   void viewPetDetails(BuildContext context, dynamic petDoc, dynamic docId) {
@@ -96,6 +98,7 @@ class _PostsState extends State<Posts> {
                 displayedAnimals.add(petDoc);
               }
             }
+            if (displayedAnimals == []) { displayedAnimals = snapshot.data.documents; }
 
             return Padding(
               padding: EdgeInsets.only(top: 16.0),
