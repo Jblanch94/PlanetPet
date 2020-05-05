@@ -7,6 +7,7 @@ class PetDetailPage extends StatefulWidget {
   final dynamic petDoc;
   final dynamic docId;
   final String userId;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   PetDetailPage({Key key, this.petDoc, this.userId, this.docId})
       : super(key: key);
@@ -71,6 +72,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: widget._scaffoldKey,
       appBar: AppBar(
         title: Text('Pet Details'),
         centerTitle: true,
@@ -173,7 +175,9 @@ class _PetDetailPageState extends State<PetDetailPage> {
                     ),
                     color: Colors.green[300],
                     icon: Icon(Icons.pets, color: Colors.white),
-                    onPressed: () => print('Adopted'),
+                    onPressed: () => widget._scaffoldKey.currentState.showSnackBar(SnackBar(
+                      content: Text('Adoption pending, we will be in touch!')
+                    ),),
                   ),
                 ],
               ),

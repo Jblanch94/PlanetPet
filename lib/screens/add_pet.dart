@@ -7,7 +7,7 @@ import 'package:location/location.dart';
 import 'package:path/path.dart' as Path;
 import '../models/animal.dart';
 
-
+//
 class PetForm extends StatefulWidget {
   @override
   _PetFormState createState() => _PetFormState();
@@ -332,6 +332,8 @@ class _PetFormState extends State<PetForm> {
                                 content: Text('Congrats! You added ${petFormFields.name} as a pet!'),
                               )
                             );
+
+                            //TODO: try to make form go back to first page
                             image = null;
                             formKey.currentState.reset();
                             setState(() {});// Navigator.of(context).pop();
