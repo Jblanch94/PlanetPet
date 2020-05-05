@@ -625,7 +625,7 @@ class _PreferencesState extends State<Preferences> {
               setState(() {
                 _availability = value;
                 usersRef.document(widget.userId).setData({
-                  'prefsAvailability': 1,
+                  'prefsAvailability': 0,
                 }, merge: true);
               });
             },
