@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
         'city': newUser.city,
         'state': newUser.state,
         'zipcode': newUser.zipcode,
-        'favorites': null,
+        'favorites': [],
         'Adopted Pets': null
       });
     }
