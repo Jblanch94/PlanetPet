@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:planet_pet/models/user.dart';
-import 'package:planet_pet/widgets/bottom_tab_bar.dart';
 import 'package:planet_pet/screens/create_account_details.dart';
 import 'package:planet_pet/widgets/not_auth_screen.dart';
+import 'package:planet_pet/widgets/admin_bottom_tab_bar.dart';
+import 'package:planet_pet/widgets/user_bottom_tab_bar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _HomeState extends State<Home> {
   GoogleSignIn _googleSignIn = GoogleSignIn();
   final CollectionReference usersRef = Firestore.instance.collection('users');
   User user;
+  bool isAdmin;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,14 @@ class _HomeState extends State<Home> {
     }
   }
 
+  //helper function that gets the admin status of the current user
+  void getAdminStatus() async {
+    DocumentSnapshot userDoc = await usersRef.document(currentUser.id).get();
+    setState(() {
+      isAdmin = userDoc['isAdmin'];
+    });
+  }
+
   //function that sets the state of authentication and updates the current users's account information
   void handleSignIn(GoogleSignInAccount account) {
     if (account != null) {
@@ -55,6 +65,8 @@ class _HomeState extends State<Home> {
         currentUser = account;
       });
       createUser();
+      getAdminStatus();
+      isAdmin = false;
       setState(() {});
     } else {
       setState(() {
@@ -130,7 +142,9 @@ class _HomeState extends State<Home> {
     }
   }
 
-  BottomTabBar authScreen() {
-    return BottomTabBar(userId: currentUser.id);
+  Widget authScreen() {
+    return isAdmin
+        ? AdminBottomTabBar()
+        : UserBottomTabBar(userId: currentUser.id);
   }
 }
