@@ -333,7 +333,6 @@ class _PetFormState extends State<PetForm> {
                               )
                             );
 
-                            //TODO: try to make form go back to first page
                             image = null;
                             formKey.currentState.reset();
                             setState(() {});// Navigator.of(context).pop();

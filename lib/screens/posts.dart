@@ -2,17 +2,33 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:planet_pet/screens/pet_detail_page.dart';
+import 'package:planet_pet/widgets/custom_appbar.dart';
 
 List<String> animalTypes = ['None', 'Cat', 'Dog', 'Other'];
 List<String> catBreeds = ['None', 'Persian', 'Shorthair', 'Himalayan'];
-List<String> dogBreeds = ['None', 'Golden Retriever', 'German Shepherd', 'Beagle', 'Poodle'];
+List<String> dogBreeds = [
+  'None',
+  'Golden Retriever',
+  'German Shepherd',
+  'Beagle',
+  'Poodle'
+];
 List<String> otherBreeds = ['None', 'Bird', 'Frog', 'Lizard', 'Snake'];
 List<String> animalSexes = ['None', 'Male', 'Female'];
-List<String> availability = ['None', 'Available', 'Pending Adoption', 'Adopted'];
+List<String> availability = [
+  'None',
+  'Available',
+  'Pending Adoption',
+  'Adopted'
+];
 
 class Posts extends StatefulWidget {
   final String userId;
-  Posts({this.userId});
+  final bool darkMode;
+  final Function(bool) toggleTheme;
+  Posts({Key key, this.userId, this.darkMode, this.toggleTheme}) : super(key: key);
+
+  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   _PostsState createState() => _PostsState();
@@ -35,7 +51,7 @@ class _PostsState extends State<Posts> {
   void initState() {
     super.initState();
     initSearchPreferences();
-    if(_animalType == null) {
+    if (_animalType == null) {
       _animalType = 'None';
       _catBreeds = 'None';
       _dogBreeds = 'None';
@@ -59,35 +75,77 @@ class _PostsState extends State<Posts> {
       needLeash = userDoc.data['prefsNeedLeash'] ?? true;
       _availability = availability[userDoc.data['prefsAvailability']] ?? 'None';
     });
-
   }
 
   void viewPetDetails(BuildContext context, dynamic petDoc, dynamic docId) {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => PetDetailPage(petDoc: petDoc, userId: widget.userId, docId: docId)));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PetDetailPage(
+            petDoc: petDoc, userId: widget.userId, docId: docId)));
   }
 
-  bool matchesSearchPrefs(var petDoc) {    
-    if (petDoc['animalType'] != _animalType && _animalType != 'None') { return false; }
-    else if (petDoc['goodChildren'] != goodHumans && goodHumans != null) { return false; }
-    else if (petDoc['goodAnimals'] != goodAnimals && goodAnimals != null) { return false; }
-    else if (petDoc['leashNeeded'] != needLeash && needLeash != null) { return false; }
-    else if (petDoc['sex'] != _animalSex && _animalSex != 'None') { return false; }
-    else if (petDoc['availability'] != _availability && _availability != 'None') { return false; }
-    else {
-      if (petDoc['animalType'] == 'Cat' && petDoc['breed'] != _catBreeds && _catBreeds != 'None') { return false; }
-      else if (petDoc['animalType'] == 'Dog' && petDoc['breed'] != _dogBreeds && _dogBreeds != 'None') { return false; }
-      else if (petDoc['animalType'] == 'Other' && petDoc['breed'] != _otherBreeds && _otherBreeds != 'None') { return false; }
-      else { return true; }
+  bool matchesSearchPrefs(var petDoc) {
+    if (petDoc['animalType'] != _animalType && _animalType != 'None') {
+      return false;
+    } else if (petDoc['goodChildren'] != goodHumans && goodHumans != null) {
+      return false;
+    } else if (petDoc['goodAnimals'] != goodAnimals && goodAnimals != null) {
+      return false;
+    } else if (petDoc['leashNeeded'] != needLeash && needLeash != null) {
+      return false;
+    } else if (petDoc['sex'] != _animalSex && _animalSex != 'None') {
+      return false;
+    } else if (petDoc['availability'] != _availability &&
+        _availability != 'None') {
+      return false;
+    } else {
+      if (petDoc['animalType'] == 'Cat' &&
+          petDoc['breed'] != _catBreeds &&
+          _catBreeds != 'None') {
+        return false;
+      } else if (petDoc['animalType'] == 'Dog' &&
+          petDoc['breed'] != _dogBreeds &&
+          _dogBreeds != 'None') {
+        return false;
+      } else if (petDoc['animalType'] == 'Other' &&
+          petDoc['breed'] != _otherBreeds &&
+          _otherBreeds != 'None') {
+        return false;
+      } else {
+        return true;
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Posts'),
+      key: widget._scaffoldKey,
+      endDrawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            SwitchListTile(
+              title: Text('DarkMode'),
+              value: widget.darkMode,
+              onChanged: (value) => widget.toggleTheme(widget.darkMode),
+              selected: true,
+            ),
+          ],
+        ),
       ),
+      appBar: AppBar(
+        title: Text('Pets'),
+        centerTitle: true,
+        actions: <Widget>[
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+            ),
+          ),
+        ],
+      ),
+     
+              
       body: StreamBuilder(
           stream: postsRef.snapshots(),
           builder: (context, snapshot) {
@@ -104,7 +162,9 @@ class _PostsState extends State<Posts> {
                 displayedAnimals.add(petDoc);
               }
             }
-            if (displayedAnimals == []) { displayedAnimals = snapshot.data.documents; }
+            if (displayedAnimals == []) {
+              displayedAnimals = snapshot.data.documents;
+            }
 
             return Padding(
               padding: EdgeInsets.only(top: 16.0),

@@ -6,8 +6,10 @@ import 'package:planet_pet/widgets/bottom_tab_bar.dart';
 
 class UserBottomTabBar extends StatefulWidget {
   final String userId;
+  final bool darkMode;
+  final Function(bool) toggleTheme;
 
-  UserBottomTabBar({this.userId});
+  UserBottomTabBar({this.userId, this.darkMode, this.toggleTheme});
 
   @override
   _UserBottomTabBarState createState() => _UserBottomTabBarState();
@@ -23,7 +25,7 @@ class _UserBottomTabBarState extends State<UserBottomTabBar> {
         Icon(Icons.favorite),
       ],
       pages: <Widget>[
-        Posts(userId: widget.userId),
+        Posts(userId: widget.userId, darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
         Preferences(userId: widget.userId),
         FavoriteAnimals(userId: widget.userId),
       ],

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:planet_pet/app.dart';
 import 'package:sentry/sentry.dart';
 import 'app.dart' as App;
 

@@ -8,6 +8,13 @@ import 'package:planet_pet/widgets/admin_bottom_tab_bar.dart';
 import 'package:planet_pet/widgets/user_bottom_tab_bar.dart';
 
 class Home extends StatefulWidget {
+
+  final bool darkMode;
+  final Function(bool) toggleTheme;
+
+  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Home({Key key, this.darkMode, this.toggleTheme}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
@@ -19,10 +26,12 @@ class _HomeState extends State<Home> {
   final CollectionReference usersRef = Firestore.instance.collection('users');
   User user;
   bool isAdmin;
+  bool darkMode;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       //ternary that displays screens if user is authenticated or not
       body: _isAuth ? authScreen() : NotAuthScreen(signIn: signIn),
     );
@@ -137,7 +146,6 @@ class _HomeState extends State<Home> {
         'prefsNeedLeash': null,
         'prefsAvailability': 0,
         'favorites': [],
-        'Adopted Pets': null
       });
     }
   }
@@ -145,6 +153,6 @@ class _HomeState extends State<Home> {
   Widget authScreen() {
     return isAdmin
         ? AdminBottomTabBar()
-        : UserBottomTabBar(userId: currentUser.id);
+        : UserBottomTabBar(userId: currentUser.id, darkMode: widget.darkMode, toggleTheme: widget.toggleTheme);
   }
 }
