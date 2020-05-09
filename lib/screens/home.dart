@@ -28,7 +28,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: _isAuth ? authScreen() : NotAuthScreen(signIn: signIn),
     );
   }
@@ -148,7 +147,8 @@ class _HomeState extends State<Home> {
 
   Widget authScreen() {
     return isAdmin
-        ? AdminBottomTabBar()
+        ? AdminBottomTabBar(
+            darkMode: widget.darkMode, toggleTheme: widget.toggleTheme)
         : UserBottomTabBar(
             userId: currentUser.id,
             darkMode: widget.darkMode,
