@@ -33,6 +33,7 @@ dependencies:
   cached_network_image: ^2.1.0+1
   intl: ^0.16.0
   flutter_launcher_icons: ^0.7.5
+  shared_preferences: ^0.5.7+1
   
 
 dev_dependencies:

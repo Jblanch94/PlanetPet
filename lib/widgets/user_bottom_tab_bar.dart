@@ -9,7 +9,7 @@ class UserBottomTabBar extends StatefulWidget {
   final bool darkMode;
   final Function(bool) toggleTheme;
 
-  UserBottomTabBar({Key key, this.userId, this.darkMode, this.toggleTheme}) : super(key: key);
+  const UserBottomTabBar({Key key, this.userId, this.darkMode, this.toggleTheme}) : super(key: key);
 
   @override
   _UserBottomTabBarState createState() => _UserBottomTabBarState();
@@ -29,7 +29,8 @@ class _UserBottomTabBarState extends State<UserBottomTabBar> {
         Preferences(userId: widget.userId, darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
         FavoriteAnimals(userId: widget.userId, darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
       ],
-      numPages: 3
+      numPages: 3,
+      darkMode: widget.darkMode
     );
   }
 }

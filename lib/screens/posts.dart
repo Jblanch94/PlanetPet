@@ -24,11 +24,10 @@ List<String> availability = [
 ];
 
 class Posts extends StatefulWidget {
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final String userId;
   final bool darkMode;
   final Function(bool) toggleTheme;
-  Posts({Key key, this.userId, this.darkMode, this.toggleTheme})
+  const Posts({Key key, this.userId, this.darkMode, this.toggleTheme})
       : super(key: key);
 
   @override
@@ -36,9 +35,10 @@ class Posts extends StatefulWidget {
 }
 
 class _PostsState extends State<Posts> {
+  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final CollectionReference postsRef = Firestore.instance.collection('pets');
   final CollectionReference usersRef = Firestore.instance.collection('users');
-  Stream<QuerySnapshot> posts;
+  Stream<QuerySnapshot> snapshot;
 
   String _animalType;
   String _catBreeds;
@@ -61,11 +61,11 @@ class _PostsState extends State<Posts> {
       _animalSex = 'None';
       _availability = 'None';
     }
-    initStream();
+    getSnapshot();
   }
 
-  initStream() {
-    posts = postsRef.snapshots();
+  getSnapshot() {
+    snapshot = postsRef.snapshots();
   }
 
   void initSearchPreferences() async {
@@ -126,8 +126,9 @@ class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: widget._scaffoldKey,
-      endDrawer: SettingsDrawer(darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
+      key: _scaffoldKey,
+      endDrawer: SettingsDrawer(
+          darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
       appBar: AppBar(
         title: Text('Pets'),
         centerTitle: true,
@@ -135,13 +136,15 @@ class _PostsState extends State<Posts> {
           Builder(
             builder: (context) => IconButton(
               icon: Icon(Icons.settings),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
             ),
           ),
         ],
       ),
       body: StreamBuilder(
-          stream: postsRef.snapshots(),
+          stream: snapshot,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(

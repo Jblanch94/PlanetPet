@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:planet_pet/screens/home.dart';
 import 'package:sentry/sentry.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const sentryDSN =
     'https://03af678dd10041d1babef9e30701aeb3@o365156.ingest.sentry.io/5207600';
@@ -33,13 +34,25 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    darkMode = false;
+    getTheme();
+    if (darkMode == null) {
+      darkMode = false;
+    }
   }
 
-  void toggleTheme(bool value) {
+  void getTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    darkMode = prefs.getBool('darkMode') ?? false;
+  }
+
+  void toggleTheme(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     setState(() {
       darkMode = value;
     });
+
+    await prefs.setBool('darkMode', darkMode);
   }
 
   @override

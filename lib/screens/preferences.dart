@@ -10,11 +10,10 @@ enum AnimalSex { none, male, female }
 enum Availability { none, available, pending, adopted }
 
 class Preferences extends StatefulWidget {
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final String userId;
   final bool darkMode;
   final Function(bool) toggleTheme;
-  Preferences({Key key, this.userId, this.darkMode, this.toggleTheme})
+  const Preferences({Key key, this.userId, this.darkMode, this.toggleTheme})
       : super(key: key);
 
   @override
@@ -22,6 +21,7 @@ class Preferences extends StatefulWidget {
 }
 
 class _PreferencesState extends State<Preferences> {
+  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final CollectionReference usersRef = Firestore.instance.collection('users');
 
   AnimalType _animalType;
@@ -61,11 +61,10 @@ class _PreferencesState extends State<Preferences> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: widget._scaffoldKey,
+      key: _scaffoldKey,
       endDrawer: SettingsDrawer(
           darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
       appBar: AppBar(
@@ -75,7 +74,9 @@ class _PreferencesState extends State<Preferences> {
           Builder(
             builder: (context) => IconButton(
               icon: Icon(Icons.settings),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
             ),
           ),
         ],

@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:planet_pet/widgets/drawer.dart';
 
 class FavoriteAnimals extends StatefulWidget {
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final String userId;
   final bool darkMode;
   final Function(bool) toggleTheme;
 
-  FavoriteAnimals({Key key,this.userId, this.darkMode, this.toggleTheme}) : super(key: key);
+  const FavoriteAnimals({Key key, this.userId, this.darkMode, this.toggleTheme})
+      : super(key: key);
 
   @override
   _FavoriteAnimalsState createState() => _FavoriteAnimalsState();
 }
 
 class _FavoriteAnimalsState extends State<FavoriteAnimals> {
+  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   CollectionReference usersRef = Firestore.instance.collection('users');
   CollectionReference postsRef = Firestore.instance.collection('pets');
   dynamic userFavorites;
+  Stream<QuerySnapshot> snapshot;
 
   @override
   void initState() {
@@ -27,18 +29,24 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
     if (userFavorites == null) {
       userFavorites = [];
     }
+    getSnapshot();
+  }
+
+  void getSnapshot() {
+    setState(() {
+      snapshot = postsRef.snapshots();
+    });
   }
 
   void fetchCurrentUserFavorites() async {
     DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
     final docs = userDoc.data['favorites'];
     userFavorites = docs;
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
-      userFavorites = docs;
-    });
+        userFavorites = docs;
+      });
     }
-    
   }
 
   Widget buildPostPet(dynamic record, String url) {
@@ -118,7 +126,9 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
                           Column(
                             children: <Widget>[
                               Text('Leash Required'),
-                              Padding(padding: EdgeInsets.only(top: 8),),
+                              Padding(
+                                padding: EdgeInsets.only(top: 8),
+                              ),
                               Text(record['leashNeeded'] ? 'Yes' : 'No')
                             ],
                           ),
@@ -126,19 +136,20 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
                           Column(
                             children: <Widget>[
                               Text('Availability'),
-                              Padding(padding: EdgeInsets.only(top: 8),),
+                              Padding(
+                                padding: EdgeInsets.only(top: 8),
+                              ),
                               Text('${record['availability']}')
                             ],
                           ),
-                          
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 12)
-                    ),
+                    Padding(padding: EdgeInsets.only(top: 12)),
                     Text('${record['status']}'),
-                    Padding(padding: EdgeInsets.only(top: 12),),
+                    Padding(
+                      padding: EdgeInsets.only(top: 12),
+                    ),
                     Text('${record['description']}')
                   ],
                 ),
@@ -153,8 +164,9 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: widget._scaffoldKey,
-      endDrawer: SettingsDrawer(darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
+      key: _scaffoldKey,
+      endDrawer: SettingsDrawer(
+          darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
       appBar: AppBar(
         title: Text('Favorites'),
         centerTitle: true,
@@ -162,15 +174,18 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
           Builder(
             builder: (context) => IconButton(
               icon: Icon(Icons.settings),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
             ),
           ),
         ],
       ),
       body: StreamBuilder(
-          stream: postsRef.snapshots(),
+          stream: snapshot,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting ||
+                !snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             } else {
               return ListView.builder(
@@ -179,10 +194,9 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
                     DocumentSnapshot record = snapshot.data.documents[index];
                     String recordId = record.documentID;
 
-
                     if (userFavorites.contains(recordId)) {
                       return buildPostPet(record, record['imageURL']);
-                    } else if(userFavorites == null) {
+                    } else if (userFavorites == null) {
                       return Text('No favorited animals.');
                     } else
                       return Container();

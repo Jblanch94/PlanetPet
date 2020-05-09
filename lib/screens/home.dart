@@ -8,11 +8,10 @@ import 'package:planet_pet/widgets/admin_bottom_tab_bar.dart';
 import 'package:planet_pet/widgets/user_bottom_tab_bar.dart';
 
 class Home extends StatefulWidget {
-
   final bool darkMode;
   final Function(bool) toggleTheme;
 
-  Home({Key key, this.darkMode, this.toggleTheme}) : super(key: key);
+  const Home({Key key, this.darkMode, this.toggleTheme}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
@@ -28,8 +27,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(body: _isAuth ? authScreen() : NotAuthScreen(signIn: signIn));
-
+    return Scaffold(
+      
+      body: _isAuth ? authScreen() : NotAuthScreen(signIn: signIn),
+    );
   }
 
   //sign user in
@@ -148,6 +149,9 @@ class _HomeState extends State<Home> {
   Widget authScreen() {
     return isAdmin
         ? AdminBottomTabBar()
-        : UserBottomTabBar(userId: currentUser.id, darkMode: widget.darkMode, toggleTheme: widget.toggleTheme);
+        : UserBottomTabBar(
+            userId: currentUser.id,
+            darkMode: widget.darkMode,
+            toggleTheme: widget.toggleTheme);
   }
 }
