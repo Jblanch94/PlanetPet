@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:planet_pet/screens/admin_detail_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:planet_pet/widgets/custom_scaffold.dart';
 import 'package:planet_pet/widgets/drawer.dart';
 
 Widget _buildGridItem(BuildContext context, DocumentSnapshot document) {
@@ -47,24 +48,11 @@ class _AdminGridState extends State<AdminGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      endDrawer: SettingsDrawer(
-          darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
-      appBar: AppBar(
-        title: Text('Pets'),
-        centerTitle: true,
-        actions: <Widget>[
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          ),
-        ],
-      ),
+    return CustomScaffold(
+      scaffoldKey: _scaffoldKey,
+      darkMode: widget.darkMode,
+      toggleTheme: widget.toggleTheme,
+      title: 'Pets',
       body: StreamBuilder(
           stream: Firestore.instance.collection('pets').snapshots(),
           builder: (context, snapshot) {

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:planet_pet/widgets/custom_scaffold.dart';
 import 'package:planet_pet/widgets/drawer.dart';
 
 enum AnimalType { none, cat, dog, other }
@@ -63,24 +64,11 @@ class _PreferencesState extends State<Preferences> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      endDrawer: SettingsDrawer(
-          darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
-      appBar: AppBar(
-        title: Text('Preferences'),
-        centerTitle: true,
-        actions: <Widget>[
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          ),
-        ],
-      ),
+    return CustomScaffold(
+      scaffoldKey: _scaffoldKey,
+      darkMode: widget.darkMode,
+      toggleTheme: widget.toggleTheme,
+      title: 'Preferences',
       body: preferencesBody(context),
     );
   }

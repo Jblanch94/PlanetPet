@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:planet_pet/widgets/drawer.dart';
+import 'package:planet_pet/widgets/custom_scaffold.dart';
 
 class FavoriteAnimals extends StatefulWidget {
   final String userId;
@@ -163,24 +163,11 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      endDrawer: SettingsDrawer(
-          darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
-      appBar: AppBar(
-        title: Text('Favorites'),
-        centerTitle: true,
-        actions: <Widget>[
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          ),
-        ],
-      ),
+    return CustomScaffold(
+      scaffoldKey: _scaffoldKey,
+      darkMode: widget.darkMode,
+      toggleTheme: widget.toggleTheme,
+      title: 'Favorite Pets',
       body: StreamBuilder(
           stream: snapshot,
           builder: (context, snapshot) {

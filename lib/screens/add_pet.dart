@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:path/path.dart' as Path;
-import 'package:planet_pet/widgets/drawer.dart';
+import 'package:planet_pet/widgets/custom_scaffold.dart';
 import '../models/animal.dart';
 
 //
@@ -74,24 +74,11 @@ class _PetFormState extends State<PetForm> {
   @override
   Widget build(BuildContext context) {
     if (image == null) {
-      return Scaffold(
-          key: _scaffoldKey,
-          endDrawer: SettingsDrawer(
-              darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
-          appBar: AppBar(
-            title: Text('Select Photo'),
-            centerTitle: true,
-            actions: <Widget>[
-              Builder(
-                builder: (context) => IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                ),
-              ),
-            ],
-          ),
+      return CustomScaffold(
+          scaffoldKey: _scaffoldKey,
+          darkMode: widget.darkMode,
+          toggleTheme: widget.toggleTheme,
+          title: 'Select Photo',
           body: Center(
               child: RaisedButton(
                   child: Text('Select Photo'),
@@ -99,24 +86,11 @@ class _PetFormState extends State<PetForm> {
                     imageURL = await getImage();
                   })));
     } else {
-      return Scaffold(
-          key: _scaffoldKey,
-          endDrawer: SettingsDrawer(
-              darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
-          appBar: AppBar(
-            title: Text('Add Pet'),
-            centerTitle: true,
-            actions: <Widget>[
-              Builder(
-                builder: (context) => IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                ),
-              ),
-            ],
-          ),
+      return CustomScaffold(
+          scaffoldKey: _scaffoldKey,
+          darkMode: widget.darkMode,
+          toggleTheme: widget.toggleTheme,
+          title: 'Add Pet',
           body: SafeArea(
               child: ListView(
             children: <Widget>[

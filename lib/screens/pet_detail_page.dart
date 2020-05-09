@@ -2,14 +2,22 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:planet_pet/widgets/custom_scaffold.dart';
 
 class PetDetailPage extends StatefulWidget {
   final dynamic petDoc;
   final dynamic docId;
   final String userId;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final bool darkMode;
+  final Function(bool) toggleTheme;
 
-  PetDetailPage({Key key, this.petDoc, this.userId, this.docId})
+  PetDetailPage(
+      {Key key,
+      this.petDoc,
+      this.userId,
+      this.docId,
+      this.darkMode,
+      this.toggleTheme})
       : super(key: key);
 
   @override
@@ -17,11 +25,12 @@ class PetDetailPage extends StatefulWidget {
 }
 
 class _PetDetailPageState extends State<PetDetailPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final CollectionReference postsRef = Firestore.instance.collection('pets');
   final CollectionReference usersRef = Firestore.instance.collection('users');
   bool favorited;
 
-  /*update the user to favorite the pet 
+  /*update the user to favorite the pet
   will now show up in user's favorites page */
   void favoritePet() async {
     getFavoriteStatus();
@@ -42,7 +51,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
   void getFavoriteStatus() async {
     DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
     List<dynamic> favorites = userDoc['favorites'];
-    if(favorites == null) {
+    if (favorites == null) {
       favorites = [];
       setState(() {
         favorited = false;
@@ -71,13 +80,11 @@ class _PetDetailPageState extends State<PetDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: widget._scaffoldKey,
-      appBar: AppBar(
-        title: Text('Pet Details'),
-        centerTitle: true,
-        titleSpacing: 0,
-      ),
+    return CustomScaffold(
+      scaffoldKey: _scaffoldKey,
+      darkMode: widget.darkMode,
+      toggleTheme: widget.toggleTheme,
+      title: "${widget.petDoc['name']}'s Details",
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
@@ -100,7 +107,8 @@ class _PetDetailPageState extends State<PetDetailPage> {
                 padding: EdgeInsets.only(top: 12),
               ),
 //              Text("Birthdate: ${widget.petDoc['dateOfBirth']}"),
-              Text("Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.petDoc['dateOfBirth'].toDate())}"),
+              Text(
+                  "Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.petDoc['dateOfBirth'].toDate())}"),
 
               Padding(
                 padding: EdgeInsets.only(top: 12),
@@ -175,9 +183,11 @@ class _PetDetailPageState extends State<PetDetailPage> {
                     ),
                     color: Colors.green[300],
                     icon: Icon(Icons.pets, color: Colors.white),
-                    onPressed: () => widget._scaffoldKey.currentState.showSnackBar(SnackBar(
-                      content: Text('Adoption pending, we will be in touch!')
-                    ),),
+                    onPressed: () => _scaffoldKey.currentState.showSnackBar(
+                      SnackBar(
+                          content:
+                              Text('Adoption pending, we will be in touch!')),
+                    ),
                   ),
                 ],
               ),

@@ -2,8 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:planet_pet/screens/pet_detail_page.dart';
-import 'package:planet_pet/widgets/custom_appbar.dart';
-import 'package:planet_pet/widgets/drawer.dart';
+import 'package:planet_pet/widgets/custom_scaffold.dart';
 
 List<String> animalTypes = ['None', 'Cat', 'Dog', 'Other'];
 List<String> catBreeds = ['None', 'Persian', 'Shorthair', 'Himalayan'];
@@ -87,7 +86,11 @@ class _PostsState extends State<Posts> {
   void viewPetDetails(BuildContext context, dynamic petDoc, dynamic docId) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PetDetailPage(
-            petDoc: petDoc, userId: widget.userId, docId: docId)));
+            petDoc: petDoc,
+            userId: widget.userId,
+            docId: docId,
+            darkMode: widget.darkMode,
+            toggleTheme: widget.toggleTheme)));
   }
 
   bool matchesSearchPrefs(var petDoc) {
@@ -125,24 +128,11 @@ class _PostsState extends State<Posts> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      endDrawer: SettingsDrawer(
-          darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
-      appBar: AppBar(
-        title: Text('Pets'),
-        centerTitle: true,
-        actions: <Widget>[
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          ),
-        ],
-      ),
+    return CustomScaffold(
+      scaffoldKey: _scaffoldKey,
+      darkMode: widget.darkMode,
+      toggleTheme: widget.toggleTheme,
+      title: 'Pets',
       body: StreamBuilder(
           stream: snapshot,
           builder: (context, snapshot) {
@@ -175,7 +165,11 @@ class _PostsState extends State<Posts> {
                     return Column(
                       children: <Widget>[
                         GestureDetector(
-                          onTap: () => viewPetDetails(context, petDoc, docId),
+                          onTap: () => viewPetDetails(
+                            context,
+                            petDoc,
+                            docId,
+                          ),
                           child: CircleAvatar(
                             radius: 50,
                             backgroundImage: CachedNetworkImageProvider(
