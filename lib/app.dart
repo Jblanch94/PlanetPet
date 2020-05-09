@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:planet_pet/screens/home.dart';
 import 'package:sentry/sentry.dart';
 
-const sentryDSN = 'https://03af678dd10041d1babef9e30701aeb3@o365156.ingest.sentry.io/5207600';
+const sentryDSN =
+    'https://03af678dd10041d1babef9e30701aeb3@o365156.ingest.sentry.io/5207600';
 final SentryClient sentry = SentryClient(dsn: sentryDSN);
 
 class App extends StatefulWidget {
@@ -11,14 +12,10 @@ class App extends StatefulWidget {
     // if (Foundation.kDebugMode) {
     //   print(stackTrace);
     //   return;
-    // }
+    //}
 
-    
-
-    final SentryResponse response = await sentry.captureException(
-      exception: error,
-      stackTrace: stackTrace
-    );
+    final SentryResponse response =
+        await sentry.captureException(exception: error, stackTrace: stackTrace);
     if (response.isSuccessful) {
       print('Sentry ID: ${response.eventId}');
     } else {
@@ -31,10 +28,9 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-
   bool darkMode;
 
-  @override 
+  @override
   void initState() {
     super.initState();
     darkMode = false;
@@ -42,16 +38,17 @@ class _AppState extends State<App> {
 
   void toggleTheme(bool value) {
     setState(() {
-      darkMode = !darkMode;
+      darkMode = value;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     // throw StateError('Generic Test Error');
 
     return MaterialApp(
       home: Home(darkMode: darkMode, toggleTheme: toggleTheme),
-      theme: darkMode ? ThemeData.dark() : ThemeData.light()
+      theme: darkMode ? ThemeData.dark() : ThemeData.light(),
     );
   }
 }

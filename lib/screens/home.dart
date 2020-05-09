@@ -12,8 +12,6 @@ class Home extends StatefulWidget {
   final bool darkMode;
   final Function(bool) toggleTheme;
 
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-
   Home({Key key, this.darkMode, this.toggleTheme}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
@@ -30,11 +28,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-      //ternary that displays screens if user is authenticated or not
-      body: _isAuth ? authScreen() : NotAuthScreen(signIn: signIn),
-    );
+    return  Scaffold(body: _isAuth ? authScreen() : NotAuthScreen(signIn: signIn));
+
   }
 
   //sign user in

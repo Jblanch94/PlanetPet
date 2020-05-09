@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:planet_pet/widgets/drawer.dart';
 
 class FavoriteAnimals extends StatefulWidget {
+  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final String userId;
+  final bool darkMode;
+  final Function(bool) toggleTheme;
 
-  FavoriteAnimals({this.userId});
+  FavoriteAnimals({Key key,this.userId, this.darkMode, this.toggleTheme}) : super(key: key);
 
   @override
   _FavoriteAnimalsState createState() => _FavoriteAnimalsState();
@@ -149,6 +153,20 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: widget._scaffoldKey,
+      endDrawer: SettingsDrawer(darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
+      appBar: AppBar(
+        title: Text('Favorites'),
+        centerTitle: true,
+        actions: <Widget>[
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+            ),
+          ),
+        ],
+      ),
       body: StreamBuilder(
           stream: postsRef.snapshots(),
           builder: (context, snapshot) {

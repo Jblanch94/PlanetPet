@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:planet_pet/screens/pet_detail_page.dart';
 import 'package:planet_pet/widgets/custom_appbar.dart';
+import 'package:planet_pet/widgets/drawer.dart';
 
 List<String> animalTypes = ['None', 'Cat', 'Dog', 'Other'];
 List<String> catBreeds = ['None', 'Persian', 'Shorthair', 'Himalayan'];
@@ -23,12 +24,12 @@ List<String> availability = [
 ];
 
 class Posts extends StatefulWidget {
+  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final String userId;
   final bool darkMode;
   final Function(bool) toggleTheme;
-  Posts({Key key, this.userId, this.darkMode, this.toggleTheme}) : super(key: key);
-
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+  Posts({Key key, this.userId, this.darkMode, this.toggleTheme})
+      : super(key: key);
 
   @override
   _PostsState createState() => _PostsState();
@@ -37,6 +38,7 @@ class Posts extends StatefulWidget {
 class _PostsState extends State<Posts> {
   final CollectionReference postsRef = Firestore.instance.collection('pets');
   final CollectionReference usersRef = Firestore.instance.collection('users');
+  Stream<QuerySnapshot> posts;
 
   String _animalType;
   String _catBreeds;
@@ -59,6 +61,11 @@ class _PostsState extends State<Posts> {
       _animalSex = 'None';
       _availability = 'None';
     }
+    initStream();
+  }
+
+  initStream() {
+    posts = postsRef.snapshots();
   }
 
   void initSearchPreferences() async {
@@ -120,18 +127,7 @@ class _PostsState extends State<Posts> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: widget._scaffoldKey,
-      endDrawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            SwitchListTile(
-              title: Text('DarkMode'),
-              value: widget.darkMode,
-              onChanged: (value) => widget.toggleTheme(widget.darkMode),
-              selected: true,
-            ),
-          ],
-        ),
-      ),
+      endDrawer: SettingsDrawer(darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
       appBar: AppBar(
         title: Text('Pets'),
         centerTitle: true,
@@ -144,8 +140,6 @@ class _PostsState extends State<Posts> {
           ),
         ],
       ),
-     
-              
       body: StreamBuilder(
           stream: postsRef.snapshots(),
           builder: (context, snapshot) {
