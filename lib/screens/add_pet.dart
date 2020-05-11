@@ -80,11 +80,15 @@ class _PetFormState extends State<PetForm> {
           toggleTheme: widget.toggleTheme,
           title: 'Select Photo',
           body: Center(
-              child: RaisedButton(
+              child: Semantics(
+                button: true,
+                focused: true,
+                enabled: true,
+                child: RaisedButton(
                   child: Text('Select Photo'),
                   onPressed: () async {
                     imageURL = await getImage();
-                  })));
+                  }))));
     } else {
       return CustomScaffold(
           scaffoldKey: _scaffoldKey,
@@ -94,7 +98,10 @@ class _PetFormState extends State<PetForm> {
           body: SafeArea(
               child: ListView(
             children: <Widget>[
-              Image.file(image, height: 240),
+              Semantics(
+                child: Image.file(image, height: 240),
+                label: "Image of pet"
+              ),
               SizedBox(height: 40),
               Text(
                   "FYI: We'll save your current location as this animal's home turf."),
@@ -106,27 +113,37 @@ class _PetFormState extends State<PetForm> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          TextFormField(
-                              autofocus: true,
-                              decoration: InputDecoration(
-                                  labelText: 'Name of pet',
-                                  border: OutlineInputBorder()),
-                              onSaved: (value) {
-                                petFormFields.name = value;
-                              },
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter a name';
-                                } else {
-                                  return null;
-                                }
-                              }),
+                          Semantics(
+                            child: TextFormField(
+                                autofocus: true,
+                                decoration: InputDecoration(
+                                    labelText: 'Name of pet',
+                                    border: OutlineInputBorder()),
+                                onSaved: (value) {
+                                  petFormFields.name = value;
+                                },
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter a name';
+                                  } else {
+                                    return null;
+                                  }
+                                }),
+                            textField: true,
+                            label: "Name of pet",
+                            hint: "Give this pet a name",
+                          ),
                           SizedBox(height: 10),
                           Text("Birthdate:"),
                           Text("${selectedDate.toLocal()}".split(' ')[0]),
-                          RaisedButton(
+                          Semantics(
+                            child: RaisedButton(
                               onPressed: () => _selectDate(context),
-                              child: Text('Select Birthdate')),
+                              child: Text('Select Birthdate')
+                            ),
+                            label: "Select birthdate",
+                            hint: "Select a birthdate for this pet"
+                          ),
                           SizedBox(height: 10),
                           Text('Sex'),
                           ListTile(
@@ -186,7 +203,8 @@ class _PetFormState extends State<PetForm> {
                                       _animalType = value;
                                     });
                                   })),
-                          TextFormField(
+                          Semantics(
+                            child: TextFormField(
                               autofocus: true,
                               decoration: InputDecoration(
                                   labelText: 'Breed',
@@ -201,6 +219,10 @@ class _PetFormState extends State<PetForm> {
                                   return null;
                                 }
                               }),
+                              textField: true,
+                              label: "Breed",
+                              hint: "Enter a breed for this pet"
+                          ),
                           Text('Traits'),
                           ListTile(
                               dense: true,
@@ -278,7 +300,8 @@ class _PetFormState extends State<PetForm> {
                                       _availability = value;
                                     });
                                   })),
-                          TextFormField(
+                          Semantics(
+                            child: TextFormField(
                               autofocus: true,
                               decoration: InputDecoration(
                                   labelText: 'Status',
@@ -292,9 +315,15 @@ class _PetFormState extends State<PetForm> {
                                 } else {
                                   return null;
                                 }
-                              }),
+                              }
+                            ),
+                            textField: true,
+                            label: "Enter status",
+                            hint: "Enter a status for this pet"
+                          ),
                           SizedBox(height: 10),
-                          TextFormField(
+                          Semantics(
+                            child: TextFormField(
                               autofocus: true,
                               decoration: InputDecoration(
                                   labelText: 'Description',
@@ -308,8 +337,14 @@ class _PetFormState extends State<PetForm> {
                                 } else {
                                   return null;
                                 }
-                              }),
-                          RaisedButton(
+                              }
+                            ),
+                            textField: true,
+                            label: "Description",
+                            hint: "Enter a description for this pet"
+                          ),
+                          Semantics(
+                            child: RaisedButton(
                               child: Text('Post it!'),
                               onPressed: () {
                                 if (formKey.currentState.validate()) {
@@ -340,7 +375,12 @@ class _PetFormState extends State<PetForm> {
                                   setState(
                                       () {}); // Navigator.of(context).pop();
                                 }
-                              })
+                              }
+                            ),
+                            button: true,
+                            label: "Submit pet to database",
+                            hint: "Submit pet to database"
+                          )
                         ],
                       )))
             ],
