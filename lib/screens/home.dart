@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:planet_pet/models/user.dart';
@@ -91,6 +92,13 @@ class _HomeState extends State<Home> {
     }
   }
 
+  void signOut() async {
+    await _googleSignIn.signOut();
+    setState(() {
+      _isAuth = false;
+    });
+  }
+
   void createUser() async {
     DocumentSnapshot doc = await usersRef.document(currentUser.id).get();
 
@@ -149,7 +157,7 @@ class _HomeState extends State<Home> {
     return isAdmin
         ? AdminBottomTabBar(
             darkMode: widget.darkMode, toggleTheme: widget.toggleTheme)
-        : UserBottomTabBar(
+        : UserBottomTabBar(signOut: signOut,
             userId: currentUser.id,
             darkMode: widget.darkMode,
             toggleTheme: widget.toggleTheme);

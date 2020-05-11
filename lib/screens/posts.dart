@@ -26,7 +26,8 @@ class Posts extends StatefulWidget {
   final String userId;
   final bool darkMode;
   final Function(bool) toggleTheme;
-  const Posts({Key key, this.userId, this.darkMode, this.toggleTheme})
+  final Function signOut;
+  const Posts({Key key, this.userId, this.darkMode, this.toggleTheme, this.signOut})
       : super(key: key);
 
   @override
@@ -142,6 +143,7 @@ class _PostsState extends State<Posts> {
       darkMode: widget.darkMode,
       toggleTheme: widget.toggleTheme,
       title: 'Pets',
+      signOut: widget.signOut,
       body: StreamBuilder(
           stream: snapshot,
           builder: (context, snapshot) {
@@ -173,6 +175,7 @@ class _PostsState extends State<Posts> {
                     var docId = displayedAnimals[index].documentID;
                     return Column(
                       children: <Widget>[
+                        
                         GestureDetector(
                           onTap: () => viewPetDetails(
                             context,

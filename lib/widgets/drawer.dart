@@ -1,17 +1,24 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:planet_pet/models/user.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class SettingsDrawer extends StatelessWidget {
+class SettingsDrawer extends StatefulWidget {
   final bool darkMode;
   final Function(bool) toggleTheme;
+  final Function signOut;
   final DocumentSnapshot user;
-  const SettingsDrawer({Key key, this.darkMode, this.toggleTheme, this.user})
+  const SettingsDrawer({Key key, this.darkMode, this.toggleTheme, this.user, this.signOut})
       : super(key: key);
+
+  @override
+  _SettingsDrawerState createState() => _SettingsDrawerState();
+}
+
+class _SettingsDrawerState extends State<SettingsDrawer> {
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -27,40 +34,40 @@ class SettingsDrawer extends StatelessWidget {
                   ListTile(
                     dense: true,
                     leading: Icon(Icons.person),
-                    title: Text(user['username']),
+                    title: Text(widget.user['username']),
                   ),
                   Divider(),
                   ListTile(
                     leading: Platform.isAndroid
                         ? Icon(Icons.phone_android)
                         : Icon(Icons.phone_iphone),
-                    title: Text(user['phoneNumber']),
+                    title: Text(widget.user['phoneNumber']),
                   ),
                   Divider(),
                   ListTile(
                     dense: true,
                     leading: Text('Street Address 1:'),
-                    title: Text(user['streetAddress1']),
+                    title: Text(widget.user['streetAddress1']),
                   ),
                   ListTile(
                     dense: true,
                     leading: Text('Street Address 2/Apartment:'),
-                    title: Text(user['streetAddress2']),
+                    title: Text(widget.user['streetAddress2']),
                   ),
                   ListTile(
                     dense: true,
                     leading: Text('City:'),
-                    title: Text(user['city']),
+                    title: Text(widget.user['city']),
                   ),
                   ListTile(
                     dense: true,
                     leading: Text('State:'),
-                    title: Text(user['state']),
+                    title: Text(widget.user['state']),
                   ),
                   ListTile(
                     dense: true,
                     leading: Text('Zip code:'),
-                    title: Text(user['zipcode']),
+                    title: Text(widget.user['zipcode']),
                   ),
                 ],
               ),
@@ -68,8 +75,15 @@ class SettingsDrawer extends StatelessWidget {
           ),
           SwitchListTile(
             title: Text('Dark Mode'),
-            value: darkMode,
-            onChanged: toggleTheme,
+            value: widget.darkMode,
+            onChanged: widget.toggleTheme,
+          ),
+          RaisedButton(
+            child: Text('Sign Out'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              widget.signOut();
+            },
           ),
         ],
       ),
