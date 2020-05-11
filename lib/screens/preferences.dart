@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:planet_pet/widgets/custom_scaffold.dart';
-import 'package:planet_pet/widgets/drawer.dart';
 
 enum AnimalType { none, cat, dog, other }
 enum CatBreeds { none, persian, shorthair, himalayan }

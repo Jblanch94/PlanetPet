@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:planet_pet/screens/admin_detail_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:planet_pet/widgets/custom_scaffold.dart';
-import 'package:planet_pet/widgets/drawer.dart';
 
-Widget _buildGridItem(BuildContext context, DocumentSnapshot document) {
+Widget _buildGridItem(BuildContext context, DocumentSnapshot document,
+    bool darkMode, void Function(bool) toggleTheme) {
   return GestureDetector(
     child: Card(
       child: Column(
@@ -28,7 +28,10 @@ Widget _buildGridItem(BuildContext context, DocumentSnapshot document) {
           context,
           MaterialPageRoute(
               builder: (_) => AdminDetailPage(
-                  document) // AdminDetailPage(document: document)
+                    document: document,
+                    darkMode: darkMode,
+                    toggleTheme: toggleTheme
+                  ) // AdminDetailPage(document: document)
               ));
     },
   );
@@ -62,8 +65,11 @@ class _AdminGridState extends State<AdminGrid> {
               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2),
               itemCount: snapshot.data.documents.length,
-              itemBuilder: (context, index) =>
-                  _buildGridItem(context, snapshot.data.documents[index]),
+              itemBuilder: (context, index) => _buildGridItem(
+                  context,
+                  snapshot.data.documents[index],
+                  widget.darkMode,
+                  widget.toggleTheme),
             );
           }),
     );
