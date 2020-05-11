@@ -38,6 +38,7 @@ class _PostsState extends State<Posts> {
   final CollectionReference postsRef = Firestore.instance.collection('pets');
   final CollectionReference usersRef = Firestore.instance.collection('users');
   Stream<QuerySnapshot> snapshot;
+  DocumentSnapshot doc;
 
   String _animalType;
   String _catBreeds;
@@ -61,10 +62,17 @@ class _PostsState extends State<Posts> {
       _availability = 'None';
     }
     getSnapshot();
+    getUserDetails();
   }
 
-  getSnapshot() {
+  void getSnapshot() {
     snapshot = postsRef.snapshots();
+  }
+
+  void getUserDetails() async {
+    setState(() async {
+      doc = await usersRef.document(widget.userId).get();
+    });
   }
 
   void initSearchPreferences() async {
@@ -129,6 +137,7 @@ class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      user: doc,
       scaffoldKey: _scaffoldKey,
       darkMode: widget.darkMode,
       toggleTheme: widget.toggleTheme,
