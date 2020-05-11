@@ -21,7 +21,7 @@ class _UserBottomTabBarState extends State<UserBottomTabBar> {
     return BottomTabBar(
       icons: <Widget>[
         Icon(Icons.home),
-        Icon(Icons.settings_applications),
+        Icon(Icons.search),
         Icon(Icons.favorite),
       ],
       pages: <Widget>[
