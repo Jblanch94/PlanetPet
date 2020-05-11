@@ -7,9 +7,16 @@ class AdminDetailPage extends StatefulWidget {
   final DocumentSnapshot document;
   final bool darkMode;
   final Function(bool) toggleTheme;
+  final Function signOut;
+  final DocumentSnapshot userDoc;
 
   const AdminDetailPage(
-      {Key key, this.document, this.darkMode, this.toggleTheme})
+      {Key key,
+      this.document,
+      this.darkMode,
+      this.toggleTheme,
+      this.signOut,
+      this.userDoc})
       : super(key: key);
 
   @override
@@ -21,6 +28,9 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+        user: widget.userDoc,
+        detailsPage: true,
+        signOut: widget.signOut,
         scaffoldKey: _scaffoldKey,
         darkMode: widget.darkMode,
         toggleTheme: widget.toggleTheme,

@@ -8,16 +8,20 @@ class PetDetailPage extends StatefulWidget {
   final dynamic petDoc;
   final dynamic docId;
   final String userId;
+  final DocumentSnapshot userDoc;
   final bool darkMode;
   final Function(bool) toggleTheme;
+  final Function signOut;
 
   PetDetailPage(
       {Key key,
       this.petDoc,
       this.userId,
       this.docId,
+      this.userDoc,
       this.darkMode,
-      this.toggleTheme})
+      this.toggleTheme,
+      this.signOut})
       : super(key: key);
 
   @override
@@ -81,6 +85,9 @@ class _PetDetailPageState extends State<PetDetailPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      detailsPage: true,
+      signOut: widget.signOut,
+      user: widget.userDoc,
       scaffoldKey: _scaffoldKey,
       darkMode: widget.darkMode,
       toggleTheme: widget.toggleTheme,

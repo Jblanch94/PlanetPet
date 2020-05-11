@@ -7,8 +7,10 @@ class FavoriteAnimals extends StatefulWidget {
   final String userId;
   final bool darkMode;
   final Function(bool) toggleTheme;
+  final Function signOut;
 
-  const FavoriteAnimals({Key key, this.userId, this.darkMode, this.toggleTheme})
+  const FavoriteAnimals(
+      {Key key, this.userId, this.darkMode, this.toggleTheme, this.signOut})
       : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
   CollectionReference postsRef = Firestore.instance.collection('pets');
   dynamic userFavorites;
   Stream<QuerySnapshot> snapshot;
+  DocumentSnapshot userDoc;
 
   @override
   void initState() {
@@ -32,6 +35,8 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
     getSnapshot();
   }
 
+  void getUserDetails() {}
+
   void getSnapshot() {
     setState(() {
       snapshot = postsRef.snapshots();
@@ -39,7 +44,8 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
   }
 
   void fetchCurrentUserFavorites() async {
-    DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
+    userDoc = await usersRef.document(widget.userId).get();
+
     final docs = userDoc.data['favorites'];
     userFavorites = docs;
     if (this.mounted) {
@@ -164,6 +170,9 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      detailsPage: false,
+      user: userDoc,
+      signOut: widget.signOut,
       scaffoldKey: _scaffoldKey,
       darkMode: widget.darkMode,
       toggleTheme: widget.toggleTheme,

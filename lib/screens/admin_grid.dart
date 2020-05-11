@@ -4,8 +4,13 @@ import 'package:planet_pet/screens/admin_detail_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:planet_pet/widgets/custom_scaffold.dart';
 
-Widget _buildGridItem(BuildContext context, DocumentSnapshot document,
-    bool darkMode, void Function(bool) toggleTheme) {
+Widget _buildGridItem(
+    BuildContext context,
+    DocumentSnapshot document,
+    bool darkMode,
+    void Function(bool) toggleTheme,
+    void Function() signOut,
+    DocumentSnapshot userDoc) {
   return GestureDetector(
     child: Card(
       child: Column(
@@ -28,19 +33,24 @@ Widget _buildGridItem(BuildContext context, DocumentSnapshot document,
           context,
           MaterialPageRoute(
               builder: (_) => AdminDetailPage(
-                    document: document,
-                    darkMode: darkMode,
-                    toggleTheme: toggleTheme
-                  ) // AdminDetailPage(document: document)
+                  document: document,
+                  darkMode: darkMode,
+                  toggleTheme: toggleTheme,
+                  signOut: signOut,
+                  userDoc: userDoc) // AdminDetailPage(document: document)
               ));
     },
   );
 }
 
 class AdminGrid extends StatefulWidget {
+  final String userId;
   final bool darkMode;
   final Function(bool) toggleTheme;
-  const AdminGrid({Key key, this.darkMode, this.toggleTheme}) : super(key: key);
+  final Function signOut;
+  const AdminGrid(
+      {Key key, this.userId, this.darkMode, this.toggleTheme, this.signOut})
+      : super(key: key);
 
   @override
   _AdminGridState createState() => _AdminGridState();
@@ -48,10 +58,26 @@ class AdminGrid extends StatefulWidget {
 
 class _AdminGridState extends State<AdminGrid> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+  CollectionReference usersRef = Firestore.instance.collection('users');
+  DocumentSnapshot userDoc;
+
+  void getUserDetails() async {
+    userDoc = await usersRef.document(widget.userId).get();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      user: userDoc,
+      detailsPage: false,
+      signOut: widget.signOut,
       scaffoldKey: _scaffoldKey,
       darkMode: widget.darkMode,
       toggleTheme: widget.toggleTheme,
@@ -69,7 +95,9 @@ class _AdminGridState extends State<AdminGrid> {
                   context,
                   snapshot.data.documents[index],
                   widget.darkMode,
-                  widget.toggleTheme),
+                  widget.toggleTheme,
+                  widget.signOut,
+                  userDoc),
             );
           }),
     );

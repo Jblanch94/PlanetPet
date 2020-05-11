@@ -10,7 +10,9 @@ class UserBottomTabBar extends StatefulWidget {
   final Function(bool) toggleTheme;
   final Function signOut;
 
-  const UserBottomTabBar({Key key, this.userId, this.darkMode, this.toggleTheme, this.signOut}) : super(key: key);
+  const UserBottomTabBar(
+      {Key key, this.userId, this.darkMode, this.toggleTheme, this.signOut})
+      : super(key: key);
 
   @override
   _UserBottomTabBarState createState() => _UserBottomTabBarState();
@@ -19,19 +21,26 @@ class UserBottomTabBar extends StatefulWidget {
 class _UserBottomTabBarState extends State<UserBottomTabBar> {
   @override
   Widget build(BuildContext context) {
-    return BottomTabBar(
-      icons: <Widget>[
-        Icon(Icons.home),
-        Icon(Icons.search),
-        Icon(Icons.favorite),
-      ],
-      pages: <Widget>[
-        Posts(userId: widget.userId, darkMode: widget.darkMode, toggleTheme: widget.toggleTheme, signOut: widget.signOut),
-        Preferences(userId: widget.userId, darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
-        FavoriteAnimals(userId: widget.userId, darkMode: widget.darkMode, toggleTheme: widget.toggleTheme),
-      ],
-      numPages: 3,
-      darkMode: widget.darkMode
-    );
+    return BottomTabBar(icons: <Widget>[
+      Icon(Icons.home),
+      Icon(Icons.search),
+      Icon(Icons.favorite),
+    ], pages: <Widget>[
+      Posts(
+          userId: widget.userId,
+          darkMode: widget.darkMode,
+          toggleTheme: widget.toggleTheme,
+          signOut: widget.signOut),
+      Preferences(
+          userId: widget.userId,
+          darkMode: widget.darkMode,
+          toggleTheme: widget.toggleTheme,
+          signOut: widget.signOut),
+      FavoriteAnimals(
+          userId: widget.userId,
+          darkMode: widget.darkMode,
+          toggleTheme: widget.toggleTheme,
+          signOut: widget.signOut),
+    ], numPages: 3, darkMode: widget.darkMode);
   }
 }

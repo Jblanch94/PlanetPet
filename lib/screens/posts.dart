@@ -99,7 +99,9 @@ class _PostsState extends State<Posts> {
             userId: widget.userId,
             docId: docId,
             darkMode: widget.darkMode,
-            toggleTheme: widget.toggleTheme)));
+            userDoc: doc,
+            toggleTheme: widget.toggleTheme,
+            signOut: widget.signOut)));
   }
 
   bool matchesSearchPrefs(var petDoc) {
@@ -138,6 +140,7 @@ class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      detailsPage: false,
       user: doc,
       scaffoldKey: _scaffoldKey,
       darkMode: widget.darkMode,
