@@ -12,21 +12,30 @@ Widget _buildGridItem(
     void Function() signOut,
     DocumentSnapshot userDoc) {
   return GestureDetector(
-    child: Card(
-      child: Column(
-        children: <Widget>[
-          CircleAvatar(
-            radius: 50,
-            backgroundImage: CachedNetworkImageProvider(
-              document['imageURL'],
+    child: Semantics(
+      child: Card(
+        child: Column(
+          children: <Widget>[
+            Semantics(
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: CachedNetworkImageProvider(
+                  document['imageURL'],
+                ),
+              ),
+              image: true,
+              label: "Image of ${document['name']}",
+              hint:  "Image of ${document['name']}"
             ),
-          ),
-          SizedBox(height: 20),
-          Text(document['name'], style: TextStyle(fontSize: 14)),
-          Text(document['breed'], style: TextStyle(fontSize: 14)),
-          Text(document['availability'], style: TextStyle(fontSize: 14)),
-        ],
+            SizedBox(height: 20),
+            Text(document['name'], style: TextStyle(fontSize: 14)),
+            Text(document['breed'], style: TextStyle(fontSize: 14)),
+            Text(document['availability'], style: TextStyle(fontSize: 14)),
+          ],
+        ),
       ),
+      label: "Card for ${document['name']}",
+      hint: "Card for ${document['name']}"
     ),
     onTap: () {
       Navigator.push(

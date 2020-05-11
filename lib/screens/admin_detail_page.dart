@@ -37,13 +37,18 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
         title: "${widget.document['name']}'s Details",
         body: ListView(
           children: <Widget>[
-            ClipRRect(
+            Semantics(
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: Image(
                   image: NetworkImage(widget.document['imageURL']),
                   height: 300,
                   width: 300,
-                )),
+                )
+              ),
+              label: "${widget.document['name']}'s Image",
+              image: true,
+            ),
             Text("Name: ${widget.document['name']}"),
             Text(
                 "Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.document['dateOfBirth'].toDate())}"),
