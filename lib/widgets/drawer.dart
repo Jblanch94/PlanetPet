@@ -26,6 +26,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
     userMap['phoneNumber'] = widget.user.data['phoneNumber'];
     userMap['streetAddress1'] = widget.user.data['streetAddress1'];
     userMap['streetAddress2'] = widget.user.data['streetAddress2'];
+    userMap['city'] = widget.user.data['city'];
     userMap['state'] = widget.user.data['state'];
     userMap['zipcode'] = widget.user.data['zipcode'];
     getUserID();
@@ -87,6 +88,15 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           dense: true,
           onTap: () {
             editUserInfo(context, 'Street Address 2', 'streetAddress2');
+          }
+        ),
+        ListTile(
+          title: Text(userMap['city']),
+          subtitle: Text('City'),
+          trailing: Icon(Icons.edit),
+          dense: true,
+          onTap: () {
+            editUserInfo(context, 'City', 'city');
           }
         ),
         ListTile(
