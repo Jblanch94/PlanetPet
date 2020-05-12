@@ -3,14 +3,20 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class SettingsDrawer extends StatefulWidget {
   final bool darkMode;
   final Function(bool) toggleTheme;
   final Function signOut;
   final DocumentSnapshot user;
-  const SettingsDrawer({Key key, this.darkMode, this.toggleTheme, this.user, this.signOut})
+  final bool detailsPage;
+  const SettingsDrawer(
+      {Key key,
+      this.darkMode,
+      this.toggleTheme,
+      this.user,
+      this.signOut,
+      this.detailsPage})
       : super(key: key);
 
   @override
@@ -18,7 +24,6 @@ class SettingsDrawer extends StatefulWidget {
 }
 
 class _SettingsDrawerState extends State<SettingsDrawer> {
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -81,8 +86,14 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           RaisedButton(
             child: Text('Sign Out'),
             onPressed: () {
-              Navigator.of(context).pop();
-              widget.signOut();
+              if (widget.detailsPage) {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                widget.signOut();
+              } else {
+                Navigator.of(context).pop();
+                widget.signOut();
+              }
             },
           ),
         ],

@@ -156,8 +156,12 @@ class _HomeState extends State<Home> {
   Widget authScreen() {
     return isAdmin
         ? AdminBottomTabBar(
-            darkMode: widget.darkMode, toggleTheme: widget.toggleTheme)
-        : UserBottomTabBar(signOut: signOut,
+          userId: currentUser.id,
+            signOut: signOut,
+            darkMode: widget.darkMode,
+            toggleTheme: widget.toggleTheme)
+        : UserBottomTabBar(
+            signOut: signOut,
             userId: currentUser.id,
             darkMode: widget.darkMode,
             toggleTheme: widget.toggleTheme);

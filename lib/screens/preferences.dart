@@ -13,7 +13,9 @@ class Preferences extends StatefulWidget {
   final String userId;
   final bool darkMode;
   final Function(bool) toggleTheme;
-  const Preferences({Key key, this.userId, this.darkMode, this.toggleTheme})
+  final Function signOut;
+  const Preferences(
+      {Key key, this.userId, this.darkMode, this.toggleTheme, this.signOut})
       : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class Preferences extends StatefulWidget {
 class _PreferencesState extends State<Preferences> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final CollectionReference usersRef = Firestore.instance.collection('users');
+  DocumentSnapshot userDoc;
 
   AnimalType _animalType;
   CatBreeds _catBreeds;
@@ -37,6 +40,11 @@ class _PreferencesState extends State<Preferences> {
   void initState() {
     super.initState();
     initSearchPreferences();
+    getUserDetails();
+  }
+
+  void getUserDetails() async {
+    userDoc = await usersRef.document(widget.userId).get();
   }
 
   void initSearchPreferences() async {
@@ -64,6 +72,9 @@ class _PreferencesState extends State<Preferences> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      detailsPage: false,
+      user: userDoc,
+      signOut: widget.signOut,
       scaffoldKey: _scaffoldKey,
       darkMode: widget.darkMode,
       toggleTheme: widget.toggleTheme,
@@ -121,152 +132,136 @@ class _PreferencesState extends State<Preferences> {
           });
         },
         child: ListTile(
-          title: Text('Reset Search Preferences',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.red,
-            )
-          )
-        )
-    );
+            title: Text('Reset Search Preferences',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.red,
+                ))));
   }
 
   Widget animalType(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(padding: EdgeInsets.only(bottom: 10)),
-        Text('Type',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _animalType = AnimalType.none;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAnimalType': 0,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: AnimalType.none,
-                      groupValue: _animalType,
-                      onChanged: (AnimalType value) {
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(padding: EdgeInsets.only(bottom: 10)),
+          Text('Type',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Row(
+            children: <Widget>[
+              Expanded(
+                  child: InkWell(
+                      onTap: () {
                         setState(() {
-                          _animalType = value;
+                          _animalType = AnimalType.none;
                           usersRef.document(widget.userId).setData({
                             'prefsAnimalType': 0,
                           }, merge: true);
                         });
-                      }
-                    ),
-                    Text('All', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _animalType = AnimalType.cat;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAnimalType': 1,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: AnimalType.cat,
-                      groupValue: _animalType,
-                      onChanged: (AnimalType value) {
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Radio(
+                              value: AnimalType.none,
+                              groupValue: _animalType,
+                              onChanged: (AnimalType value) {
+                                setState(() {
+                                  _animalType = value;
+                                  usersRef.document(widget.userId).setData({
+                                    'prefsAnimalType': 0,
+                                  }, merge: true);
+                                });
+                              }),
+                          Text('All', style: TextStyle(fontSize: 16)),
+                        ],
+                      ))),
+              Expanded(
+                  child: InkWell(
+                      onTap: () {
                         setState(() {
-                          _animalType = value;
+                          _animalType = AnimalType.cat;
                           usersRef.document(widget.userId).setData({
                             'prefsAnimalType': 1,
                           }, merge: true);
                         });
-                      }
-                    ),
-                    Text('Cat', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _animalType = AnimalType.dog;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAnimalType': 2,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: AnimalType.dog,
-                      groupValue: _animalType,
-                      onChanged: (AnimalType value) {
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Radio(
+                              value: AnimalType.cat,
+                              groupValue: _animalType,
+                              onChanged: (AnimalType value) {
+                                setState(() {
+                                  _animalType = value;
+                                  usersRef.document(widget.userId).setData({
+                                    'prefsAnimalType': 1,
+                                  }, merge: true);
+                                });
+                              }),
+                          Text('Cat', style: TextStyle(fontSize: 16)),
+                        ],
+                      ))),
+              Expanded(
+                  child: InkWell(
+                      onTap: () {
                         setState(() {
-                          _animalType = value;
+                          _animalType = AnimalType.dog;
                           usersRef.document(widget.userId).setData({
                             'prefsAnimalType': 2,
                           }, merge: true);
                         });
-                      }
-                    ),
-                    Text('Dog', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _animalType = AnimalType.other;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAnimalType': 3,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: AnimalType.other,
-                      groupValue: _animalType,
-                      onChanged: (AnimalType value) {
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Radio(
+                              value: AnimalType.dog,
+                              groupValue: _animalType,
+                              onChanged: (AnimalType value) {
+                                setState(() {
+                                  _animalType = value;
+                                  usersRef.document(widget.userId).setData({
+                                    'prefsAnimalType': 2,
+                                  }, merge: true);
+                                });
+                              }),
+                          Text('Dog', style: TextStyle(fontSize: 16)),
+                        ],
+                      ))),
+              Expanded(
+                  child: InkWell(
+                      onTap: () {
                         setState(() {
-                          _animalType = value;
+                          _animalType = AnimalType.other;
                           usersRef.document(widget.userId).setData({
                             'prefsAnimalType': 3,
                           }, merge: true);
                         });
-                      }
-                    ),
-                    Text('Other', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
-          ],
-        )
-      ]
-    );
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Radio(
+                              value: AnimalType.other,
+                              groupValue: _animalType,
+                              onChanged: (AnimalType value) {
+                                setState(() {
+                                  _animalType = value;
+                                  usersRef.document(widget.userId).setData({
+                                    'prefsAnimalType': 3,
+                                  }, merge: true);
+                                });
+                              }),
+                          Text('Other', style: TextStyle(fontSize: 16)),
+                        ],
+                      ))),
+            ],
+          )
+        ]);
   }
 
   Widget breed() {
     return Text('Breed',
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
   Widget animalBreed(BuildContext context) {
@@ -294,121 +289,109 @@ class _PreferencesState extends State<Preferences> {
         Row(
           children: <Widget>[
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _catBreeds = CatBreeds.none;
-                    usersRef.document(widget.userId).setData({
-                      'prefsCatBreeds': 0,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: CatBreeds.none,
-                      groupValue: _catBreeds,
-                      onChanged: (CatBreeds value) {
-                        setState(() {
-                          _catBreeds = CatBreeds.none;
-                          usersRef.document(widget.userId).setData({
-                            'prefsCatBreeds': 0,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('All', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _catBreeds = CatBreeds.none;
+                        usersRef.document(widget.userId).setData({
+                          'prefsCatBreeds': 0,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: CatBreeds.none,
+                            groupValue: _catBreeds,
+                            onChanged: (CatBreeds value) {
+                              setState(() {
+                                _catBreeds = CatBreeds.none;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsCatBreeds': 0,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('All', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _catBreeds = CatBreeds.persian;
-                    usersRef.document(widget.userId).setData({
-                      'prefsCatBreeds': 1,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: CatBreeds.persian,
-                      groupValue: _catBreeds,
-                      onChanged: (CatBreeds value) {
-                        setState(() {
-                          _catBreeds = CatBreeds.persian;
-                          usersRef.document(widget.userId).setData({
-                            'prefsCatBreeds': 1,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Persian', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _catBreeds = CatBreeds.persian;
+                        usersRef.document(widget.userId).setData({
+                          'prefsCatBreeds': 1,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: CatBreeds.persian,
+                            groupValue: _catBreeds,
+                            onChanged: (CatBreeds value) {
+                              setState(() {
+                                _catBreeds = CatBreeds.persian;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsCatBreeds': 1,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Persian', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _catBreeds = CatBreeds.shorthair;
-                    usersRef.document(widget.userId).setData({
-                      'prefsCatBreeds': 2,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: CatBreeds.shorthair,
-                      groupValue: _catBreeds,
-                      onChanged: (CatBreeds value) {
-                        setState(() {
-                          _catBreeds = CatBreeds.shorthair;
-                          usersRef.document(widget.userId).setData({
-                            'prefsCatBreeds': 2,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Short Hair', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _catBreeds = CatBreeds.shorthair;
+                        usersRef.document(widget.userId).setData({
+                          'prefsCatBreeds': 2,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: CatBreeds.shorthair,
+                            groupValue: _catBreeds,
+                            onChanged: (CatBreeds value) {
+                              setState(() {
+                                _catBreeds = CatBreeds.shorthair;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsCatBreeds': 2,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Short Hair', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _catBreeds = CatBreeds.himalayan;
-                    usersRef.document(widget.userId).setData({
-                      'prefsCatBreeds': 3,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: CatBreeds.himalayan,
-                      groupValue: _catBreeds,
-                      onChanged: (CatBreeds value) {
-                        setState(() {
-                          _catBreeds = CatBreeds.himalayan;
-                          usersRef.document(widget.userId).setData({
-                            'prefsCatBreeds': 3,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Himalayan', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _catBreeds = CatBreeds.himalayan;
+                        usersRef.document(widget.userId).setData({
+                          'prefsCatBreeds': 3,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: CatBreeds.himalayan,
+                            groupValue: _catBreeds,
+                            onChanged: (CatBreeds value) {
+                              setState(() {
+                                _catBreeds = CatBreeds.himalayan;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsCatBreeds': 3,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Himalayan', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
           ],
         ),
       ],
@@ -423,159 +406,142 @@ class _PreferencesState extends State<Preferences> {
         Row(
           children: <Widget>[
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _dogBreeds = DogBreeds.none;
-                    usersRef.document(widget.userId).setData({
-                      'prefsDogBreeds': 0,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: DogBreeds.none,
-                      groupValue: _dogBreeds,
-                      onChanged: (DogBreeds value) {
-                        setState(() {
-                          _dogBreeds = DogBreeds.none;
-                          usersRef.document(widget.userId).setData({
-                            'prefsDogBreeds': 0,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('All', style: TextStyle(fontSize: 16)),
-                    SizedBox(height: 19),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _dogBreeds = DogBreeds.none;
+                        usersRef.document(widget.userId).setData({
+                          'prefsDogBreeds': 0,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: DogBreeds.none,
+                            groupValue: _dogBreeds,
+                            onChanged: (DogBreeds value) {
+                              setState(() {
+                                _dogBreeds = DogBreeds.none;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsDogBreeds': 0,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('All', style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 19),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _dogBreeds = DogBreeds.goldenRetriever;
-                    usersRef.document(widget.userId).setData({
-                      'prefsDogBreeds': 1,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: DogBreeds.goldenRetriever,
-                      groupValue: _dogBreeds,
-                      onChanged: (DogBreeds value) {
-                        setState(() {
-                          _dogBreeds = DogBreeds.goldenRetriever;
-                          usersRef.document(widget.userId).setData({
-                            'prefsDogBreeds': 1,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Golden Retriever', 
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16)
-                    ),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _dogBreeds = DogBreeds.goldenRetriever;
+                        usersRef.document(widget.userId).setData({
+                          'prefsDogBreeds': 1,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: DogBreeds.goldenRetriever,
+                            groupValue: _dogBreeds,
+                            onChanged: (DogBreeds value) {
+                              setState(() {
+                                _dogBreeds = DogBreeds.goldenRetriever;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsDogBreeds': 1,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Golden Retriever',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _dogBreeds = DogBreeds.germanShepherd;
-                    usersRef.document(widget.userId).setData({
-                      'prefsDogBreeds': 2,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: DogBreeds.germanShepherd,
-                      groupValue: _dogBreeds,
-                      onChanged: (DogBreeds value) {
-                        setState(() {
-                          _dogBreeds = DogBreeds.germanShepherd;
-                          usersRef.document(widget.userId).setData({
-                            'prefsDogBreeds': 2,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('German Shepherd', 
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16)
-                    ),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _dogBreeds = DogBreeds.germanShepherd;
+                        usersRef.document(widget.userId).setData({
+                          'prefsDogBreeds': 2,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: DogBreeds.germanShepherd,
+                            groupValue: _dogBreeds,
+                            onChanged: (DogBreeds value) {
+                              setState(() {
+                                _dogBreeds = DogBreeds.germanShepherd;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsDogBreeds': 2,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('German Shepherd',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _dogBreeds = DogBreeds.beagle;
-                    usersRef.document(widget.userId).setData({
-                      'prefsDogBreeds': 3,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: DogBreeds.beagle,
-                      groupValue: _dogBreeds,
-                      onChanged: (DogBreeds value) {
-                        setState(() {
-                          _dogBreeds = DogBreeds.beagle;
-                          usersRef.document(widget.userId).setData({
-                            'prefsDogBreeds': 3,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Beagle', style: TextStyle(fontSize: 16)),
-                    SizedBox(height: 19),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _dogBreeds = DogBreeds.beagle;
+                        usersRef.document(widget.userId).setData({
+                          'prefsDogBreeds': 3,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: DogBreeds.beagle,
+                            groupValue: _dogBreeds,
+                            onChanged: (DogBreeds value) {
+                              setState(() {
+                                _dogBreeds = DogBreeds.beagle;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsDogBreeds': 3,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Beagle', style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 19),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _dogBreeds = DogBreeds.poodle;
-                    usersRef.document(widget.userId).setData({
-                      'prefsDogBreeds': 4,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: DogBreeds.poodle,
-                      groupValue: _dogBreeds,
-                      onChanged: (DogBreeds value) {
-                        setState(() {
-                          _dogBreeds = DogBreeds.poodle;
-                          usersRef.document(widget.userId).setData({
-                            'prefsDogBreeds': 4,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Poodle', style: TextStyle(fontSize: 16)),
-                    SizedBox(height: 19),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _dogBreeds = DogBreeds.poodle;
+                        usersRef.document(widget.userId).setData({
+                          'prefsDogBreeds': 4,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: DogBreeds.poodle,
+                            groupValue: _dogBreeds,
+                            onChanged: (DogBreeds value) {
+                              setState(() {
+                                _dogBreeds = DogBreeds.poodle;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsDogBreeds': 4,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Poodle', style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 19),
+                      ],
+                    ))),
           ],
         ),
       ],
@@ -590,150 +556,135 @@ class _PreferencesState extends State<Preferences> {
         Row(
           children: <Widget>[
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _otherBreeds = OtherBreeds.none;
-                    usersRef.document(widget.userId).setData({
-                      'prefsOtherBreeds': 0,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: OtherBreeds.none,
-                      groupValue: _otherBreeds,
-                      onChanged: (OtherBreeds value) {
-                        setState(() {
-                          _otherBreeds = OtherBreeds.none;
-                          usersRef.document(widget.userId).setData({
-                            'prefsOtherBreeds': 0,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('All', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _otherBreeds = OtherBreeds.none;
+                        usersRef.document(widget.userId).setData({
+                          'prefsOtherBreeds': 0,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: OtherBreeds.none,
+                            groupValue: _otherBreeds,
+                            onChanged: (OtherBreeds value) {
+                              setState(() {
+                                _otherBreeds = OtherBreeds.none;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsOtherBreeds': 0,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('All', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _otherBreeds = OtherBreeds.bird;
-                    usersRef.document(widget.userId).setData({
-                      'prefsOtherBreeds': 1,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: OtherBreeds.bird,
-                      groupValue: _otherBreeds,
-                      onChanged: (OtherBreeds value) {
-                        setState(() {
-                          _otherBreeds = OtherBreeds.bird;
-                          usersRef.document(widget.userId).setData({
-                            'prefsOtherBreeds': 1,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Bird', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _otherBreeds = OtherBreeds.bird;
+                        usersRef.document(widget.userId).setData({
+                          'prefsOtherBreeds': 1,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: OtherBreeds.bird,
+                            groupValue: _otherBreeds,
+                            onChanged: (OtherBreeds value) {
+                              setState(() {
+                                _otherBreeds = OtherBreeds.bird;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsOtherBreeds': 1,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Bird', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _otherBreeds = OtherBreeds.frog;
-                    usersRef.document(widget.userId).setData({
-                      'prefsOtherBreeds': 2,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: OtherBreeds.frog,
-                      groupValue: _otherBreeds,
-                      onChanged: (OtherBreeds value) {
-                        setState(() {
-                          _otherBreeds = OtherBreeds.frog;
-                          usersRef.document(widget.userId).setData({
-                            'prefsOtherBreeds': 2,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Frog', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _otherBreeds = OtherBreeds.frog;
+                        usersRef.document(widget.userId).setData({
+                          'prefsOtherBreeds': 2,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: OtherBreeds.frog,
+                            groupValue: _otherBreeds,
+                            onChanged: (OtherBreeds value) {
+                              setState(() {
+                                _otherBreeds = OtherBreeds.frog;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsOtherBreeds': 2,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Frog', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _otherBreeds = OtherBreeds.lizard;
-                    usersRef.document(widget.userId).setData({
-                      'prefsOtherBreeds': 3,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: OtherBreeds.lizard,
-                      groupValue: _otherBreeds,
-                      onChanged: (OtherBreeds value) {
-                        setState(() {
-                          _otherBreeds = OtherBreeds.lizard;
-                          usersRef.document(widget.userId).setData({
-                            'prefsOtherBreeds': 3,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Lizard', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _otherBreeds = OtherBreeds.lizard;
+                        usersRef.document(widget.userId).setData({
+                          'prefsOtherBreeds': 3,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: OtherBreeds.lizard,
+                            groupValue: _otherBreeds,
+                            onChanged: (OtherBreeds value) {
+                              setState(() {
+                                _otherBreeds = OtherBreeds.lizard;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsOtherBreeds': 3,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Lizard', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _otherBreeds = OtherBreeds.snake;
-                    usersRef.document(widget.userId).setData({
-                      'prefsOtherBreeds': 3,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: OtherBreeds.snake,
-                      groupValue: _otherBreeds,
-                      onChanged: (OtherBreeds value) {
-                        setState(() {
-                          _otherBreeds = OtherBreeds.snake;
-                          usersRef.document(widget.userId).setData({
-                            'prefsOtherBreeds': 4,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Snake', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _otherBreeds = OtherBreeds.snake;
+                        usersRef.document(widget.userId).setData({
+                          'prefsOtherBreeds': 3,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: OtherBreeds.snake,
+                            groupValue: _otherBreeds,
+                            onChanged: (OtherBreeds value) {
+                              setState(() {
+                                _otherBreeds = OtherBreeds.snake;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsOtherBreeds': 4,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Snake', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
           ],
         ),
       ],
@@ -749,98 +700,87 @@ class _PreferencesState extends State<Preferences> {
         Row(
           children: <Widget>[
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _animalSex = AnimalSex.none;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAnimalSex': 0,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: AnimalSex.none,
-                      groupValue: _animalSex,
-                      onChanged: (AnimalSex value) {
-                        setState(() {
-                          _animalSex = AnimalSex.none;
-                          usersRef.document(widget.userId).setData({
-                            'prefsAnimalSex': 0,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('All', style: TextStyle(fontSize: 16)),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _animalSex = AnimalSex.none;
+                        usersRef.document(widget.userId).setData({
+                          'prefsAnimalSex': 0,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: AnimalSex.none,
+                            groupValue: _animalSex,
+                            onChanged: (AnimalSex value) {
+                              setState(() {
+                                _animalSex = AnimalSex.none;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsAnimalSex': 0,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('All', style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _animalSex = AnimalSex.male;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAnimalSex': 1,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: AnimalSex.male,
-                      groupValue: _animalSex,
-                      onChanged: (AnimalSex value) {
-                        setState(() {
-                          _animalSex = AnimalSex.male;
-                          usersRef.document(widget.userId).setData({
-                            'prefsAnimalSex': 1,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Male', 
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16)
-                    ),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _animalSex = AnimalSex.male;
+                        usersRef.document(widget.userId).setData({
+                          'prefsAnimalSex': 1,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: AnimalSex.male,
+                            groupValue: _animalSex,
+                            onChanged: (AnimalSex value) {
+                              setState(() {
+                                _animalSex = AnimalSex.male;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsAnimalSex': 1,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Male',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _animalSex = AnimalSex.female;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAnimalSex': 2,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: AnimalSex.female,
-                      groupValue: _animalSex,
-                      onChanged: (AnimalSex value) {
-                        setState(() {
-                          _animalSex = AnimalSex.female;
-                          usersRef.document(widget.userId).setData({
-                            'prefsAnimalSex': 2,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Female', 
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16)
-                    ),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _animalSex = AnimalSex.female;
+                        usersRef.document(widget.userId).setData({
+                          'prefsAnimalSex': 2,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: AnimalSex.female,
+                            groupValue: _animalSex,
+                            onChanged: (AnimalSex value) {
+                              setState(() {
+                                _animalSex = AnimalSex.female;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsAnimalSex': 2,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Female',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
           ],
         ),
       ],
@@ -849,103 +789,101 @@ class _PreferencesState extends State<Preferences> {
 
   Widget animalBehavior(BuildContext context) {
     return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text('Behavior Traits',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  goodHumans = !goodHumans;
-                  usersRef.document(widget.userId).setData({
-                    'prefsGoodHumans': goodHumans,
-                  }, merge: true);
-                });
-              },
-              child: Column(
-                children: <Widget>[
-                  Checkbox(
-                      value: goodHumans,
-                      onChanged: (bool newValue) {
-                        setState(() {
-                          goodHumans = !goodHumans;
-                          usersRef.document(widget.userId).setData({
-                            'prefsGoodHumans': goodHumans,
-                          }, merge: true);
-                        });
-                      }),
-                  Text('Good With Children', 
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16)
-                    ),
-                ],
+          Text('Behavior Traits',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      goodHumans = !goodHumans;
+                      usersRef.document(widget.userId).setData({
+                        'prefsGoodHumans': goodHumans,
+                      }, merge: true);
+                    });
+                  },
+                  child: Column(
+                    children: <Widget>[
+                      Checkbox(
+                          value: goodHumans,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              goodHumans = !goodHumans;
+                              usersRef.document(widget.userId).setData({
+                                'prefsGoodHumans': goodHumans,
+                              }, merge: true);
+                            });
+                          }),
+                      Text('Good With Children',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  goodAnimals = !goodAnimals;
-                  usersRef.document(widget.userId).setData({
-                    'prefsGoodAnimals': goodAnimals,
-                  }, merge: true);
-                });
-              },
-              child: Column(
-                children: <Widget>[
-                  Checkbox(
-                      value: goodAnimals,
-                      onChanged: (bool newValue) {
-                        setState(() {
-                          goodAnimals = !goodAnimals;
-                          usersRef.document(widget.userId).setData({
-                            'prefsGoodAnimals': goodAnimals,
-                          }, merge: true);
-                        });
-                      }),
-                  Text('Good With Animals', 
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16)
-                    ),
-                ],
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      goodAnimals = !goodAnimals;
+                      usersRef.document(widget.userId).setData({
+                        'prefsGoodAnimals': goodAnimals,
+                      }, merge: true);
+                    });
+                  },
+                  child: Column(
+                    children: <Widget>[
+                      Checkbox(
+                          value: goodAnimals,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              goodAnimals = !goodAnimals;
+                              usersRef.document(widget.userId).setData({
+                                'prefsGoodAnimals': goodAnimals,
+                              }, merge: true);
+                            });
+                          }),
+                      Text('Good With Animals',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  needLeash = !needLeash;
-                  usersRef.document(widget.userId).setData({
-                    'prefsNeedLeash': needLeash,
-                  }, merge: true);
-                });
-              },
-              child: Column(
-                children: <Widget>[
-                  Checkbox(
-                      value: needLeash,
-                      onChanged: (bool newValue) {
-                        setState(() {
-                          needLeash = !needLeash;
-                          usersRef.document(widget.userId).setData({
-                            'prefsNeedLeash': needLeash,
-                          }, merge: true);
-                        });
-                      }),
-                  Text('Needs A Leash', style: TextStyle(fontSize: 16)),
-                  SizedBox(height: 20),
-                ],
-              ),
-            ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      needLeash = !needLeash;
+                      usersRef.document(widget.userId).setData({
+                        'prefsNeedLeash': needLeash,
+                      }, merge: true);
+                    });
+                  },
+                  child: Column(
+                    children: <Widget>[
+                      Checkbox(
+                          value: needLeash,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              needLeash = !needLeash;
+                              usersRef.document(widget.userId).setData({
+                                'prefsNeedLeash': needLeash,
+                              }, merge: true);
+                            });
+                          }),
+                      Text('Needs A Leash', style: TextStyle(fontSize: 16)),
+                      SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              )
+            ],
           )
-        ],
-      )
-    ]);
+        ]);
   }
 
   Widget animalAvailability(BuildContext context) {
@@ -957,127 +895,114 @@ class _PreferencesState extends State<Preferences> {
         Row(
           children: <Widget>[
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _availability = Availability.none;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAvailability': 0,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: Availability.none,
-                      groupValue: _availability,
-                      onChanged: (Availability value) {
-                        setState(() {
-                          _availability = Availability.none;
-                          usersRef.document(widget.userId).setData({
-                            'prefsAvailability': 0,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('All', style: TextStyle(fontSize: 16)),
-                    SizedBox(height: 19),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _availability = Availability.none;
+                        usersRef.document(widget.userId).setData({
+                          'prefsAvailability': 0,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: Availability.none,
+                            groupValue: _availability,
+                            onChanged: (Availability value) {
+                              setState(() {
+                                _availability = Availability.none;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsAvailability': 0,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('All', style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 19),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _availability = Availability.available;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAvailability': 1,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: Availability.available,
-                      groupValue: _availability,
-                      onChanged: (Availability value) {
-                        setState(() {
-                          _availability = Availability.available;
-                          usersRef.document(widget.userId).setData({
-                            'prefsAvailability': 1,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Available', style: TextStyle(fontSize: 16)),
-                    SizedBox(height: 19),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _availability = Availability.available;
+                        usersRef.document(widget.userId).setData({
+                          'prefsAvailability': 1,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: Availability.available,
+                            groupValue: _availability,
+                            onChanged: (Availability value) {
+                              setState(() {
+                                _availability = Availability.available;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsAvailability': 1,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Available', style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 19),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _availability = Availability.pending;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAvailability': 2,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: Availability.pending,
-                      groupValue: _availability,
-                      onChanged: (Availability value) {
-                        setState(() {
-                          _availability = Availability.pending;
-                          usersRef.document(widget.userId).setData({
-                            'prefsAvailability': 2,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Pending Adoption', 
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16)
-                    ),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _availability = Availability.pending;
+                        usersRef.document(widget.userId).setData({
+                          'prefsAvailability': 2,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: Availability.pending,
+                            groupValue: _availability,
+                            onChanged: (Availability value) {
+                              setState(() {
+                                _availability = Availability.pending;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsAvailability': 2,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Pending Adoption',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16)),
+                      ],
+                    ))),
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _availability = Availability.adopted;
-                    usersRef.document(widget.userId).setData({
-                      'prefsAvailability': 3,
-                    }, merge: true);
-                  });
-                },
-                child: Column(
-                  children: <Widget>[
-                    Radio(
-                      value: Availability.adopted,
-                      groupValue: _availability,
-                      onChanged: (Availability value) {
-                        setState(() {
-                          _availability = Availability.adopted;
-                          usersRef.document(widget.userId).setData({
-                            'prefsAvailability': 3,
-                          }, merge: true);
-                        });
-                      }
-                    ),
-                    Text('Adopted', style: TextStyle(fontSize: 16)),
-                    SizedBox(height: 19),
-                  ],
-                )
-              )
-            ),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _availability = Availability.adopted;
+                        usersRef.document(widget.userId).setData({
+                          'prefsAvailability': 3,
+                        }, merge: true);
+                      });
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Radio(
+                            value: Availability.adopted,
+                            groupValue: _availability,
+                            onChanged: (Availability value) {
+                              setState(() {
+                                _availability = Availability.adopted;
+                                usersRef.document(widget.userId).setData({
+                                  'prefsAvailability': 3,
+                                }, merge: true);
+                              });
+                            }),
+                        Text('Adopted', style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 19),
+                      ],
+                    ))),
           ],
         ),
       ],
