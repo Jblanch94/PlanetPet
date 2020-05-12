@@ -100,10 +100,15 @@ class _PetDetailPageState extends State<PetDetailPage> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(top: 32),
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage:
-                      CachedNetworkImageProvider(widget.petDoc['imageURL']),
+                child: Semantics(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage:
+                        CachedNetworkImageProvider(widget.petDoc['imageURL']),
+                  ),
+                  image: true,
+                  label: "Image of ${widget.petDoc['name']}",
+                  hint: "Image of ${widget.petDoc['name']}"
                 ),
               ),
               Padding(
@@ -179,22 +184,27 @@ class _PetDetailPageState extends State<PetDetailPage> {
                     color: Colors.yellow[700],
                     onPressed: favoritePet,
                   ),
-                  RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32),
+                  Semantics(
+                    child: RaisedButton.icon(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                      elevation: 11,
+                      label: Text(
+                        'Adopt',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.green[300],
+                      icon: Icon(Icons.pets, color: Colors.white),
+                      onPressed: () => _scaffoldKey.currentState.showSnackBar(
+                        SnackBar(
+                            content:
+                                Text('Adoption pending, we will be in touch!')),
+                      ),
                     ),
-                    elevation: 11,
-                    label: Text(
-                      'Adopt',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    color: Colors.green[300],
-                    icon: Icon(Icons.pets, color: Colors.white),
-                    onPressed: () => _scaffoldKey.currentState.showSnackBar(
-                      SnackBar(
-                          content:
-                              Text('Adoption pending, we will be in touch!')),
-                    ),
+                    button: true,
+                    label: "Adopt this pet",
+                    hint: "Press this button to adopt this pet"
                   ),
                 ],
               ),
