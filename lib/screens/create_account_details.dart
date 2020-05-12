@@ -58,97 +58,121 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                 child: Column(
                   children: <Widget>[
                     //field for phone number
-                    Container(
-                      margin: EdgeInsets.only(left: 12, right: 12),
-                      child: AccountTextField(
-                        fieldDecorator: kPhoneFormField,
-                        keyboardType: TextInputType.phone,
-                        save: accountForm.phoneSave,
-                        validate: accountForm.phoneValidate,
+                    Semantics(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 12, right: 12),
+                        child: AccountTextField(
+                          fieldDecorator: kPhoneFormField,
+                          keyboardType: TextInputType.phone,
+                          save: accountForm.phoneSave,
+                          validate: accountForm.phoneValidate,
+                        ),
                       ),
+                      textField: true,
+                      label: "Enter phone number",
+                      hint: "Enter your phone number"
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 16),
 
                       //field for first street address
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 12, right: 12),
-                      child: AccountTextField(
-                        fieldDecorator: kStreetAddressField1,
-                        save: accountForm.streetAddress1Save,
-                        validate: accountForm.streetAddress1Validate,
+                    Semantics(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 12, right: 12),
+                        child: AccountTextField(
+                          fieldDecorator: kStreetAddressField1,
+                          save: accountForm.streetAddress1Save,
+                          validate: accountForm.streetAddress1Validate,
+                        ),
                       ),
+                      textField: true,
+                      label: "Street Address Field 1",
+                      hint: "Enter your street address"
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 16),
                     ),
 
                     //field for optional apartment number/second address
-                    Container(
-                      margin: EdgeInsets.only(left: 12, right: 12),
-                      child: AccountTextField(
-                        fieldDecorator: kStreetAddressField2,
-                        save: accountForm.streetAddress2Save,
+                    Semantics(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 12, right: 12),
+                        child: AccountTextField(
+                          fieldDecorator: kStreetAddressField2,
+                          save: accountForm.streetAddress2Save,
+                        ),
                       ),
+                      textField: true,
+                      label: "Street Address Field 2",
+                      hint: "Enter your street address"
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 16),
                     ),
 
                     //field for city
-                    Container(
-                      margin: EdgeInsets.only(left: 12, right: 200),
-                      child: AccountTextField(
-                        fieldDecorator: kCityField,
-                        validate: accountForm.cityValidate,
-                        save: accountForm.citySave,
+                    Semantics(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 12, right: 200),
+                        child: AccountTextField(
+                          fieldDecorator: kCityField,
+                          validate: accountForm.cityValidate,
+                          save: accountForm.citySave,
+                        ),
                       ),
+                      textField: true,
+                      label: "City",
+                      hint: "Enter your city"
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 16),
                     ),
 
                     //dropdown button for state selection
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        height: 80,
-                        width: 180,
-                        margin: EdgeInsets.only(left: 12),
-                        child: DropdownButtonFormField(
-                            isDense: true,
-                            hint: Text('Select a state'),
-                            decoration: InputDecoration(
-                              hintText: 'Select a state',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
+                    Semantics(
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          height: 80,
+                          width: 180,
+                          margin: EdgeInsets.only(left: 12),
+                          child: DropdownButtonFormField(
+                              isDense: true,
+                              hint: Text('Select a state'),
+                              decoration: InputDecoration(
+                                hintText: 'Select a state',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
                               ),
-                            ),
-                            value: _selectedState,
-                            items: accountForm.states
-                                .map(
-                                  (state) => DropdownMenuItem(
-                                    child: Text(state),
-                                    value: state,
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedState = value;
-                              });
-                            },
-                            onSaved: (value) {
-                              accountForm.user.state = value;
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Please select a state';
-                              }
-                              return null;
-                            }),
+                              value: _selectedState,
+                              items: accountForm.states
+                                  .map(
+                                    (state) => DropdownMenuItem(
+                                      child: Text(state),
+                                      value: state,
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedState = value;
+                                });
+                              },
+                              onSaved: (value) {
+                                accountForm.user.state = value;
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please select a state';
+                                }
+                                return null;
+                              }),
+                        ),
                       ),
+                      label: "State selection dropdown",
+                      hint: "Select your state"
                     ),
 
                     Padding(
@@ -156,38 +180,48 @@ class _CreateAccountDetailsState extends State<CreateAccountDetails> {
                     ),
 
                     //field for zipcode
-                    Container(
-                      margin: EdgeInsets.only(left: 12, right: 150),
-                      child: AccountTextField(
-                        fieldDecorator: kZipcodeField,
-                        save: accountForm.zipcodeSave,
-                        validate: accountForm.zipcodeValidate,
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 16)),
-                    RaisedButton(
-                      elevation: 11,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      color: Theme.of(context).primaryColor,
-                      child: Text(
-                        'Submit',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
+                    Semantics(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 12, right: 150),
+                        child: AccountTextField(
+                          fieldDecorator: kZipcodeField,
+                          save: accountForm.zipcodeSave,
+                          validate: accountForm.zipcodeValidate,
+                          keyboardType: TextInputType.number,
                         ),
                       ),
-                      onPressed: () {
-                        if (widget._formKey.currentState.validate()) {
-                          widget._formKey.currentState.save();
-                          accountForm.user.latitude = locationData.latitude;
-                          accountForm.user.longitude = locationData.longitude;
-                        
-                           Navigator.of(context).pop(accountForm.user);
-                        }
-                      },
+                      textField: true,
+                      label: "ZIP Code",
+                      hint: "Enter your ZIP Code"
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 16)),
+                    Semantics(
+                      child: RaisedButton(
+                        elevation: 11,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        color: Theme.of(context).primaryColor,
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                          ),
+                        ),
+                        onPressed: () {
+                          if (widget._formKey.currentState.validate()) {
+                            widget._formKey.currentState.save();
+                            accountForm.user.latitude = locationData.latitude;
+                            accountForm.user.longitude = locationData.longitude;
+                          
+                            Navigator.of(context).pop(accountForm.user);
+                          }
+                        },
+                      ),
+                      button: true,
+                      label: "Submit",
+                      hint: "Submit"
                     ),
                   ],
                 ),
