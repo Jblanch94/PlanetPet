@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:planet_pet/models/user.dart';
 import 'package:planet_pet/screens/create_account_details.dart';
 import 'package:planet_pet/widgets/not_auth_screen.dart';
@@ -20,10 +21,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool _isAuth = false;
   GoogleSignInAccount currentUser;
+  GoogleSignInAccount authUser;
   GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference usersRef = Firestore.instance.collection('users');
   User user;
-  bool isAdmin;
+  bool isAdmin = false;
   bool darkMode;
 
   @override
@@ -35,7 +38,17 @@ class _HomeState extends State<Home> {
 
   //sign user in
   void signIn() async {
-    await _googleSignIn.signIn();
+    authUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await authUser.authentication;
+    final AuthCredential authCredential = GoogleAuthProvider.getCredential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken);
+
+     await (_auth.signInWithCredential(authCredential));
+
+    // final FirebaseUser user = authResult.user;
+    // await _auth.currentUser();
   }
 
   @override
@@ -56,7 +69,7 @@ class _HomeState extends State<Home> {
 
   //helper function that gets the admin status of the current user
   void getAdminStatus() async {
-    DocumentSnapshot userDoc = await usersRef.document(currentUser.id).get();
+    DocumentSnapshot userDoc = await usersRef.document(authUser.id).get();
     setState(() {
       isAdmin = userDoc['isAdmin'];
     });
@@ -66,13 +79,11 @@ class _HomeState extends State<Home> {
   void handleSignIn(GoogleSignInAccount account) {
     if (account != null) {
       setState(() {
-        _isAuth = true;
+        //_isAuth = true;
         currentUser = account;
       });
       createUser();
-      getAdminStatus();
-      isAdmin = false;
-      setState(() {});
+
     } else {
       setState(() {
         _isAuth = false;
@@ -86,7 +97,6 @@ class _HomeState extends State<Home> {
       final GoogleSignInAccount _authOnStart =
           await _googleSignIn.signInSilently();
       handleSignIn(_authOnStart);
-      print(currentUser.displayName);
     } catch (err) {
       print('$err');
     }
@@ -100,7 +110,7 @@ class _HomeState extends State<Home> {
   }
 
   void createUser() async {
-    DocumentSnapshot doc = await usersRef.document(currentUser.id).get();
+    DocumentSnapshot doc = await usersRef.document(authUser.id).get();
 
     //check if document exists by using the user id as the document id
     //if user does not exist then navigate to create account page
@@ -108,7 +118,7 @@ class _HomeState extends State<Home> {
       final User newUser = await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) =>
-              CreateAccountDetails(currentUserName: currentUser.displayName),
+              CreateAccountDetails(currentUserName: authUser.displayName),
         ),
       );
 
@@ -125,7 +135,7 @@ class _HomeState extends State<Home> {
         });
       }
       //send to firebase with new user
-      usersRef.document(currentUser.id).setData({
+      usersRef.document(authUser.id).setData({
         'username': currentUser.displayName,
         'userId': currentUser.id,
         'email': currentUser.email,
@@ -151,18 +161,26 @@ class _HomeState extends State<Home> {
         'favorites': [],
       });
     }
+    getAdminStatus();
+    if(authUser != null) {
+      setState(() {
+        _isAuth = true;
+      });
+    } else {
+      _isAuth = false;
+    }
   }
 
   Widget authScreen() {
     return isAdmin
         ? AdminBottomTabBar(
-          userId: currentUser.id,
+            userId: authUser.id,
             signOut: signOut,
             darkMode: widget.darkMode,
             toggleTheme: widget.toggleTheme)
         : UserBottomTabBar(
             signOut: signOut,
-            userId: currentUser.id,
+            userId: authUser.id,
             darkMode: widget.darkMode,
             toggleTheme: widget.toggleTheme);
   }

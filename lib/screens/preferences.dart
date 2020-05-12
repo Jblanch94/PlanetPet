@@ -50,23 +50,26 @@ class _PreferencesState extends State<Preferences> {
   void initSearchPreferences() async {
     DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
 
-    setState(() {
-      _animalType =
-          AnimalType.values[userDoc.data['prefsAnimalType']] ?? AnimalType.none;
-      _catBreeds =
-          CatBreeds.values[userDoc.data['prefsCatBreeds']] ?? CatBreeds.none;
-      _dogBreeds =
-          DogBreeds.values[userDoc.data['prefsDogBreeds']] ?? DogBreeds.none;
-      _otherBreeds = OtherBreeds.values[userDoc.data['prefsOtherBreeds']] ??
-          OtherBreeds.none;
-      _animalSex =
-          AnimalSex.values[userDoc.data['prefsAnimalSex']] ?? AnimalSex.none;
-      goodHumans = userDoc.data['prefsGoodHumans'] ?? true;
-      goodAnimals = userDoc.data['prefsGoodAnimals'] ?? true;
-      needLeash = userDoc.data['prefsNeedLeash'] ?? true;
-      _availability = Availability.values[userDoc.data['prefsAvailability']] ??
-          Availability.none;
-    });
+    if (this.mounted) {
+      setState(() {
+        _animalType = AnimalType.values[userDoc.data['prefsAnimalType']] ??
+            AnimalType.none;
+        _catBreeds =
+            CatBreeds.values[userDoc.data['prefsCatBreeds']] ?? CatBreeds.none;
+        _dogBreeds =
+            DogBreeds.values[userDoc.data['prefsDogBreeds']] ?? DogBreeds.none;
+        _otherBreeds = OtherBreeds.values[userDoc.data['prefsOtherBreeds']] ??
+            OtherBreeds.none;
+        _animalSex =
+            AnimalSex.values[userDoc.data['prefsAnimalSex']] ?? AnimalSex.none;
+        goodHumans = userDoc.data['prefsGoodHumans'] ?? true;
+        goodAnimals = userDoc.data['prefsGoodAnimals'] ?? true;
+        needLeash = userDoc.data['prefsNeedLeash'] ?? true;
+        _availability =
+            Availability.values[userDoc.data['prefsAvailability']] ??
+                Availability.none;
+      });
+    }
   }
 
   @override
