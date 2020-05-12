@@ -185,11 +185,16 @@ class _PostsState extends State<Posts> {
                             petDoc,
                             docId,
                           ),
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: CachedNetworkImageProvider(
-                              petDoc['imageURL'],
+                          child: Semantics(
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: CachedNetworkImageProvider(
+                                petDoc['imageURL'],
+                              ),
                             ),
+                            image: true,
+                            label: "Image of ${petDoc['name']}",
+                            hint: "Image of ${petDoc['name']}"
                           ),
                         ),
                         Padding(

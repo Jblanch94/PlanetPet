@@ -72,7 +72,10 @@ class _AdminGridState extends State<AdminGrid> {
 
   void getUserDetails() async {
     userDoc = await usersRef.document(widget.userId).get();
-    setState(() {});
+    if(this.mounted) {
+      setState(() {});
+    }
+    
   }
 
   @override
