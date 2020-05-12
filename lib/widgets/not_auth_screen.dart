@@ -32,7 +32,7 @@ class _NotAuthScreenState extends State<NotAuthScreen> {
             width: 280,
             height: 120,
             child: GestureDetector(
-              onTap: widget.signIn,
+              onTap:  widget.signIn,
               child: Image.asset('assets/images/google_signin_button.png'),
             ),
           ),
