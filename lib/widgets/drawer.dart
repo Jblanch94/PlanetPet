@@ -27,6 +27,19 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
   final CollectionReference usersRef = Firestore.instance.collection('users');
   TextEditingController controller = TextEditingController();
 
+  Map userMap = {};
+
+  void initState() {
+    super.initState();
+    userMap['username'] = widget.user['username'];
+    userMap['phoneNumber'] = widget.user['phoneNumber'];
+    userMap['streetAddress1'] = widget.user['streetAddress1'];
+    userMap['streetAddress2'] = widget.user['streetAddress2'];
+    userMap['city'] = widget.user['city'];
+    userMap['state'] = widget.user['state'];
+    userMap['zipcode'] = widget.user['zipcode'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -74,11 +87,11 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
       children: <Widget>[
         ListTile(
           leading: Icon(Icons.person),
-          title: Text('${widget.user['username']}'),
+          title: Text('${userMap['username']}'),
           dense: true,
         ),
         ListTile(
-          title: Text(widget.user['phoneNumber']),
+          title: Text(userMap['phoneNumber']),
           leading: Platform.isAndroid ? Icon(Icons.phone_android) : Icon(Icons.phone_iphone),
           trailing: Icon(Icons.edit),
           dense: true,
@@ -87,7 +100,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(widget.user['streetAddress1']),
+          title: Text(userMap['streetAddress1']),
           leading: FaIcon(FontAwesomeIcons.houseUser),
           trailing: Icon(Icons.edit),
           dense: true,
@@ -96,7 +109,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(widget.user['streetAddress2']),
+          title: Text(userMap['streetAddress2']),
           leading: FaIcon(FontAwesomeIcons.building),
           trailing: Icon(Icons.edit),
           dense: true,
@@ -105,7 +118,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(widget.user['city']),
+          title: Text(userMap['city']),
           leading: FaIcon(FontAwesomeIcons.city),
           trailing: Icon(Icons.edit),
           dense: true,
@@ -114,7 +127,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(widget.user['state']),
+          title: Text(userMap['state']),
           subtitle: Text('state'),
           trailing: Icon(Icons.edit),
           dense: true,
@@ -123,7 +136,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(widget.user['zipcode']),
+          title: Text(userMap['zipcode']),
           subtitle: Text('Zip Code'),
           trailing: Icon(Icons.edit),
           dense: true,
@@ -153,8 +166,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
                   key: controller.text.toString(),
                 }, merge: true);
                 setState(()  {
-                  //not sure what you are trying to do here
-                  //userMap[key] = controller.text.toString();
+                  userMap[key] = controller.text.toString();
                 });
                 controller.clear();
 
