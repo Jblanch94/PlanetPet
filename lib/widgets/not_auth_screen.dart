@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NotAuthScreen extends StatefulWidget {
-
-  final  Function signIn;
+  final Function signIn;
 
   NotAuthScreen({Key key, this.signIn}) : super(key: key);
   @override
@@ -10,7 +9,6 @@ class NotAuthScreen extends StatefulWidget {
 }
 
 class _NotAuthScreenState extends State<NotAuthScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +30,7 @@ class _NotAuthScreenState extends State<NotAuthScreen> {
             width: 280,
             height: 120,
             child: GestureDetector(
-              onTap:  widget.signIn,
+              onTap: widget.signIn,
               child: Image.asset('assets/images/google_signin_button.png'),
             ),
           ),

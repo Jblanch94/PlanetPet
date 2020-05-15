@@ -13,30 +13,28 @@ Widget _buildGridItem(
     DocumentSnapshot userDoc) {
   return GestureDetector(
     child: Semantics(
-      child: Card(
-        child: Column(
-          children: <Widget>[
-            Semantics(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: CachedNetworkImageProvider(
-                  document['imageURL'],
-                ),
-              ),
-              image: true,
-              label: "Image of ${document['name']}",
-              hint:  "Image of ${document['name']}"
-            ),
-            SizedBox(height: 20),
-            Text(document['name'], style: TextStyle(fontSize: 14)),
-            Text(document['breed'], style: TextStyle(fontSize: 14)),
-            Text(document['availability'], style: TextStyle(fontSize: 14)),
-          ],
+        child: Card(
+          child: Column(
+            children: <Widget>[
+              Semantics(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: CachedNetworkImageProvider(
+                      document['imageURL'],
+                    ),
+                  ),
+                  image: true,
+                  label: "Image of ${document['name']}",
+                  hint: "Image of ${document['name']}"),
+              SizedBox(height: 20),
+              Text(document['name'], style: TextStyle(fontSize: 14)),
+              Text(document['breed'], style: TextStyle(fontSize: 14)),
+              Text(document['availability'], style: TextStyle(fontSize: 14)),
+            ],
+          ),
         ),
-      ),
-      label: "Card for ${document['name']}",
-      hint: "Card for ${document['name']}"
-    ),
+        label: "Card for ${document['name']}",
+        hint: "Card for ${document['name']}"),
     onTap: () {
       Navigator.push(
           context,
@@ -72,10 +70,9 @@ class _AdminGridState extends State<AdminGrid> {
 
   void getUserDetails() async {
     userDoc = await usersRef.document(widget.userId).get();
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {});
     }
-    
   }
 
   @override

@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken);
 
-     await (_auth.signInWithCredential(authCredential));
+    await (_auth.signInWithCredential(authCredential));
 
     // final FirebaseUser user = authResult.user;
     // await _auth.currentUser();
@@ -83,7 +83,6 @@ class _HomeState extends State<Home> {
         currentUser = account;
       });
       createUser();
-
     } else {
       setState(() {
         _isAuth = false;
@@ -162,7 +161,7 @@ class _HomeState extends State<Home> {
       });
     }
     getAdminStatus();
-    if(authUser != null) {
+    if (authUser != null) {
       setState(() {
         _isAuth = true;
       });

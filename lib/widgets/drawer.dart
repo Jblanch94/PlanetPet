@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingsDrawer extends StatefulWidget {
   final bool darkMode;
@@ -7,8 +10,14 @@ class SettingsDrawer extends StatefulWidget {
   final Function signOut;
   final DocumentSnapshot user;
   final bool detailsPage;
-  const SettingsDrawer({Key key, this.detailsPage, this.darkMode,
-      this.toggleTheme, this.user, this.signOut}) : super(key: key);
+  const SettingsDrawer(
+      {Key key,
+      this.detailsPage,
+      this.darkMode,
+      this.toggleTheme,
+      this.user,
+      this.signOut})
+      : super(key: key);
 
   @override
   _SettingsDrawerState createState() => _SettingsDrawerState();
@@ -17,41 +26,44 @@ class SettingsDrawer extends StatefulWidget {
 class _SettingsDrawerState extends State<SettingsDrawer> {
   final CollectionReference usersRef = Firestore.instance.collection('users');
   TextEditingController controller = TextEditingController();
-  String userId;
-  var userMap = new Map();
-
-  void initState() {
-    super.initState();
-    userMap['username'] = widget.user.data['username'];
-    userMap['phoneNumber'] = widget.user.data['phoneNumber'];
-    userMap['streetAddress1'] = widget.user.data['streetAddress1'];
-    userMap['streetAddress2'] = widget.user.data['streetAddress2'];
-    userMap['city'] = widget.user.data['city'];
-    userMap['state'] = widget.user.data['state'];
-    userMap['zipcode'] = widget.user.data['zipcode'];
-    getUserID();
-  }
-
-  void getUserID() async {
-    userId = await widget.user.data['userId'];
-  }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          ListTile(
-            title: Text('Hello, ' + userMap['username'])
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: ListView(
+              children: <Widget>[
+                userInformation(context),
+              ],
+            ),
           ),
-          Divider(height: 0),
+          Divider(),
           SwitchListTile(
             title: Text('Dark Mode'),
             value: widget.darkMode,
             onChanged: widget.toggleTheme,
           ),
-          Divider(height: 0),
-          userInformation(context),
+          Divider(),
+          RaisedButton(
+            elevation: 11,
+            child: Text('Sign out'),
+            onPressed: () {
+              if(widget.detailsPage) {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                widget.signOut();
+              } else {
+                Navigator.of(context).pop();
+                widget.signOut();
+              }
+            }
+          ),
+          
         ],
       ),
     );
@@ -61,11 +73,13 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
     return Column(
       children: <Widget>[
         ListTile(
-          title: Text('User Information')
+          leading: Icon(Icons.person),
+          title: Text('${widget.user['username']}'),
+          dense: true,
         ),
         ListTile(
-          title: Text(userMap['phoneNumber']),
-          subtitle: Text('Phone Number'),
+          title: Text(widget.user['phoneNumber']),
+          leading: Platform.isAndroid ? Icon(Icons.phone_android) : Icon(Icons.phone_iphone),
           trailing: Icon(Icons.edit),
           dense: true,
           onTap: () {
@@ -73,8 +87,8 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(userMap['streetAddress1']),
-          subtitle: Text('Street Address 1'),
+          title: Text(widget.user['streetAddress1']),
+          leading: FaIcon(FontAwesomeIcons.houseUser),
           trailing: Icon(Icons.edit),
           dense: true,
           onTap: () {
@@ -82,8 +96,8 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(userMap['streetAddress2']),
-          subtitle: Text('Street Address 2'),
+          title: Text(widget.user['streetAddress2']),
+          leading: FaIcon(FontAwesomeIcons.building),
           trailing: Icon(Icons.edit),
           dense: true,
           onTap: () {
@@ -91,8 +105,8 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(userMap['city']),
-          subtitle: Text('City'),
+          title: Text(widget.user['city']),
+          leading: FaIcon(FontAwesomeIcons.city),
           trailing: Icon(Icons.edit),
           dense: true,
           onTap: () {
@@ -100,8 +114,8 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(userMap['state']),
-          subtitle: Text('State'),
+          title: Text(widget.user['state']),
+          subtitle: Text('state'),
           trailing: Icon(Icons.edit),
           dense: true,
           onTap: () {
@@ -109,7 +123,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           }
         ),
         ListTile(
-          title: Text(userMap['zipcode']),
+          title: Text(widget.user['zipcode']),
           subtitle: Text('Zip Code'),
           trailing: Icon(Icons.edit),
           dense: true,
@@ -135,14 +149,15 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
             MaterialButton(
               elevation: 5.0,
               onPressed: () {
-                usersRef.document(userId).setData({
+                usersRef.document(widget.user['userId']).setData({
                   key: controller.text.toString(),
                 }, merge: true);
-                setState(() {
-                  userMap[key] = controller.text.toString();
+                setState(()  {
+                  //not sure what you are trying to do here
+                  //userMap[key] = controller.text.toString();
                 });
                 controller.clear();
-                
+
                 Navigator.of(context).pop(controller.text.toString());
               },
               child: Text('Submit')
