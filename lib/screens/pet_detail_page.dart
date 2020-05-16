@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:planet_pet/screens/pet_adoption_pending.dart';
 import 'package:planet_pet/widgets/custom_scaffold.dart';
 
 class PetDetailPage extends StatefulWidget {
@@ -33,6 +34,8 @@ class _PetDetailPageState extends State<PetDetailPage> {
   final CollectionReference postsRef = Firestore.instance.collection('pets');
   final CollectionReference usersRef = Firestore.instance.collection('users');
   bool favorited;
+  DocumentSnapshot docStatus;
+  String petDocStatus;
 
   /*update the user to favorite the pet
   will now show up in user's favorites page */
@@ -80,6 +83,15 @@ class _PetDetailPageState extends State<PetDetailPage> {
     if (favorited == null) {
       favorited = false;
     }
+    getAvailability();
+    if (petDocStatus == null) {
+      petDocStatus = '';
+    }
+  }
+
+  void getAvailability() async {
+    docStatus = await postsRef.document(widget.docId).get();
+    petDocStatus = docStatus['availability'];
   }
 
   @override
@@ -101,15 +113,14 @@ class _PetDetailPageState extends State<PetDetailPage> {
               Padding(
                 padding: EdgeInsets.only(top: 32),
                 child: Semantics(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        CachedNetworkImageProvider(widget.petDoc['imageURL']),
-                  ),
-                  image: true,
-                  label: "Image of ${widget.petDoc['name']}",
-                  hint: "Image of ${widget.petDoc['name']}"
-                ),
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage:
+                          CachedNetworkImageProvider(widget.petDoc['imageURL']),
+                    ),
+                    image: true,
+                    label: "Image of ${widget.petDoc['name']}",
+                    hint: "Image of ${widget.petDoc['name']}"),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 12),
@@ -176,6 +187,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
+                  //TODO: CHANGE ICON TO HEART
                   IconButton(
                     icon: favorited
                         ? Icon(Icons.star, color: Colors.yellow)
@@ -185,27 +197,53 @@ class _PetDetailPageState extends State<PetDetailPage> {
                     onPressed: favoritePet,
                   ),
                   Semantics(
-                    child: RaisedButton.icon(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      elevation: 11,
-                      label: Text(
-                        'Adopt',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.green[300],
-                      icon: Icon(Icons.pets, color: Colors.white),
-                      onPressed: () => _scaffoldKey.currentState.showSnackBar(
-                        SnackBar(
-                            content:
-                                Text('Adoption pending, we will be in touch!')),
-                      ),
-                    ),
-                    button: true,
-                    label: "Adopt this pet",
-                    hint: "Press this button to adopt this pet"
-                  ),
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          elevation: 11,
+                          label: Text(
+                            'Adopt',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: Colors.green[300],
+                          icon: Icon(Icons.pets, color: Colors.white),
+                          onPressed: () async {
+                            docStatus =
+                                await postsRef.document(widget.docId).get();
+                            petDocStatus = docStatus['availability'];
+                            setState(() {});
+
+                            if (petDocStatus == 'Available') {
+                              // change status of pet to adoption pending
+                              await postsRef.document(widget.docId).updateData({
+                                'availability': 'Adoption Pending',
+                              });
+
+                              //navigate to Adoption Pending page
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => PetAdoptionPending(
+                                      darkMode: widget.darkMode,
+                                      userDoc: widget.userDoc,
+                                      toggleTheme: widget.toggleTheme,
+                                      signOut: widget.signOut,
+                                      petDoc: widget.petDoc),
+                                ),
+                              );
+                            } else if (petDocStatus == 'Adoption Pending' ||
+                                petDocStatus == 'Adopted') {
+                              _scaffoldKey.currentState.showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      '${widget.petDoc['name']} is pending adoption!'),
+                                ),
+                              );
+                            }
+                          }),
+                      button: true,
+                      label: "Adopt this pet",
+                      hint: "Press this button to adopt this pet"),
                 ],
               ),
             ],

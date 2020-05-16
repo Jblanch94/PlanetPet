@@ -63,20 +63,18 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           ),
           Divider(),
           RaisedButton(
-            elevation: 11,
-            child: Text('Sign out'),
-            onPressed: () {
-              if(widget.detailsPage) {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                widget.signOut();
-              } else {
-                Navigator.of(context).pop();
-                widget.signOut();
-              }
-            }
-          ),
-          
+              elevation: 11,
+              child: Text('Sign out'),
+              onPressed: () {
+                if (widget.detailsPage) {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  widget.signOut();
+                } else {
+                  Navigator.of(context).pop();
+                  widget.signOut();
+                }
+              }),
         ],
       ),
     );
@@ -91,92 +89,86 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           dense: true,
         ),
         ListTile(
-          title: Text(userMap['phoneNumber']),
-          leading: Platform.isAndroid ? Icon(Icons.phone_android) : Icon(Icons.phone_iphone),
-          trailing: Icon(Icons.edit),
-          dense: true,
-          onTap: () {
-            editUserInfo(context, 'Phone Number', 'phoneNumber');
-          }
-        ),
+            title: Text(userMap['phoneNumber']),
+            leading: Platform.isAndroid
+                ? Icon(Icons.phone_android)
+                : Icon(Icons.phone_iphone),
+            trailing: Icon(Icons.edit),
+            dense: true,
+            onTap: () {
+              editUserInfo(context, 'Phone Number', 'phoneNumber');
+            }),
         ListTile(
-          title: Text(userMap['streetAddress1']),
-          leading: FaIcon(FontAwesomeIcons.houseUser),
-          trailing: Icon(Icons.edit),
-          dense: true,
-          onTap: () {
-            editUserInfo(context, 'Street Address 1', 'streetAddress1');
-          }
-        ),
+            title: Text(userMap['streetAddress1']),
+            leading: FaIcon(FontAwesomeIcons.houseUser),
+            trailing: Icon(Icons.edit),
+            dense: true,
+            onTap: () {
+              editUserInfo(context, 'Street Address 1', 'streetAddress1');
+            }),
         ListTile(
-          title: Text(userMap['streetAddress2']),
-          leading: FaIcon(FontAwesomeIcons.building),
-          trailing: Icon(Icons.edit),
-          dense: true,
-          onTap: () {
-            editUserInfo(context, 'Street Address 2', 'streetAddress2');
-          }
-        ),
+            title: Text(userMap['streetAddress2']),
+            leading: FaIcon(FontAwesomeIcons.building),
+            trailing: Icon(Icons.edit),
+            dense: true,
+            onTap: () {
+              editUserInfo(context, 'Street Address 2', 'streetAddress2');
+            }),
         ListTile(
-          title: Text(userMap['city']),
-          leading: FaIcon(FontAwesomeIcons.city),
-          trailing: Icon(Icons.edit),
-          dense: true,
-          onTap: () {
-            editUserInfo(context, 'City', 'city');
-          }
-        ),
+            title: Text(userMap['city']),
+            leading: FaIcon(FontAwesomeIcons.city),
+            trailing: Icon(Icons.edit),
+            dense: true,
+            onTap: () {
+              editUserInfo(context, 'City', 'city');
+            }),
         ListTile(
-          title: Text(userMap['state']),
-          subtitle: Text('state'),
-          trailing: Icon(Icons.edit),
-          dense: true,
-          onTap: () {
-            editUserInfo(context, 'State', 'state');
-          }
-        ),
+            title: Text(userMap['state']),
+            subtitle: Text('state'),
+            trailing: Icon(Icons.edit),
+            dense: true,
+            onTap: () {
+              editUserInfo(context, 'State', 'state');
+            }),
         ListTile(
-          title: Text(userMap['zipcode']),
-          subtitle: Text('Zip Code'),
-          trailing: Icon(Icons.edit),
-          dense: true,
-          onTap: () {
-            editUserInfo(context, 'Zipcode', 'zipcode');
-          }
-        ),
+            title: Text(userMap['zipcode']),
+            subtitle: Text('Zip Code'),
+            trailing: Icon(Icons.edit),
+            dense: true,
+            onTap: () {
+              editUserInfo(context, 'Zipcode', 'zipcode');
+            }),
       ],
     );
   }
 
   Future<String> editUserInfo(BuildContext context, String prompt, String key) {
     return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(prompt),
-          content: TextField(
-            keyboardType: key == 'phoneNumber' ? TextInputType.phone : null,
-            controller: controller,
-          ),
-          actions: <Widget>[
-            MaterialButton(
-              elevation: 5.0,
-              onPressed: () {
-                usersRef.document(widget.user['userId']).setData({
-                  key: controller.text.toString(),
-                }, merge: true);
-                setState(()  {
-                  userMap[key] = controller.text.toString();
-                });
-                controller.clear();
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(prompt),
+            content: TextField(
+              keyboardType: key == 'phoneNumber' ? TextInputType.phone : null,
+              controller: controller,
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                  elevation: 5.0,
+                  onPressed: () {
+                    usersRef.document(widget.user['userId']).setData({
+                      key: controller.text.toString(),
+                    }, merge: true);
+                    setState(() {
+                      userMap[key] = controller.text.toString();
+                    });
+                    controller.clear();
 
-                Navigator.of(context).pop(controller.text.toString());
-              },
-              child: Text('Submit')
-            )
-          ],
-        );
-      }
-    );
+                    Navigator.of(context).pop(controller.text.toString());
+                  },
+                  child: Text('Submit'))
+            ],
+          );
+        });
   }
 }
