@@ -187,13 +187,12 @@ class _PetDetailPageState extends State<PetDetailPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  //TODO: CHANGE ICON TO HEART
                   IconButton(
                     icon: favorited
-                        ? Icon(Icons.star, color: Colors.yellow)
-                        : Icon(Icons.star_border),
+                        ? Icon(Icons.favorite, color: Colors.red)
+                        : Icon(Icons.favorite_border),
                     iconSize: 30,
-                    color: Colors.yellow[700],
+                    color: Colors.red,
                     onPressed: favoritePet,
                   ),
                   Semantics(
