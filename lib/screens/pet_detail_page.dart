@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:maps_toolkit/maps_toolkit.dart';
 import 'package:planet_pet/screens/pet_adoption_pending.dart';
 import 'package:planet_pet/widgets/custom_scaffold.dart';
+import '../models/animal.dart';
 
 class PetDetailPage extends StatefulWidget {
   final dynamic petDoc;
@@ -13,6 +15,7 @@ class PetDetailPage extends StatefulWidget {
   final bool darkMode;
   final Function(bool) toggleTheme;
   final Function signOut;
+
 
   PetDetailPage(
       {Key key,
@@ -36,6 +39,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
   bool favorited;
   DocumentSnapshot docStatus;
   String petDocStatus;
+
 
   /*update the user to favorite the pet
   will now show up in user's favorites page */
@@ -89,6 +93,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
     }
   }
 
+
   void getAvailability() async {
     docStatus = await postsRef.document(widget.docId).get();
     petDocStatus = docStatus['availability'];
@@ -129,10 +134,15 @@ class _PetDetailPageState extends State<PetDetailPage> {
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),
-//              Text("Birthdate: ${widget.petDoc['dateOfBirth']}"),
-              Text(
-                  "Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.petDoc['dateOfBirth'].toDate())}"),
-
+              Text("Distance: ${double.parse((SphericalUtil.computeDistanceBetween(LatLng(widget.petDoc['latitude'], widget.petDoc['longitude']), LatLng(widget.userDoc['latitude'], widget.userDoc['longitude'])) / 1000 * .621371).toStringAsFixed(1))} miles"),
+              Padding(
+                padding: EdgeInsets.only(top: 12),
+              ),
+              Text("Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.petDoc['dateOfBirth'].toDate())}"),
+              Padding(
+                padding: EdgeInsets.only(top: 12),
+              ),
+              Text("Age: ${Animal(dateOfBirth: widget.petDoc['dateOfBirth'].toDate().toString()).getAge()}"),
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),

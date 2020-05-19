@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:maps_toolkit/maps_toolkit.dart';
 import 'package:planet_pet/screens/pet_detail_page.dart';
 import 'package:planet_pet/widgets/custom_scaffold.dart';
+
 
 List<String> animalTypes = ['None', 'Cat', 'Dog', 'Other'];
 List<String> catBreeds = ['None', 'Persian', 'Shorthair', 'Himalayan'];
@@ -201,6 +203,7 @@ class _PostsState extends State<Posts> {
                           padding: EdgeInsets.only(top: 8),
                         ),
                         Text(petDoc['name']),
+                        Text("${(SphericalUtil.computeDistanceBetween(LatLng(petDoc['latitude'], petDoc['longitude']), LatLng(doc['latitude'], doc['longitude'])) / 1000 * .621371).round()} miles away"),
                       ],
                     );
                   }),
