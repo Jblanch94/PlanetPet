@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:planet_pet/widgets/custom_scaffold.dart';
+import 'package:maps_toolkit/maps_toolkit.dart';
+import '../models/animal.dart';
 
 class AdminDetailPage extends StatefulWidget {
   final DocumentSnapshot document;
@@ -50,8 +52,9 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
               image: true,
             ),
             Text("Name: ${widget.document['name']}"),
-            Text(
-                "Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.document['dateOfBirth'].toDate())}"),
+            Text("Distance: ${double.parse((SphericalUtil.computeDistanceBetween(LatLng(widget.document['latitude'], widget.document['longitude']), LatLng(widget.userDoc['latitude'], widget.userDoc['longitude'])) / 1000 * .621371).toStringAsFixed(1))} miles"),
+            Text("Age: ${Animal(dateOfBirth: widget.document['dateOfBirth'].toDate().toString()).getAge()}"),
+            Text("Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.document['dateOfBirth'].toDate())}"),
             Text("Sex: ${widget.document['sex']}"),
             Text("Animal type: ${widget.document['animalType']}"),
             Text("Breed: ${widget.document['breed']}"),
