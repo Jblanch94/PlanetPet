@@ -46,9 +46,6 @@ class _HomeState extends State<Home> {
         idToken: googleSignInAuthentication.idToken);
 
     await (_auth.signInWithCredential(authCredential));
-
-    // final FirebaseUser user = authResult.user;
-    // await _auth.currentUser();
   }
 
   @override

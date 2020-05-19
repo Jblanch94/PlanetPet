@@ -9,8 +9,12 @@ class NotAuthScreen extends StatefulWidget {
 }
 
 class _NotAuthScreenState extends State<NotAuthScreen> {
+  
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
       width: double.infinity,
       child: Column(
@@ -20,15 +24,16 @@ class _NotAuthScreenState extends State<NotAuthScreen> {
           Text(
             'Planet Pet',
             style: TextStyle(
-              fontSize: 42,
+              // fontSize: 42,
+              fontSize: orientation == Orientation.portrait ? height * 0.065 : width * 0.065,
               fontWeight: FontWeight.w800,
               fontFamily: 'Indie Flower',
               fontStyle: FontStyle.italic,
             ),
           ),
           Container(
-            width: 280,
-            height: 120,
+            width: orientation == Orientation.portrait ? height * 0.45 : width * 0.50,
+            height: orientation == Orientation.portrait ? height * 0.12 : width * 0.15,
             child: GestureDetector(
               onTap: widget.signIn,
               child: Image.asset('assets/images/google_signin_button.png'),

@@ -9,6 +9,7 @@ const sentryDSN = 'https://03af678dd10041d1babef9e30701aeb3@o365156.ingest.sentr
 final SentryClient sentry = SentryClient(dsn: sentryDSN);
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
@@ -19,6 +20,7 @@ void main() async {
     Zone.current.handleUncaughtError(details.exception, details.stack);
   };
   runZoned( () {
+    
     runApp(App.App());
   }, onError: (error, stackTrace) {
     App.App.reportError(error, stackTrace);
