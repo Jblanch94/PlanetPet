@@ -5,7 +5,6 @@ import 'package:maps_toolkit/maps_toolkit.dart';
 import 'package:planet_pet/screens/pet_detail_page.dart';
 import 'package:planet_pet/widgets/custom_scaffold.dart';
 
-
 List<String> animalTypes = ['None', 'Cat', 'Dog', 'Other'];
 List<String> catBreeds = ['None', 'Persian', 'Shorthair', 'Himalayan'];
 List<String> dogBreeds = [
@@ -29,7 +28,8 @@ class Posts extends StatefulWidget {
   final bool darkMode;
   final Function(bool) toggleTheme;
   final Function signOut;
-  const Posts({Key key, this.userId, this.darkMode, this.toggleTheme, this.signOut})
+  const Posts(
+      {Key key, this.userId, this.darkMode, this.toggleTheme, this.signOut})
       : super(key: key);
 
   @override
@@ -141,6 +141,9 @@ class _PostsState extends State<Posts> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return CustomScaffold(
       detailsPage: false,
       user: doc,
@@ -169,18 +172,25 @@ class _PostsState extends State<Posts> {
               displayedAnimals = snapshot.data.documents;
             }
 
-            return Padding(
-              padding: EdgeInsets.only(top: 16.0),
+            return Container(
+              height: double.maxFinite,
+              padding: orientation == Orientation.portrait
+                  ? EdgeInsets.only(top: height * 0.05)
+                  : EdgeInsets.only(top: width * 0.04),
               child: GridView.builder(
+                  addRepaintBoundaries: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
+                      childAspectRatio: orientation == Orientation.landscape
+                          ? 11 / 10
+                          : 7 / 9,
+                      crossAxisCount:
+                          orientation == Orientation.portrait ? 2 : 3),
                   itemCount: displayedAnimals.length,
                   itemBuilder: (_, index) {
                     var petDoc = displayedAnimals[index];
                     var docId = displayedAnimals[index].documentID;
                     return Column(
                       children: <Widget>[
-                        
                         GestureDetector(
                           onTap: () => viewPetDetails(
                             context,
@@ -188,22 +198,26 @@ class _PostsState extends State<Posts> {
                             docId,
                           ),
                           child: Semantics(
-                            child: CircleAvatar(
-                              radius: 50,
-                              backgroundImage: CachedNetworkImageProvider(
-                                petDoc['imageURL'],
+                              child: CircleAvatar(
+                                radius: orientation == Orientation.portrait
+                                    ? height * 0.085
+                                    : width * 0.075,
+                                backgroundImage: CachedNetworkImageProvider(
+                                  petDoc['imageURL'],
+                                ),
                               ),
-                            ),
-                            image: true,
-                            label: "Image of ${petDoc['name']}",
-                            hint: "Image of ${petDoc['name']}"
-                          ),
+                              image: true,
+                              label: "Image of ${petDoc['name']}",
+                              hint: "Image of ${petDoc['name']}"),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 8),
+                          padding: orientation == Orientation.portrait
+                              ? EdgeInsets.only(top: height * 0.015)
+                              : EdgeInsets.only(top: width * 0.0075),
                         ),
                         Text(petDoc['name']),
-                        Text("${(SphericalUtil.computeDistanceBetween(LatLng(petDoc['latitude'], petDoc['longitude']), LatLng(doc['latitude'], doc['longitude'])) / 1000 * .621371).round()} miles away"),
+                        Text(
+                            "${(SphericalUtil.computeDistanceBetween(LatLng(petDoc['latitude'], petDoc['longitude']), LatLng(doc['latitude'], doc['longitude'])) / 1000 * .621371).round()} miles away"),
                       ],
                     );
                   }),
