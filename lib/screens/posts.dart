@@ -73,9 +73,8 @@ class _PostsState extends State<Posts> {
   }
 
   void getUserDetails() async {
-    setState(() async {
-      doc = await usersRef.document(widget.userId).get();
-    });
+    doc = await usersRef.document(widget.userId).get();
+    setState(() {});
   }
 
   void initSearchPreferences() async {
