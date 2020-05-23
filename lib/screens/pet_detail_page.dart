@@ -16,7 +16,6 @@ class PetDetailPage extends StatefulWidget {
   final Function(bool) toggleTheme;
   final Function signOut;
 
-
   PetDetailPage(
       {Key key,
       this.petDoc,
@@ -39,7 +38,6 @@ class _PetDetailPageState extends State<PetDetailPage> {
   bool favorited;
   DocumentSnapshot docStatus;
   String petDocStatus;
-
 
   /*update the user to favorite the pet
   will now show up in user's favorites page */
@@ -93,7 +91,6 @@ class _PetDetailPageState extends State<PetDetailPage> {
     }
   }
 
-
   void getAvailability() async {
     docStatus = await postsRef.document(widget.docId).get();
     petDocStatus = docStatus['availability'];
@@ -101,6 +98,9 @@ class _PetDetailPageState extends State<PetDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return CustomScaffold(
       detailsPage: true,
       signOut: widget.signOut,
@@ -116,60 +116,103 @@ class _PetDetailPageState extends State<PetDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 32),
+                padding: EdgeInsets.all(orientation == Orientation.portrait
+                    ? height * 0.035
+                    : width * 0.035),
                 child: Semantics(
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage:
-                          CachedNetworkImageProvider(widget.petDoc['imageURL']),
+                    child: AspectRatio(
+                      //aspectRatio: 4/3,
+                      aspectRatio:
+                          orientation == Orientation.portrait ? 4 / 3 : 9 / 4,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            orientation == Orientation.portrait
+                                ? height * 0.025
+                                : width * 0.03),
+                        child: Image.network(widget.petDoc['imageURL'],
+                            fit: BoxFit.cover),
+                      ),
                     ),
                     image: true,
                     label: "Image of ${widget.petDoc['name']}",
                     hint: "Image of ${widget.petDoc['name']}"),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.0075
+                        : width * 0.0075),
               ),
               Text("Name: ${widget.petDoc['name']}"),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
-              Text("Distance: ${double.parse((SphericalUtil.computeDistanceBetween(LatLng(widget.petDoc['latitude'], widget.petDoc['longitude']), LatLng(widget.userDoc['latitude'], widget.userDoc['longitude'])) / 1000 * .621371).toStringAsFixed(1))} miles"),
+              Text(
+                  "Distance: ${double.parse((SphericalUtil.computeDistanceBetween(LatLng(widget.petDoc['latitude'], widget.petDoc['longitude']), LatLng(widget.userDoc['latitude'], widget.userDoc['longitude'])) / 1000 * .621371).toStringAsFixed(1))} miles"),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
-              Text("Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.petDoc['dateOfBirth'].toDate())}"),
+              Text(
+                  "Birthdate: ${DateFormat.yMMMMEEEEd().format(widget.petDoc['dateOfBirth'].toDate())}"),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
-              Text("Age: ${Animal(dateOfBirth: widget.petDoc['dateOfBirth'].toDate().toString()).getAge()}"),
+              Text(
+                  "Age: ${Animal(dateOfBirth: widget.petDoc['dateOfBirth'].toDate().toString()).getAge()}"),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               Text("Sex: ${widget.petDoc['sex']}"),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               Text("Animal type: ${widget.petDoc['animalType']}"),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               Text("Breed: ${widget.petDoc['breed']}"),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               widget.petDoc['goodAnimals']
                   ? Text('${widget.petDoc['name']} is good with other animals.')
                   : Text(
                       '${widget.petDoc['name']} is not good with other animals.'),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               widget.petDoc['goodChildren']
                   ? Text('${widget.petDoc['name']} is good with children.')
                   : Text('${widget.petDoc['name']} is not good with children.'),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               widget.petDoc['leashNeeded']
                   ? Text('Leash required')
@@ -179,11 +222,17 @@ class _PetDetailPageState extends State<PetDetailPage> {
               ),
               Text('Availability: ${widget.petDoc['availability']}'),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               Text('Status: ${widget.petDoc['status']}'),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               Text(
                 'Description: ${widget.petDoc['description']}',
@@ -192,7 +241,10 @@ class _PetDetailPageState extends State<PetDetailPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -201,7 +253,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
                     icon: favorited
                         ? Icon(Icons.favorite, color: Colors.red)
                         : Icon(Icons.favorite_border),
-                    iconSize: 30,
+                    iconSize: orientation == Orientation.portrait ? height * 0.05 : width * 0.05,
                     color: Colors.red,
                     onPressed: favoritePet,
                   ),
