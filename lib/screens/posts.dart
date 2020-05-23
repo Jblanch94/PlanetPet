@@ -188,6 +188,7 @@ class _PostsState extends State<Posts> {
                   itemBuilder: (_, index) {
                     var petDoc = displayedAnimals[index];
                     var docId = displayedAnimals[index].documentID;
+                  
                     return Column(
                       children: <Widget>[
                         GestureDetector(
@@ -216,7 +217,7 @@ class _PostsState extends State<Posts> {
                         ),
                         Text(petDoc['name']),
                         Text(
-                            "${(SphericalUtil.computeDistanceBetween(LatLng(petDoc['latitude'], petDoc['longitude']), LatLng(doc['latitude'], doc['longitude'])) / 1000 * .621371).round()} miles away"),
+                              doc == null ? '' : "${(SphericalUtil.computeDistanceBetween(LatLng(petDoc['latitude'], petDoc['longitude']), LatLng(doc['latitude'], doc['longitude'])) / 1000 * .621371).round()} miles away"),
                       ],
                     );
                   }),
