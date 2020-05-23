@@ -35,7 +35,6 @@ class _PetFormState extends State<PetForm> {
     super.initState();
     getUserDetails();
     retrieveLocation();
-    
   }
 
   void retrieveLocation() async {
@@ -86,9 +85,12 @@ class _PetFormState extends State<PetForm> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     if (image == null) {
       return CustomScaffold(
-        detailsPage: false,
+          detailsPage: false,
           user: userDoc,
           signOut: widget.signOut,
           scaffoldKey: _scaffoldKey,
@@ -107,7 +109,7 @@ class _PetFormState extends State<PetForm> {
                       }))));
     } else {
       return CustomScaffold(
-        detailsPage: false,
+          detailsPage: false,
           user: userDoc,
           signOut: widget.signOut,
           scaffoldKey: _scaffoldKey,
@@ -118,12 +120,30 @@ class _PetFormState extends State<PetForm> {
               child: ListView(
             children: <Widget>[
               Semantics(
-                  child: Image.file(image, height: 240), label: "Image of pet"),
-              SizedBox(height: 40),
-              Text(
-                  "FYI: We'll save your current location as this animal's home turf."),
+                  child: AspectRatio(
+                    aspectRatio:
+                        orientation == Orientation.portrait ? 9 / 6 : 4.75 / 2,
+                    child: Image.file(image),
+                  ),
+                  label: "Image of pet"),
               Padding(
-                  padding: EdgeInsets.all(10),
+                padding: orientation == Orientation.portrait
+                    ? EdgeInsets.only(top: height * 0.05)
+                    : EdgeInsets.only(top: width * 0.05),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: orientation == Orientation.portrait
+                        ? height * 0.015
+                        : width * 0.015),
+                child: Text(
+                    "FYI: We'll save your current location as this animal's home turf."),
+              ),
+              Padding(
+                  //padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(orientation == Orientation.portrait
+                      ? height * 0.015
+                      : width * 0.015),
                   child: Form(
                       key: formKey,
                       child: Column(
@@ -150,7 +170,12 @@ class _PetFormState extends State<PetForm> {
                             label: "Name of pet",
                             hint: "Give this pet a name",
                           ),
-                          SizedBox(height: 10),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: orientation == Orientation.portrait
+                                    ? height * 0.02
+                                    : width * 0.02),
+                          ),
                           Text("Birthdate:"),
                           Text("${selectedDate.toLocal()}".split(' ')[0]),
                           Semantics(
@@ -159,7 +184,12 @@ class _PetFormState extends State<PetForm> {
                                   child: Text('Select Birthdate')),
                               label: "Select birthdate",
                               hint: "Select a birthdate for this pet"),
-                          SizedBox(height: 10),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: orientation == Orientation.portrait
+                                    ? height * 0.02
+                                    : width * 0.02),
+                          ),
                           Text('Sex'),
                           ListTile(
                             dense: true,
@@ -237,6 +267,12 @@ class _PetFormState extends State<PetForm> {
                               textField: true,
                               label: "Breed",
                               hint: "Enter a breed for this pet"),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: orientation == Orientation.portrait
+                                    ? height * 0.02
+                                    : width * 0.02),
+                          ),
                           Text('Traits'),
                           ListTile(
                               dense: true,
@@ -268,7 +304,12 @@ class _PetFormState extends State<PetForm> {
                                       _leashNeeded = value ? false : true;
                                     });
                                   })),
-                          SizedBox(height: 10),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: orientation == Orientation.portrait
+                                    ? height * 0.02
+                                    : width * 0.02),
+                          ),
                           Text('Availability'),
                           ListTile(
                               dense: true,
@@ -333,7 +374,12 @@ class _PetFormState extends State<PetForm> {
                               textField: true,
                               label: "Enter status",
                               hint: "Enter a status for this pet"),
-                          SizedBox(height: 10),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: orientation == Orientation.portrait
+                                    ? height * 0.02
+                                    : width * 0.02),
+                          ),
                           Semantics(
                               child: TextFormField(
                                   autofocus: true,
