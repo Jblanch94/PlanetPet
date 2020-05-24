@@ -55,7 +55,11 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
     }
   }
 
-  Widget buildPostPet(dynamic record, String url) {
+  //TODO: Need to update will make it responsive when I do that
+  Widget buildPostPet(dynamic record, String url, BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Semantics(
       child: Card(
         child: Column(
@@ -173,6 +177,7 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
 
   @override
   Widget build(BuildContext context) {
+    
     return CustomScaffold(
       detailsPage: false,
       user: userDoc,
@@ -195,7 +200,7 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
                     String recordId = record.documentID;
 
                     if (userFavorites.contains(recordId)) {
-                      return buildPostPet(record, record['imageURL']);
+                      return buildPostPet(record, record['imageURL'], context);
                     } else if (userFavorites == null) {
                       return Text('No favorited animals.');
                     } else

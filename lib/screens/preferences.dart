@@ -87,21 +87,41 @@ class _PreferencesState extends State<Preferences> {
   }
 
   Widget preferencesBody(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
-      padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+      //padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+      padding: orientation == Orientation.portrait
+          ? EdgeInsets.only(
+              left: height * 0.03, right: height * 0.03, bottom: height * 0.025)
+          : EdgeInsets.only(
+              left: width * 0.03, right: width * 0.03, bottom: width * 0.025),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           resetPrefs(context),
           Divider(height: 0),
           animalType(context),
-          Divider(height: 20),
+          Divider(
+              height: orientation == Orientation.portrait
+                  ? height * 0.05
+                  : width * 0.05),
           animalBreed(context),
-          Divider(height: 20),
+          Divider(
+              height: orientation == Orientation.portrait
+                  ? height * 0.05
+                  : width * 0.05),
           animalSex(context),
-          Divider(height: 20),
+          Divider(
+              height: orientation == Orientation.portrait
+                  ? height * 0.05
+                  : width * 0.05),
           animalBehavior(context),
-          Divider(height: 20),
+          Divider(
+              height: orientation == Orientation.portrait
+                  ? height * 0.05
+                  : width * 0.05),
           animalAvailability(context),
         ],
       ),
@@ -109,6 +129,9 @@ class _PreferencesState extends State<Preferences> {
   }
 
   Widget resetPrefs(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return InkWell(
         onTap: () {
           setState(() {
@@ -139,16 +162,27 @@ class _PreferencesState extends State<Preferences> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: orientation == Orientation.portrait
+                      ? height * 0.03
+                      : width * 0.04,
                   color: Colors.red,
                 ))));
   }
 
   Widget animalType(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(padding: EdgeInsets.only(bottom: 10)),
+          Padding(
+            //padding: EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.only(
+                bottom: orientation == Orientation.portrait
+                    ? height * 0.03
+                    : width * 0.04),
+          ),
           Text('Type',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           Row(
@@ -262,9 +296,18 @@ class _PreferencesState extends State<Preferences> {
         ]);
   }
 
-  Widget breed() {
-    return Text('Breed',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+  Widget breed(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Text(
+      'Breed',
+      style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: orientation == Orientation.portrait
+              ? height * 0.04
+              : width * 0.05),
+    );
   }
 
   Widget animalBreed(BuildContext context) {
@@ -278,7 +321,7 @@ class _PreferencesState extends State<Preferences> {
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            breed(),
+            breed(context),
             ListTile(title: Text('Please select a specific Animal Type')),
           ]);
     }
@@ -288,7 +331,7 @@ class _PreferencesState extends State<Preferences> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        breed(),
+        breed(context),
         Row(
           children: <Widget>[
             Expanded(
@@ -402,10 +445,14 @@ class _PreferencesState extends State<Preferences> {
   }
 
   Widget dogBreeds(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        breed(),
+        
+        breed(context),
         Row(
           children: <Widget>[
             Expanded(
@@ -460,7 +507,10 @@ class _PreferencesState extends State<Preferences> {
                             }),
                         Text('Golden Retriever',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16)),
+                            style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? height * 0.05
+                                    : width * 0.04)),
                       ],
                     ))),
             Expanded(
@@ -488,7 +538,10 @@ class _PreferencesState extends State<Preferences> {
                             }),
                         Text('German Shepherd',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16)),
+                            style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? height * 0.03
+                                    : width * 0.04)),
                       ],
                     ))),
             Expanded(
@@ -514,7 +567,11 @@ class _PreferencesState extends State<Preferences> {
                                 }, merge: true);
                               });
                             }),
-                        Text('Beagle', style: TextStyle(fontSize: 16)),
+                        Text('Beagle',
+                            style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? height * 0.05
+                                    : width * 0.04)),
                         SizedBox(height: 19),
                       ],
                     ))),
@@ -541,7 +598,11 @@ class _PreferencesState extends State<Preferences> {
                                 }, merge: true);
                               });
                             }),
-                        Text('Poodle', style: TextStyle(fontSize: 16)),
+                        Text('Poodle',
+                            style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? height * 0.05
+                                    : width * 0.04)),
                         SizedBox(height: 19),
                       ],
                     ))),
@@ -555,7 +616,7 @@ class _PreferencesState extends State<Preferences> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        breed(),
+        breed(context),
         Row(
           children: <Widget>[
             Expanded(
@@ -699,7 +760,7 @@ class _PreferencesState extends State<Preferences> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Sex',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
         Row(
           children: <Widget>[
             Expanded(
