@@ -188,7 +188,7 @@ class _PostsState extends State<Posts> {
                   itemBuilder: (_, index) {
                     var petDoc = displayedAnimals[index];
                     var docId = displayedAnimals[index].documentID;
-                  
+
                     return Column(
                       children: <Widget>[
                         GestureDetector(
@@ -200,8 +200,8 @@ class _PostsState extends State<Posts> {
                           child: Semantics(
                               child: CircleAvatar(
                                 radius: orientation == Orientation.portrait
-                                    ? height * 0.085
-                                    : width * 0.075,
+                                    ? height * 0.09
+                                    : width * 0.09,
                                 backgroundImage: CachedNetworkImageProvider(
                                   petDoc['imageURL'],
                                 ),
@@ -215,9 +215,29 @@ class _PostsState extends State<Posts> {
                               ? EdgeInsets.only(top: height * 0.015)
                               : EdgeInsets.only(top: width * 0.0075),
                         ),
-                        Text(petDoc['name']),
-                        Text(
-                              doc == null ? '' : "${(SphericalUtil.computeDistanceBetween(LatLng(petDoc['latitude'], petDoc['longitude']), LatLng(doc['latitude'], doc['longitude'])) / 1000 * .621371).round()} miles away"),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              petDoc['name'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: orientation == Orientation.portrait
+                                    ? height * 0.04
+                                    : width * 0.04,
+                              ),
+                            ),
+                            Text(
+                              doc == null
+                                  ? ''
+                                  : "${(SphericalUtil.computeDistanceBetween(LatLng(petDoc['latitude'], petDoc['longitude']), LatLng(doc['latitude'], doc['longitude'])) / 1000 * .621371).round()} miles away",
+                              style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? height * 0.03
+                                    : width * 0.03,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     );
                   }),

@@ -760,7 +760,7 @@ class _PreferencesState extends State<Preferences> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Sex',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         Row(
           children: <Widget>[
             Expanded(

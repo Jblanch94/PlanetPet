@@ -10,15 +10,25 @@ Widget _buildGridItem(
     bool darkMode,
     void Function(bool) toggleTheme,
     void Function() signOut,
-    DocumentSnapshot userDoc) {
+    DocumentSnapshot userDoc,
+    Orientation orientation,
+    double width,
+    double height) {
   return GestureDetector(
     child: Semantics(
-        child: Card(
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: orientation == Orientation.portrait
+                    ? height * 0.025
+                    : width * 0.025),
+              ),
               Semantics(
                   child: CircleAvatar(
-                    radius: 50,
+                    radius: orientation == Orientation.portrait
+                        ? height * 0.08
+                        : width * 0.09,
                     backgroundImage: CachedNetworkImageProvider(
                       document['imageURL'],
                     ),
@@ -26,10 +36,41 @@ Widget _buildGridItem(
                   image: true,
                   label: "Image of ${document['name']}",
                   hint: "Image of ${document['name']}"),
-              SizedBox(height: 20),
-              Text(document['name'], style: TextStyle(fontSize: 14)),
-              Text(document['breed'], style: TextStyle(fontSize: 14)),
-              Text(document['availability'], style: TextStyle(fontSize: 14)),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: orientation == Orientation.portrait
+                        ? height * 0.02
+                        : width * 0.015),
+              ),
+              Column(
+                children: <Widget>[
+                  Text(
+                    document['name'],
+                    style: TextStyle(
+                      fontSize: orientation == Orientation.portrait
+                          ? height * 0.03
+                          : width * 0.03,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    document['breed'],
+                    style: TextStyle(
+                      fontSize: orientation == Orientation.portrait
+                          ? height * 0.03
+                          : width * 0.03,
+                    ),
+                  ),
+                  Text(
+                    document['availability'],
+                    style: TextStyle(
+                      fontSize: orientation == Orientation.portrait
+                          ? height * 0.025
+                          : width * 0.02,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -37,15 +78,16 @@ Widget _buildGridItem(
         hint: "Card for ${document['name']}"),
     onTap: () {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => AdminDetailPage(
-                  document: document,
-                  darkMode: darkMode,
-                  toggleTheme: toggleTheme,
-                  signOut: signOut,
-                  userDoc: userDoc) // AdminDetailPage(document: document)
-              ));
+        context,
+        MaterialPageRoute(
+            builder: (_) => AdminDetailPage(
+                document: document,
+                darkMode: darkMode,
+                toggleTheme: toggleTheme,
+                signOut: signOut,
+                userDoc: userDoc) // AdminDetailPage(document: document)
+            ),
+      );
     },
   );
 }
@@ -83,6 +125,9 @@ class _AdminGridState extends State<AdminGrid> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return CustomScaffold(
       user: userDoc,
       detailsPage: false,
@@ -98,7 +143,10 @@ class _AdminGridState extends State<AdminGrid> {
               return Center(child: CircularProgressIndicator());
             return GridView.builder(
               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2),
+                crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+                childAspectRatio:
+                    orientation == Orientation.landscape ? 10 / 10 : 7 / 9,
+              ),
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) => _buildGridItem(
                   context,
@@ -106,7 +154,10 @@ class _AdminGridState extends State<AdminGrid> {
                   widget.darkMode,
                   widget.toggleTheme,
                   widget.signOut,
-                  userDoc),
+                  userDoc,
+                  orientation,
+                  width,
+                  height),
             );
           }),
     );
