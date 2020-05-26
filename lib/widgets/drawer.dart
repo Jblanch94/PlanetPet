@@ -43,6 +43,9 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -63,19 +66,33 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
             onChanged: widget.toggleTheme,
           ),
           Divider(),
-          RaisedButton(
-              elevation: 11,
-              child: Text('Sign out'),
-              onPressed: () {
-                if (widget.detailsPage) {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                  widget.signOut();
-                } else {
-                  Navigator.of(context).pop();
-                  widget.signOut();
-                }
-              }),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                  color: Theme.of(context).buttonTheme.colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 11,
+                  child: Text(
+                    'Sign out',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    if (widget.detailsPage) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      widget.signOut();
+                    } else {
+                      Navigator.of(context).pop();
+                      widget.signOut();
+                    }
+                  }),
+            ],
+          ),
         ],
       ),
     );
@@ -85,56 +102,101 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
     return Column(
       children: <Widget>[
         ListTile(
-          leading: Icon(Icons.person),
-          title: Text('${userMap['username']}'),
+          leading: Icon(Icons.person, color: Colors.white),
+          title: Text(
+            '${userMap['username']}',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
           dense: true,
         ),
         ListTile(
-            title: Text(userMap['phoneNumber']),
+            title: Text(
+              userMap['phoneNumber'],
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
             leading: Platform.isAndroid
-                ? Icon(Icons.phone_android)
-                : Icon(Icons.phone_iphone),
-            trailing: Icon(Icons.edit),
+                ? Icon(Icons.phone_android, color: Colors.white)
+                : Icon(Icons.phone_iphone, color: Colors.white),
+            trailing: Icon(Icons.edit, color: Colors.white),
             dense: true,
             onTap: () {
               editUserInfo(context, 'Phone Number', 'phoneNumber');
             }),
         ListTile(
-            title: Text(userMap['streetAddress1']),
-            leading: FaIcon(FontAwesomeIcons.houseUser),
-            trailing: Icon(Icons.edit),
+            title: Text(
+              userMap['streetAddress1'],
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            leading: FaIcon(FontAwesomeIcons.houseUser, color: Colors.white),
+            trailing: Icon(Icons.edit, color: Colors.white),
             dense: true,
             onTap: () {
               editUserInfo(context, 'Street Address 1', 'streetAddress1');
             }),
         ListTile(
-            title: Text(userMap['streetAddress2']),
-            leading: FaIcon(FontAwesomeIcons.building),
-            trailing: Icon(Icons.edit),
+            title: Text(
+              userMap['streetAddress2'],
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            leading: FaIcon(FontAwesomeIcons.building, color: Colors.white),
+            trailing: Icon(Icons.edit, color: Colors.white),
             dense: true,
             onTap: () {
               editUserInfo(context, 'Street Address 2', 'streetAddress2');
             }),
         ListTile(
-            title: Text(userMap['city']),
-            leading: FaIcon(FontAwesomeIcons.city),
-            trailing: Icon(Icons.edit),
+            title: Text(
+              userMap['city'],
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            leading: FaIcon(FontAwesomeIcons.city, color: Colors.white),
+            trailing: Icon(Icons.edit, color: Colors.white),
             dense: true,
             onTap: () {
               editUserInfo(context, 'City', 'city');
             }),
         ListTile(
-            title: Text(userMap['state']),
-            subtitle: Text('state'),
-            trailing: Icon(Icons.edit),
+            title: Text(
+              userMap['state'],
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            subtitle: Text(
+              'state',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            trailing: Icon(Icons.edit, color: Colors.white),
             dense: true,
             onTap: () {
               editUserInfo(context, 'State', 'state');
             }),
         ListTile(
-            title: Text(userMap['zipcode']),
-            subtitle: Text('Zip Code'),
-            trailing: Icon(Icons.edit),
+            title: Text(
+              userMap['zipcode'],
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            subtitle: Text(
+              'Zip Code',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            trailing: Icon(Icons.edit, color: Colors.white),
             dense: true,
             onTap: () {
               editUserInfo(context, 'Zipcode', 'zipcode');
