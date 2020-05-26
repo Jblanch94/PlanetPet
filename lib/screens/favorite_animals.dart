@@ -56,7 +56,6 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
     }
   }
 
-  //TODO: Need to update will make it responsive when I do that
   Widget buildPostPet(dynamic record, String url, BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
     double width = MediaQuery.of(context).size.width;

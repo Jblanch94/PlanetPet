@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -253,7 +252,9 @@ class _PetDetailPageState extends State<PetDetailPage> {
                     icon: favorited
                         ? Icon(Icons.favorite, color: Colors.red)
                         : Icon(Icons.favorite_border),
-                    iconSize: orientation == Orientation.portrait ? height * 0.05 : width * 0.05,
+                    iconSize: orientation == Orientation.portrait
+                        ? height * 0.05
+                        : width * 0.05,
                     color: Colors.red,
                     onPressed: favoritePet,
                   ),

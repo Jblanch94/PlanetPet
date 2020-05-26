@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -48,12 +47,18 @@ class _AdminDetailPageState extends State<AdminDetailPage> {
               Semantics(
                 child: Padding(
                   //padding: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(orientation == Orientation.portrait ? height * 0.035 : width * 0.035),
+                  padding: EdgeInsets.all(orientation == Orientation.portrait
+                      ? height * 0.035
+                      : width * 0.035),
                   child: AspectRatio(
                     //aspectRatio: 4/3,
-                    aspectRatio: orientation == Orientation.portrait ? 4/3 : 9/4,
+                    aspectRatio:
+                        orientation == Orientation.portrait ? 4 / 3 : 9 / 4,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(orientation == Orientation.portrait ? height * 0.025 : width * 0.03),
+                      borderRadius: BorderRadius.circular(
+                          orientation == Orientation.portrait
+                              ? height * 0.025
+                              : width * 0.03),
                       child: Image.network(widget.document['imageURL'],
                           fit: BoxFit.cover),
                     ),

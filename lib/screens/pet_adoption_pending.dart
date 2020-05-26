@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:planet_pet/widgets/custom_scaffold.dart';
 
 class PetAdoptionPending extends StatefulWidget {
   final bool darkMode;
@@ -24,12 +23,9 @@ class PetAdoptionPending extends StatefulWidget {
 }
 
 class _PetAdoptionPendingState extends State<PetAdoptionPending> {
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     super.initState();
-    print('${widget.petDoc}');
   }
 
   @override
