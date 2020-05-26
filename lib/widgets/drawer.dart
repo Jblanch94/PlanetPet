@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:planet_pet/screens/home.dart';
 
 class SettingsDrawer extends StatefulWidget {
   final bool darkMode;

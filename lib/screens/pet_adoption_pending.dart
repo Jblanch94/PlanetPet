@@ -34,13 +34,16 @@ class _PetAdoptionPendingState extends State<PetAdoptionPending> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      scaffoldKey: _scaffoldKey,
-      title: "${widget.petDoc['name']}",
-      darkMode: widget.darkMode,
-      toggleTheme: widget.toggleTheme,
-      signOut: widget.signOut,
-      user: widget.userDoc,
+    return Scaffold(
+      //scaffoldKey: _scaffoldKey,
+      appBar: AppBar(
+        title: Text("${widget.petDoc['name']}"),
+        centerTitle: true,
+      ),
+      // darkMode: widget.darkMode,
+      // toggleTheme: widget.toggleTheme,
+      // signOut: widget.signOut,
+      // user: widget.userDoc,
       body: Container(
         width: double.infinity,
         child: Column(
@@ -55,7 +58,9 @@ class _PetAdoptionPendingState extends State<PetAdoptionPending> {
                   CachedNetworkImageProvider(widget.petDoc['imageURL']),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 16,),
+              padding: EdgeInsets.only(
+                top: 16,
+              ),
             ),
             Text(
               widget.petDoc['name'],
@@ -73,16 +78,10 @@ class _PetAdoptionPendingState extends State<PetAdoptionPending> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(
-                top: 16
-              ),
+              padding: EdgeInsets.only(top: 16),
             ),
-            Text(
-              'Call to confirm visit at (999)999-9999'
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 16)
-            ),
+            Text('Call to confirm visit at (999)999-9999'),
+            Padding(padding: EdgeInsets.only(top: 16)),
             Text(
               'Email to confirm visit at example@gmail.com',
             ),
