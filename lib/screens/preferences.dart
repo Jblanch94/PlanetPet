@@ -305,8 +305,8 @@ class _PreferencesState extends State<Preferences> {
       style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: orientation == Orientation.portrait
-              ? height * 0.04
-              : width * 0.05),
+              ? height * 0.03
+              : width * 0.03),
     );
   }
 
@@ -495,6 +495,7 @@ class _PreferencesState extends State<Preferences> {
                     child: Column(
                       children: <Widget>[
                         Radio(
+                  
                             value: DogBreeds.goldenRetriever,
                             groupValue: _dogBreeds,
                             onChanged: (DogBreeds value) {
@@ -509,8 +510,8 @@ class _PreferencesState extends State<Preferences> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: orientation == Orientation.portrait
-                                    ? height * 0.05
-                                    : width * 0.04)),
+                                    ? height * 0.02
+                                    : width * 0.02)),
                       ],
                     ))),
             Expanded(
@@ -540,8 +541,8 @@ class _PreferencesState extends State<Preferences> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: orientation == Orientation.portrait
-                                    ? height * 0.03
-                                    : width * 0.04)),
+                                    ? height * 0.02
+                                    : width * 0.02)),
                       ],
                     ))),
             Expanded(
@@ -570,8 +571,8 @@ class _PreferencesState extends State<Preferences> {
                         Text('Beagle',
                             style: TextStyle(
                                 fontSize: orientation == Orientation.portrait
-                                    ? height * 0.05
-                                    : width * 0.04)),
+                                    ? height * 0.02
+                                    : width * 0.02)),
                         SizedBox(height: 19),
                       ],
                     ))),
@@ -601,8 +602,8 @@ class _PreferencesState extends State<Preferences> {
                         Text('Poodle',
                             style: TextStyle(
                                 fontSize: orientation == Orientation.portrait
-                                    ? height * 0.05
-                                    : width * 0.04)),
+                                    ? height * 0.02
+                                    : width * 0.02)),
                         SizedBox(height: 19),
                       ],
                     ))),

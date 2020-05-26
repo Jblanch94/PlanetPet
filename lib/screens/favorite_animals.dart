@@ -77,7 +77,7 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
               aspectRatio: 16 / 9,
               child: Image.network(
                 url,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
             ExpansionTile(
