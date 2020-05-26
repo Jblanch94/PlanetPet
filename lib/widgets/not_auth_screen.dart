@@ -37,22 +37,13 @@ class _NotAuthScreenState extends State<NotAuthScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Icon(
-                Icons.pets,
-                size: orientation == Orientation.portrait
-                    ? height * 0.05
-                    : width * 0.05,
-              ),
-              Icon(
-                Icons.pets,
-                size: orientation == Orientation.portrait
-                    ? height * 0.05
-                    : width * 0.05,
-              ),
-            ],
+          Icon(
+            
+            Icons.pets,
+            size: orientation == Orientation.portrait
+                ? height * 0.05
+                : width * 0.05,
+            color: Theme.of(context).iconTheme.color,
           ),
           Text(
             'Planet Pet',
