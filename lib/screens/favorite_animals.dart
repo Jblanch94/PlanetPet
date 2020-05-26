@@ -24,6 +24,7 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
   dynamic userFavorites;
   Stream<QuerySnapshot> snapshot;
   DocumentSnapshot userDoc;
+  bool isExpanded;
 
   @override
   void initState() {
@@ -61,123 +62,85 @@ class _FavoriteAnimalsState extends State<FavoriteAnimals> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Semantics(
-      child: Card(
+      child: cardContainer(url, record, orientation, width, height),
+    );
+  }
+
+  Widget cardContainer(String url, dynamic record, Orientation orientation,
+      double width, double height) {
+    return Card(
+      child: Align(
+        alignment: Alignment.topLeft,
         child: Column(
           children: <Widget>[
-            Row(
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Image.network(
+                url,
+                fit: BoxFit.cover,
+              ),
+            ),
+            ExpansionTile(
+              leading: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(url),
+                radius: 30,
+              ),
+              title: Text('${record['name']}'),
+              subtitle: Text('Details'),
+              trailing: Icon(Icons.expand_more),
               children: <Widget>[
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: FittedBox(
-                      child: CachedNetworkImage(imageUrl: url),
-                      fit: BoxFit.contain,
-                      alignment: Alignment.topLeft,
-                    ),
-                  ),
+                ListTile(
+                    dense: true,
+                    leading: Text('Name'),
+                    title: Text('${record['name']}')),
+                ListTile(
+                    dense: true,
+                    leading: Text('Type'),
+                    title: Text('${record['animalType']}')),
+                ListTile(
+                    dense: true,
+                    leading: Text('Breed'),
+                    title: Text('${record['breed']}')),
+                ListTile(
+                    dense: true,
+                    leading: Text('Gender'),
+                    title: Text('${record['sex']}')),
+                ListTile(
+                  dense: true,
+                  title: Text(record['goodAnimals']
+                      ? 'Good with Other Animals'
+                      : 'Not Good with Other Animals'),
                 ),
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Text('Name'),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 8),
-                                ),
-                                Text('${record['name']}')
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(left: 8)),
-                            Column(
-                              children: <Widget>[
-                                Text('Sex'),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 8),
-                                ),
-                                Text('${record['sex']}')
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(left: 8)),
-                            Column(
-                              children: <Widget>[
-                                Text('Animal Type'),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 8),
-                                ),
-                                Text('${record['animalType']}')
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(left: 8)),
-                            Column(
-                              children: <Widget>[
-                                Text('Breed'),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 8),
-                                ),
-                                Text('${record['breed']}')
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(left: 8)),
-                            Column(
-                              children: <Widget>[
-                                Text('Good with other animals'),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 8),
-                                ),
-                                Text(record['goodAnimals'] ? 'Yes' : 'No')
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(left: 8)),
-                            Column(
-                              children: <Widget>[
-                                Text('Leash Required'),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 8),
-                                ),
-                                Text(record['leashNeeded'] ? 'Yes' : 'No')
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(left: 8)),
-                            Column(
-                              children: <Widget>[
-                                Text('Availability'),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 8),
-                                ),
-                                Text('${record['availability']}')
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(top: 12)),
-                      Text('${record['status']}'),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      Text('${record['description']}')
-                    ],
-                  ),
+                ListTile(
+                  dense: true,
+                  title: Text(record['goodChildren']
+                      ? 'Good with Children'
+                      : 'Not Good with Children'),
+                ),
+                ListTile(
+                  dense: true,
+                  title: Text(record['leashNeeded']
+                      ? 'Leash Required'
+                      : 'Leash not Required'),
+                ),
+                ListTile(
+                  dense: true,
+                  title: Text('${record['status']}'),
+                ),
+                ListTile(
+                  dense: true,
+                  title: Text('${record['description']}'),
                 ),
               ],
             ),
           ],
         ),
       ),
-      label: "${record['name']} is a favorite",
-      hint: "${record['name']} is a favorite"
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return CustomScaffold(
       detailsPage: false,
       user: userDoc,

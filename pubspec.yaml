@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.1.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -37,7 +37,7 @@ dependencies:
   maps_toolkit: ^1.0.1+3
   path: ^1.6.4
   shared_preferences: ^0.5.7+1
-  
+  expandable: ^4.1.4
 
 dev_dependencies:
   flutter_driver:
@@ -46,15 +46,12 @@ dev_dependencies:
     sdk: flutter
   sentry: ^3.0.1
   test:
-  
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -75,7 +72,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts: 
+  fonts:
     - family: Indie Flower
       fonts:
         - asset: assets/fonts/IndieFlower-Regular.ttf
@@ -89,6 +86,6 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 flutter_icons:
-  android: "launcher_icon"
+  android: 'launcher_icon'
   ios: true
-  image_path: "assets/icon/icon.png" # Attribution for this icon goes to Freepik
+  image_path: 'assets/icon/icon.png' # Attribution for this icon goes to Freepik
