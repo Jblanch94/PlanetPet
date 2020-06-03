@@ -74,23 +74,28 @@ class _PostsState extends State<Posts> {
 
   void getUserDetails() async {
     doc = await usersRef.document(widget.userId).get();
-    setState(() {});
+    if(this.mounted) {
+      setState(() {});
+    }
+    
   }
 
   void initSearchPreferences() async {
     DocumentSnapshot userDoc = await usersRef.document(widget.userId).get();
-
-    setState(() {
-      _animalType = animalTypes[userDoc.data['prefsAnimalType']] ?? 'None';
-      _catBreeds = catBreeds[userDoc.data['prefsCatBreeds']] ?? 'None';
-      _dogBreeds = dogBreeds[userDoc.data['prefsDogBreeds']] ?? 'None';
-      _otherBreeds = otherBreeds[userDoc.data['prefsOtherBreeds']] ?? 'None';
-      _animalSex = animalSexes[userDoc.data['prefsAnimalSex']] ?? 'None';
-      goodHumans = userDoc.data['prefsGoodHumans'] ?? true;
-      goodAnimals = userDoc.data['prefsGoodAnimals'] ?? true;
-      needLeash = userDoc.data['prefsNeedLeash'] ?? true;
-      _availability = availability[userDoc.data['prefsAvailability']] ?? 'None';
-    });
+    if (this.mounted) {
+      setState(() {
+        _animalType = animalTypes[userDoc.data['prefsAnimalType']] ?? 'None';
+        _catBreeds = catBreeds[userDoc.data['prefsCatBreeds']] ?? 'None';
+        _dogBreeds = dogBreeds[userDoc.data['prefsDogBreeds']] ?? 'None';
+        _otherBreeds = otherBreeds[userDoc.data['prefsOtherBreeds']] ?? 'None';
+        _animalSex = animalSexes[userDoc.data['prefsAnimalSex']] ?? 'None';
+        goodHumans = userDoc.data['prefsGoodHumans'] ?? true;
+        goodAnimals = userDoc.data['prefsGoodAnimals'] ?? true;
+        needLeash = userDoc.data['prefsNeedLeash'] ?? true;
+        _availability =
+            availability[userDoc.data['prefsAvailability']] ?? 'None';
+      });
+    }
   }
 
   void viewPetDetails(BuildContext context, dynamic petDoc, dynamic docId) {
